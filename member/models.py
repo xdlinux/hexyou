@@ -3,6 +3,6 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Profile(models.Model):
-	user = models.OneToOne(User)
+    user = models.OneToOneField(User)
 	verified = models.BooleanField()
 
