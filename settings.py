@@ -1,5 +1,6 @@
 # Django settings for NearsideBindings project.
 
+import os
 HERE=os.path.dirname(os.path.dirname(__file__))
 
 DEBUG = True
