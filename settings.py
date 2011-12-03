@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'NearsideBindings.member',
     'NearsideBindings.activity',
     'NearsideBindings.group',
+    'NearsideBindings.backendsse',
 )
 
 # A sample logging configuration. The only tangible logging
