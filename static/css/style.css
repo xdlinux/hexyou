@@ -1,0 +1,46 @@
+/* general */
+body { padding-top:40px;text-align:justify }
+.container>.row { padding-top:20px; }
+.content {background-color:#fff; padding:20px; margin:0 -20px; border-radius:0 0 6px 6px; box-shadow:0 1px 2px rgba(0,0,0,.15); }
+.page-header{ background-color:#f5f5f5; padding:20px 20px 10px; margin:-20px -20px 20px; }
+.content>.row>.span6 { padding-left:19px; border-left:1px solid #eee; min-height:500px; width:320px; }
+.holding { position:relative; padding:0; margin:0; }
+.holding .holder { position:absolute; z-index:1; top:0; color:#999; }
+.extra { text-align:center; margin-top:8px; padding:8px; border-top:1px solid #eee; }
+ul.avatar { margin-left:0; }
+ul.avatar a { margin-left:10px; padding:1px; }
+img.avatar { padding:1px; border:1px solid #eee; border-radius:6px; }
+.align-right{text-align:right}
+.align-left{text-align:left}
+
+
+/* front-top */
+#front-top { padding-bottom:20px; }
+#front-login { padding-top:28px; }
+#front-login input[type=text], #front-login input[type=password] { width:125px; }
+#front-login button { margin-left:1px; }
+#front-login .remember { text-align:left; padding:0; }
+#front-login .forgot { line-height:22px; margin-left:10px; }
+#front-login .holding { display:inline; margin-bottom:8px; }
+#front-login .holding .holder { left:7px;  line-height:16px; }
+
+/* front-signup */
+#front-signup { width:340px; font-size:15px; }
+#front-signup input { width:320px; padding:9px; }
+#front-signup .holding { margin-bottom:8px; }
+#front-signup .holding .holder { left:10px;  line-height:38px; }
+#front-signup .primary { width:auto; float:right; padding:5px 14px 6px 14px; }
+
+/* front-bottom */
+#copyright { text-align:right; }
+#friends-link { float:none; }
+#friends-link>h5 { float:left; }
+#friends-link>li>a:hover { color:#00438a; text-decoration:underline; }
+
+/* content */
+.intro{background:#eee;padding:10px;
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    -o-border-radius:5px;
+    border-radius:5px;
+}
