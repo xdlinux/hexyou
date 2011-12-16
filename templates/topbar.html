@@ -1,0 +1,14 @@
+{% load topbar %}
+    <div class="topbar">
+        <div class="fill">
+            <div class="container">
+                <a href="#" class="brand">Trypsin</a>
+                <ul class="nav">
+                    <li class="{{ topbar|active:"home" }}"><a href="#" >首页</a></li>
+                    <li class="{{ topbar|active:"person" }}"><a href="#">我的主页</a></li>
+                    <li class="{{ topbar|active:"groups" }}"><a href="#">组织与团队</a></li>
+                    <li class="{{ topbar|active:"activities" }}"><a href="#">活动</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>

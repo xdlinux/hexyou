@@ -1,6 +1,6 @@
-{% extends "group/base.html" %}
+{% extends "groups/base.html" %}
 
-{% block title %}Groups{% endblock title %}
+{% block title %}组织与团队{% endblock title %}
 
 {% block main %}
             <div class="hero-unit">
@@ -9,7 +9,7 @@
                         <img src="http://placehold.it/150x150" class="avatar" alt="" />
                     </div>
                     <div class="span6">
-                        <h2>Group name</h2>
+                        <h2>组织名称</h2>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
                         quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -17,12 +17,12 @@
                         cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                         proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                         <p class="align-right">
-                            <a href="#" class="btn primary">View detials</a>
+                            <a href="#" class="btn primary">详细信息</a>
                         </p>
                     </div>
                 </div>
             </div>
-            <h3>Active groups</h3>
+            <h3>活跃组织</h3>
             <table>
                 <tbody>
                     <tr>
@@ -30,7 +30,7 @@
                             <img src="http://placehold.it/64x64" class="avatar" alt="" />
                         </td>
                         <td>
-                            <h4>Group name
+                            <h4>组织名称 
                             <small>(12)</small></h4>
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                             tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -45,7 +45,7 @@
                             <img src="http://placehold.it/64x64" class="avatar" alt="" />
                         </td>
                         <td>
-                            <h4>Group name
+                            <h4>组织名称
                             <small>(16)</small></h4>
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                             tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -60,7 +60,7 @@
 {% endblock main %}
 
 {% block side %}
-                        <h3>My groups
+                        <h3>我管理的组织
                             <small>(233)</small></h3>
                         <ul class="media-grid avatar">
                             <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
@@ -72,7 +72,7 @@
                             <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
                             <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
                         </ul>
-                        <h3>Groups you manage
+                        <h3>我参加的组织
                             <small>(42)</small></h3>
                         <ul class="media-grid avatar">
                             <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
@@ -84,6 +84,6 @@
                             <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
                             <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
                         </ul>
-                        <h3>Calendar</h3>
+                        <h3>日历</h3>
                         <img src="http://placehold.it/320x200" />
 {% endblock side %}

@@ -15,19 +15,25 @@ def active(value,arg):
 
 
 class TopbarNode(template.Node):
-    def __init__(self,path,active=None):
-       self.path=path
-       self.active=active
+    def __init__(self,ls):
+       self.active=ls[1]
+       if len(ls)>2:
+           self.path=ls[2]
+       else:
+           self.path=None
 
     def render(self,context):
         context['topbar']=self.active
-        t=get_template("%s/topbar.html" % self.path)
+        if self.path:
+            t=get_template(str(self.path))
+        else:
+            t=get_template("topbar.html" )
         return t.render(context)
 
 @register.tag
 def topbar(parser,token):
     ls=token.contents.split(None)
-    if len(ls)!=3:
-        msg = '%r tag requires 2 arguments, %d given.' % (token.contents[0], len(ls)-1)
+    if len(ls)<2:
+        msg = '%r tag requires at least 1 arguments, %d given.' % (token.contents[0], len(ls)-1)
         raise template.TemplateSyntaxError(msg)
-    return TopbarNode(ls[1],ls[2])
+    return TopbarNode(ls)

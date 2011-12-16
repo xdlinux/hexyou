@@ -17,7 +17,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^/?$',index),
-    url(r'^group/?$',frontpage),
+    url(r'^groups/?$',frontpage),
      url(r'^admin/', include(admin.site.urls)),
 )
 urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_ROOT )
