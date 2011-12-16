@@ -10,9 +10,11 @@ body { padding-top:40px; }
 ul.avatar { margin-left:0; }
 ul.avatar a { margin-left:10px; padding:1px; }
 img.avatar { padding:1px; border:1px solid #eee; border-radius:6px; }
-.align-right{text-align:right}
-.align-left{text-align:left}
-
+.align-right { text-align:right }
+.align-left { text-align:left }
+.intro { background:#eee;padding:10px; border-radius:5px; }
+.float-left { float:left }
+.float-right { float:right }
 
 /* front-top */
 #front-top { padding-bottom:20px; }
@@ -37,10 +39,6 @@ img.avatar { padding:1px; border:1px solid #eee; border-radius:6px; }
 #friends-link>h5 { float:left; }
 #friends-link>li>a:hover { color:#00438a; text-decoration:underline; }
 
-/* content */
-.intro{background:#eee;padding:10px;
-    -webkit-border-radius:5px;
-    -moz-border-radius:5px;
-    -o-border-radius:5px;
-    border-radius:5px;
-}
+/* inner-main */
+#main .hero-unit { padding:25px; }
+#main .hero-unit p { font-size:13px; line-height:18px; font-weight:normal; }

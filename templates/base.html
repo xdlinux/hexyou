@@ -1,23 +1,23 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-    <title>
-        {% block title %}
-            
-        {% endblock %}
-    </title>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
     {% block css %}
     <link rel="stylesheet" href="/static/css/bootstrap.css" />
     <link rel="stylesheet" href="/static/css/style.css" />
     {% endblock %}
-    {% block js %}    
+    {% block js %}
     <script type="text/javascript" src="/static/js/jquery.js"></script>
     <script type="text/javascript" src="/static/js/functions.js"></script>
     {% endblock %}
 </head>
 <body>
-{% block content %}
-{% endblock %}
+    {% block body %}
+    <div class="container">
+    {% block container %}
+    {% endblock %}
+    </div>
+    {% endblock body %}
 </body>
 </html>
