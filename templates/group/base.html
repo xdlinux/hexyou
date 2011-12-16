@@ -1,5 +1,36 @@
 {% extends "base.html" %}
 {% load topbar %}
-{% block content %}
-{% topbar group frontpage %}
-{% endblock %}
+{% block body %}
+    {% topbar group f %}
+    <div class="container">
+    {% block container %}
+        <div class="content">
+            <div class="page-header">
+                <h1>{% block title %}{% endblock title %}{% block subtitle %}{% endblock subtitle %}</h1>
+            </div>
+            {% block content %}
+            <div class="row">
+                <div id="main" class="span10">
+                    {% block main %}{% endblock main %}
+                </div>
+                <div id="side" class="span6">
+                    {% block side %} {% endblock side %}
+                </div>
+            </div>
+            {% endblock content %}
+        </div>
+        {% block footer %}
+        <footer id="footer">
+            <ul class="nav" id="internal-link">
+                <li><a href="#">Internal link</a></li>
+                <li><a href="#">Internal link</a></li>
+                <li><a href="#">Internal link</a></li>
+                <li><a href="#">Internal link</a></li>
+                <li><a href="#">Internal link</a></li>
+            </ul>
+            <p id="copyright">&copy; Trypsin 2011</p>
+        </footer>
+        {% endblock footer %}
+    {% endblock %}
+    </div>
+{% endblock body %}
