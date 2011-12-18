@@ -12,7 +12,7 @@ ul.avatar a { margin-left:10px; padding:1px; }
 img.avatar { padding:1px; border:1px solid #eee; border-radius:6px; }
 .align-right { text-align:right }
 .align-left { text-align:left }
-.intro { background:#eee;padding:10px; border-radius:5px; }
+.intro { background:#f7f7f7;padding:10px; border-radius:5px; }
 .float-left { float:left }
 .float-right { float:right }
 
@@ -42,3 +42,4 @@ img.avatar { padding:1px; border:1px solid #eee; border-radius:6px; }
 /* inner-main */
 #main .hero-unit { padding:25px; }
 #main .hero-unit p { font-size:13px; line-height:18px; font-weight:normal; }
+#main #profile { margin-top:22px; }
