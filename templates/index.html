@@ -3,96 +3,83 @@
 {% block title %}NearsideBindings | index{% endblock %}
 
 {% block container %}
-    <div class="container">
-        <div class="row" id="front-top">
-            <div class="span8">
-                <img src="http://placehold.it/300x100" alt="" />
-            </div>
-            <div class="span6 offset2" id="front-login">
-                <form action="login" method="post" accept-charset="utf-8">
-                    <div class="holding">
-                        <input type="text" name="username" />
-                        <span class="holder">Username</span>
-                    </div>
-                    <div class="holding">
-                        <input type="password" name="password" />
-                        <span class="holder">Password</span>
-                    </div>
-                    <button type="submit" class="btn primary">Login</button>
-                    <label class="remember">
-                        <input type="checkbox" name="remember_me" />
-                        <span>Remember me</span>
-                    </label>
-                    <p><a class="forgot" href="forgot">Forgot?</a></p>
-                </form>
-            </div>
+<div class="container">
+    <div class="row" id="front-top">
+        <div class="span8">
+            <img src="http://placehold.it/300x100" alt="" />
         </div>
-        <div class="row">
-            <div class="span8">
-                <h2>Top Activity</h2>
-                <ul>
-                    <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-                    <li>Vivamus non tortor et quam fringilla fermentum adipiscing ac nisl.</li>
-                    <li>Quisque suscipit lacus quis augue rhoncus vel facilisis metus mattis.</li>
-                    <li>Praesent a est quis metus sagittis vulputate ac et purus.</li>
-                    <li>Ut id neque nulla, eget lobortis elit.</li>
-                    <li>Cras at elit eget ligula imperdiet varius.</li>
-                    <li>Aliquam a risus id tortor tristique cursus vitae ac mi.</li>
-                </ul>
-            </div>
-            <div class="span6 offset2">
-                <h2>Join Us</h2>
-                <form action="signup" method="post" accept-charset="utf-8" id="front-signup">
-                    <div class="holding">
-                        <input type="text" name="username" class="span6" />
-                        <span class="holder">Username</span>
-                    </div>
-                    <div class="holding">
-                        <input type="email" name="email" class="span6" />
-                        <span class="holder">Email</span>
-                    </div>
-                    <div class="holding">
-                        <input type="password" name="password" class="span6" />
-                        <span class="holder">Password</span>
-                    </div>
-                    <input type="submit" name="submit" value="Signup" class="btn primary" />
-                </form>
-            </div>
+        <div class="span6 offset2" id="front-login">
+            <form action="login" method="post" accept-charset="utf-8">
+                <div class="holding">
+                    <input type="text" name="username" />
+                    <span class="holder">Username</span>
+                </div>
+                <div class="holding">
+                    <input type="password" name="password" />
+                    <span class="holder">Password</span>
+                </div>
+                <button type="submit" class="btn primary">Login</button>
+                <label class="remember">
+                    <input type="checkbox" name="remember_me" />
+                    <span>Remember me</span>
+                </label>
+                <p><a class="forgot" href="forgot">Forgot?</a></p>
+            </form>
         </div>
-        <div class="row">
-            <div class="span16">
-                <h2>Recently</h2>
-                <div class="row">
-                    <div class="span-one-third">
-                        <img src="http://placehold.it/150x100" alt="" />
-                        <h3>Name of Activity</h3>
-                        <p>Etiam blandit adipiscing laoreet. Phasellus accumsan turpis eget ligula volutpat nec varius libero ultricies. Donec ut mi nec sapien tristique fermentum ornare in diam. Donec mollis dignissim cursus. Nunc pharetra pulvinar posuere. Nulla eros neque, ultricies non rhoncus in, laoreet sed nisl. Donec eget velit neque. Maecenas rutrum, justo vitae varius volutpat, diam est imperdiet quam, et sodales eros elit a ipsum. Duis vitae lorem sapien, id dignissim ipsum. Cras sit amet risus velit, molestie porttitor risus. </p>
-                    </div>
-                    <div class="span-one-third">
-                        <img src="http://placehold.it/150x100" alt="" />
-                        <h3>Name of Activity</h3>
-                        <p>Suspendisse a convallis metus. Integer imperdiet faucibus metus vel lacinia. Duis hendrerit vestibulum odio in elementum. Phasellus non felis lorem, a euismod lacus. Integer ut risus metus, non cursus arcu. Aliquam mattis turpis a lectus pulvinar aliquet. Ut eu quam lacus. Suspendisse potenti. Vivamus vel interdum nulla. </p>
-                    </div>
-                    <div class="span-one-third">
-                        <img src="http://placehold.it/150x100" alt="" />
-                        <h3>Name of Activity</h3>
-                        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id elit dolor, nec molestie lorem. Integer nulla tortor, fringilla quis vulputate eget, viverra nec elit. Mauris a tellus urna, condimentum dictum purus. Nulla et magna enim, ut luctus dolor. Integer commodo, erat eget placerat congue, lectus leo convallis urna, a congue leo sem sed nulla. Quisque gravida varius nunc, id mollis tortor convallis quis. In eleifend suscipit porta. Phasellus elementum, eros eu venenatis molestie, ligula magna dignissim ante, eget cursus sapien tellus quis risus. </p>
-                    </div>
+    </div>
+    <div class="row">
+        <div class="span8">
+            <h2>Top Activity</h2>
+            <ul>
+                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                <li>Vivamus non tortor et quam fringilla fermentum adipiscing ac nisl.</li>
+                <li>Quisque suscipit lacus quis augue rhoncus vel facilisis metus mattis.</li>
+                <li>Praesent a est quis metus sagittis vulputate ac et purus.</li>
+                <li>Ut id neque nulla, eget lobortis elit.</li>
+                <li>Cras at elit eget ligula imperdiet varius.</li>
+                <li>Aliquam a risus id tortor tristique cursus vitae ac mi.</li>
+            </ul>
+        </div>
+        <div class="span6 offset2">
+            <h2>Join Us</h2>
+            <form action="signup" method="post" accept-charset="utf-8" id="front-signup">
+                <div class="holding">
+                    <input type="text" name="username" class="span6" />
+                    <span class="holder">Username</span>
+                </div>
+                <div class="holding">
+                    <input type="email" name="email" class="span6" />
+                    <span class="holder">Email</span>
+                </div>
+                <div class="holding">
+                    <input type="password" name="password" class="span6" />
+                    <span class="holder">Password</span>
+                </div>
+                <input type="submit" name="submit" value="Signup" class="btn primary" />
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span16">
+            <h2>Recently</h2>
+            <div class="row">
+                <div class="span-one-third">
+                    <img src="http://placehold.it/150x100" alt="" />
+                    <h3>Name of Activity</h3>
+                    <p>Etiam blandit adipiscing laoreet. Phasellus accumsan turpis eget ligula volutpat nec varius libero ultricies. Donec ut mi nec sapien tristique fermentum ornare in diam. Donec mollis dignissim cursus. Nunc pharetra pulvinar posuere. Nulla eros neque, ultricies non rhoncus in, laoreet sed nisl. Donec eget velit neque. Maecenas rutrum, justo vitae varius volutpat, diam est imperdiet quam, et sodales eros elit a ipsum. Duis vitae lorem sapien, id dignissim ipsum. Cras sit amet risus velit, molestie porttitor risus. </p>
+                </div>
+                <div class="span-one-third">
+                    <img src="http://placehold.it/150x100" alt="" />
+                    <h3>Name of Activity</h3>
+                    <p>Suspendisse a convallis metus. Integer imperdiet faucibus metus vel lacinia. Duis hendrerit vestibulum odio in elementum. Phasellus non felis lorem, a euismod lacus. Integer ut risus metus, non cursus arcu. Aliquam mattis turpis a lectus pulvinar aliquet. Ut eu quam lacus. Suspendisse potenti. Vivamus vel interdum nulla. </p>
+                </div>
+                <div class="span-one-third">
+                    <img src="http://placehold.it/150x100" alt="" />
+                    <h3>Name of Activity</h3>
+                    <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id elit dolor, nec molestie lorem. Integer nulla tortor, fringilla quis vulputate eget, viverra nec elit. Mauris a tellus urna, condimentum dictum purus. Nulla et magna enim, ut luctus dolor. Integer commodo, erat eget placerat congue, lectus leo convallis urna, a congue leo sem sed nulla. Quisque gravida varius nunc, id mollis tortor convallis quis. In eleifend suscipit porta. Phasellus elementum, eros eu venenatis molestie, ligula magna dignissim ante, eget cursus sapien tellus quis risus. </p>
                 </div>
             </div>
         </div>
-        <footer id="front-bottom">
-            <div class="container">
-                <ul id="friends-link" class="nav">
-                    <h5>Friends Link</h5>
-                    <li><a href="#">Example.com</a></li>
-                    <li><a href="#">Example.com</a></li>
-                    <li><a href="#">Example.com</a></li>
-                    <li><a href="#">Example.com</a></li>
-                    <li><a href="#">Example.com</a></li>
-                    <li><a href="#">Example.com</a></li>
-                </ul>
-            </div>
-        <p id="copyright">&copy; Trypsin 2011</p>
-        </footer>
-    </div>{% endblock %}
+    </div>
+</div>
+{% endblock %}

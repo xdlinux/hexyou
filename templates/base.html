@@ -1,23 +1,45 @@
 <!DOCTYPE HTML>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
-    {% block css %}
-    <link rel="stylesheet" href="/static/css/bootstrap.css" />
-    <link rel="stylesheet" href="/static/css/style.css" />
-    {% endblock %}
-    {% block js %}
-    <script type="text/javascript" src="/static/js/jquery.js"></script>
-    <script type="text/javascript" src="/static/js/functions.js"></script>
-    {% endblock %}
-</head>
-<body>
-    {% block body %}
-    <div class="container">
-    {% block container %}
-    {% endblock %}
-    </div>
-    {% endblock body %}
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %}</title>
+        {% block css %}
+        <link rel="stylesheet" href="/static/css/bootstrap.css" />
+        <link rel="stylesheet" href="/static/css/style.css" />
+        {% endblock %}
+        {% block js %}
+        <script type="text/javascript" src="/static/js/jquery.js"></script>
+        <script type="text/javascript" src="/static/js/bootstrap-twipsy.js"></script>
+        <script type="text/javascript" src="/static/js/bootstrap-popover.js"></script>
+        <script type="text/javascript" src="/static/js/functions.js"></script>
+        {% endblock %}
+    </head>
+    <body>
+        <div class="container">
+            <header>
+            {% block header %}
+            {% endblock %}
+            </header>
+            {% block container %}
+            {% endblock %}
+            <footer id="footer">
+            {% block footer %}
+            <footer>
+            <div class="container">
+                <ul id="friends-link" class="nav">
+                    <h5>Friends Link</h5>
+                    <li><a href="#">Example.com</a></li>
+                    <li><a href="#">Example.com</a></li>
+                    <li><a href="#">Example.com</a></li>
+                    <li><a href="#">Example.com</a></li>
+                    <li><a href="#">Example.com</a></li>
+                    <li><a href="#">Example.com</a></li>
+                </ul>
+                <br/>
+                <p id="copyright">&copy; Trypsin 2011</p>
+            </div>
+            {% endblock %}
+            </footer>
+        </div>
+    </body>
 </html>
