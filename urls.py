@@ -18,6 +18,8 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^/?$',index),
     url(r'^signup/?$',signup),
+    url(r'^signin/?$',signin),
+    url(r'^members/?$','NearsideBindings.member.views.frontpage'),
     url(r'^groups/?$','NearsideBindings.group.views.frontpage'),
     url(r'^groups/single/?$','NearsideBindings.group.views.single'),
      url(r'^admin/', include(admin.site.urls)),

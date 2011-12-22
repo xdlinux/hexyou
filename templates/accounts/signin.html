@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block header %}
+<div class="topbar">
+    <div class="fill">
+        <div class="container">
+            <a href="#" class="brand">NearsideBindings</a>
+        <ul class="nav secondary-nav">
+            <li>
+                <a href="/signup">注册</a>
+            </li>
+        </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block container %}
+<div class="content">
+    <div class="page-header">
+        <h1>登陆
+        </h1> 
+    </div>
+    <div class="row">
+        <div class="span4">
+            <h2>输入您的凭证</h2>
+            <p>
+                请在右边的表单中正确输入您的登陆凭证。
+            </p>
+        </div>
+        <div class="span6">
+            <form action="" id="account">
+                <div class="holding">
+                    <input type="text" />
+                    <span class="holder">登陆邮箱</span>
+                </div> 
+                <div class="holding">
+                    <input type="password" />
+                    <span class="holder">密码</span>
+                </div> 
+                <input type="reset" class="btn large " id="reset" value="重置"/>
+                <input type="submit" class="btn large primary" id="submit"  value="登陆"/>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

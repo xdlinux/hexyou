@@ -44,10 +44,10 @@ img.avatar { padding:1px; border:1px solid #eee; border-radius:6px; }
 #main #profile { margin-top:22px; }
 
 /* accounts  */
-#signup { font-size:15px; }
-#signup input { padding:9px; width:100%}
-#signup .holding{margin-bottom:20px}
-#signup .holding .holder { left:10px;  line-height:38px; }
+#account { font-size:15px; }
+#account input { padding:9px; width:100%}
+#account .holding{margin-bottom:20px}
+#account .holding .holder { left:10px;  line-height:38px; }
 #policy{
     width:340px;
     height:300px;
@@ -55,3 +55,4 @@ img.avatar { padding:1px; border:1px solid #eee; border-radius:6px; }
     padding:0;
 }
 #policy iframe{width:340px;height:100%}
+#account #reset,#account #submit{width:120px;}
