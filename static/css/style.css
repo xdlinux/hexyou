@@ -50,14 +50,11 @@ img.avatar { padding:1px; border:1px solid #eee; border-radius:6px; }
 
 /* accounts  */
 #account { font-size:15px; }
-#account input { padding:9px; width:100%}
-#account .holding{margin-bottom:20px}
-#account .holding .holder { left:10px;  line-height:38px; }
-#policy{
-    width:340px;
-    height:300px;
-    background:#f0f0a0;
-    padding:0;
-}
+#account .holding { margin-bottom:20px }
+#account .holding>input { padding:9px; width:320px; }
+#account .holding .holder { left:10px; line-height:38px; }
+#account .holding .remember { padding:0; position:absolute; top:9px; left:272px; }
+#account .holding p { margin:0; position:absolute; top:9px; width:130px; text-align:right; left:280px; }
+#policy { width:340px; height:300px; background:#f0f0a0; padding:0; }
 #policy iframe{width:340px;height:100%}
 #account #reset,#account #submit{width:120px;}
