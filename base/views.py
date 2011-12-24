@@ -10,3 +10,7 @@ def index(request):
 def signup(request):
     """page for signup"""
     return render_to_response("accounts/signup.html")
+
+def signin(request):
+    """page for signup"""
+    return render_to_response("accounts/signin.html")
