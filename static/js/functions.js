@@ -16,5 +16,5 @@ $(document).ready(function(){
       $(this).next('.holder').show();
     }
   })
-    $('input[rel=popover]').popover({'trigger':'focus'});
+    $('input[rel=popover]').popover({'trigger':'focus','offset':32});
 })
