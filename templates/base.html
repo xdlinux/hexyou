@@ -15,19 +15,18 @@
         {% endblock %}
     </head>
     <body>
+        <header>
+        {% block header %}
+        {% endblock %}
+        </header>
         <div class="container">
-            <header>
-            {% block header %}
-            {% endblock %}
-            </header>
             {% block container %}
             {% endblock %}
             <footer id="footer">
             {% block footer %}
-            <footer>
             <div class="container">
                 <ul id="friends-link" class="nav">
-                    <h5>Friends Link</h5>
+                    <h5>友情链接</h5>
                     <li><a href="#">Example.com</a></li>
                     <li><a href="#">Example.com</a></li>
                     <li><a href="#">Example.com</a></li>
@@ -35,7 +34,6 @@
                     <li><a href="#">Example.com</a></li>
                     <li><a href="#">Example.com</a></li>
                 </ul>
-                <br/>
                 <p id="copyright">&copy; Trypsin 2011</p>
             </div>
             {% endblock %}
