@@ -38,6 +38,12 @@ img.avatar { padding:1px; border:1px solid #eee; border-radius:6px; }
 #front-signup .holding .holder { left:10px;  line-height:38px; }
 #front-signup .primary { width:auto; float:right; padding:5px 14px 6px 14px; }
 
+/* front-promotion */
+#front-promotion>li { width:100%; }
+#front-promotion>li.display-all { display:block; margin-bottom:14px; min-height:98px; }
+#front-promotion>li.display-all a { margin:0 14px 0 20px; }
+#front-promotion>li.display-image-only p { display:none; }
+
 /* front-bottom */
 #copyright { text-align:right; line-height:40px; }
 #friends-link>h5 { float:left; line-height:40px; }
