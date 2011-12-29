@@ -64,3 +64,5 @@ img.avatar { padding:1px; border:1px solid #eee; border-radius:6px; }
 #policy { width:340px; height:300px; background:#f0f0a0; padding:0; }
 #policy iframe{width:340px;height:100%}
 #account #reset,#account #submit{width:120px;}
+
+#member-counter { margin-left:30px; }

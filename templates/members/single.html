@@ -1,0 +1,72 @@
+{% extends "members/base.html" %}
+
+{% block title %}Kim Jong II{% endblock title %}
+
+{% block subtitle %}
+<a href="">@kimjongii</a>
+{% endblock subtitle %}
+
+{% block main %}
+<div class="row">
+    <div class="span3">
+        <img src="http://placehold.it/150x150" class="avatar" alt="" />
+        <p id="member-counter">发起活动 <span class="label success">31</span>
+        <br />参加活动 <span class="label warning">4159</span></p>
+    </div>
+    <div class="span7">
+        <dl id="profile">
+            <dt>主页</dt>
+            <dd><a href="http://www.korea-dpr.com/">http://www.korea-dpr.com/</a></dd>
+            <dt>注册日期</dt>
+            <dd>1942年2月16日</dd>
+        </dl>
+        <p>朝鲜民主主义人民共和国的第二代最高领导人，原朝鲜劳动党总书记、国防委员会委员长、朝鲜人民军最高司令官，拥有共和国元帅军衔。</p>
+    </div>
+</div>
+<p class="extra align-right">
+    <a href="#" class="btn primary">联系Kim Jong II</a>
+    <a href="#" class="btn">咻！</a>
+</p>
+<h3>参加的活动</h3>
+<table>
+    <tbody>
+        <tr>
+            <td>
+                <img src="http://placehold.it/64x64" class="avatar" alt="" />
+            </td>
+            <td>
+                <h4>六方外长非正式会晤 
+                <small>(6)</small></h4>
+                <p>朝鲜核问题六方外长非正式会晤在新加坡举行。六方会谈主席国、中国外交部长杨洁篪主持，朝鲜外相朴义春、美国国务卿赖斯、日本外相高村正彦、俄罗斯外长拉夫罗夫及韩国外交通商部长官柳明桓出席。</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="http://placehold.it/64x64" class="avatar" alt="" />
+            </td>
+            <td>
+                <h4>六方会谈第二次会间团长会
+                <small>(6)</small></h4>
+                <p>重点讨论进一步全面均衡落实第二阶段行动的措施和步骤。会议发表新闻公报。各方同意在六方会谈框架内建立朝鲜半岛无核化的验证和监督机制。</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% endblock main %}
+
+{% block side %}
+<h3>参加的组织
+    <small>(12)</small></h3>
+<ul class="media-grid avatar">
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+</ul>
+<h3>日历</h3>
+<img src="http://placehold.it/320x200" />
+{% endblock side %}
