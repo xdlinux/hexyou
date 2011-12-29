@@ -19,7 +19,8 @@
 {% block container %}
 <div class="content">
     <div class="page-header">
-        <h1>登陆
+        <h1>登录
+            <small>必须洗净一切往事，否则你永远无法清楚自由地看这个世界</small>
         </h1> 
     </div>
     <div class="row">
@@ -29,7 +30,7 @@
                 请在右边的表单中正确输入您的登陆凭证。
             </p>
         </div>
-        <div class="span6">
+        <div class="span11" style="padding-left:19px; border-left:1px solid #eee; min-height:500px;">
             <form action="" id="account">
                 <div class="holding">
                     <input type="text" />
@@ -44,10 +45,24 @@
                     <span class="holder">密码</span>
                     <p><a href="" title="">忘记密码？</a></p>
                 </div>                
-                <input type="reset" class="btn large " id="reset" value="重置"/>
-                <input type="submit" class="btn large primary" id="submit"  value="登陆"/>
+                <input type="submit" class="btn primary" value="登陆"/>
+                <input type="reset" class="btn" value="重置"/>
             </form>
         </div>
     </div>
 </div>
+<footer id="footer">
+    <div class="container">
+        <ul id="friends-link" class="nav">
+            <h5>友情链接</h5>
+            <li><a href="#">Example.com</a></li>
+            <li><a href="#">Example.com</a></li>
+            <li><a href="#">Example.com</a></li>
+            <li><a href="#">Example.com</a></li>
+            <li><a href="#">Example.com</a></li>
+            <li><a href="#">Example.com</a></li>
+        </ul>
+        <p id="copyright">&copy; Trypsin 2011</p>
+    </div>
+</footer>
 {% endblock %}

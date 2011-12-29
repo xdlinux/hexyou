@@ -11,6 +11,7 @@
     <div class="page-header">
         <h1>{% block title %}{% endblock title %}
             <small>{% block subtitle %}{% endblock subtitle %}</small></h1>
+        <div id="header-action">{% block headeraction %}{% endblock headeraction %}</div>
     </div>
     {% block content %}
     <div class="row">
@@ -18,9 +19,25 @@
             {% block main %}{% endblock main %}
         </div>
         <div id="side" class="span6">
-            {% block side %} {% endblock side %}
+            {% block side %}{% endblock side %}
         </div>
     </div>
     {% endblock content %}
 </div>
+<footer id="footer">
+    {% block footer %}
+    <div class="container">
+        <ul id="friends-link" class="nav">
+            <h5>友情链接</h5>
+            <li><a href="#">Example.com</a></li>
+            <li><a href="#">Example.com</a></li>
+            <li><a href="#">Example.com</a></li>
+            <li><a href="#">Example.com</a></li>
+            <li><a href="#">Example.com</a></li>
+            <li><a href="#">Example.com</a></li>
+        </ul>
+        <p id="copyright">&copy; Trypsin 2011</p>
+    </div>
+    {% endblock %}
+</footer>
 {% endblock %}

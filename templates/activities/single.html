@@ -1,0 +1,81 @@
+{% extends "activities/base.html" %}
+
+{% block title %}寒假{% endblock title %}
+
+{% block subtitle %}<a href="/members/moe">教育部</a>{% endblock subtitle %}
+
+{% block headeraction %}
+<a href="#" class="btn small danger">编辑活动</a>
+{% endblock headeraction %}
+
+{% block main %}
+<div class="row">
+    <div class="span3">
+        <img src="http://placehold.it/150x150" class="avatar" alt="" />
+    </div>
+    <div class="span7">
+        <dl id="profile">
+            <dt>时间</dt>
+            <dd>2012-1-14 全天 ~ 2012-2-19 全天</dd>
+            <dt>地点</dt>
+            <dd>我们的同志遍布五湖四海</dd>
+            <dt>类型</dt>
+            <dd><a href="#">广大人民群众喜闻乐见的</a></dd>
+        </dl>
+    </div>
+</div>
+<p class="extra align-right">
+    <a href="#" class="btn primary">参加寒假</a>
+    <a href="#" class="btn">咻！</a>
+</p>
+<h3>简介</h3>
+<p class="intro">在中国，学校通常将每个学年分为上、下两个学期。上学期从秋季九月份开始，到第二年的除夕之前，各学校开始放假，而这个假期正处于中国寒冷的冬季,被称为寒假。假期一共有20天,中小学是30天左右，但在寒冷的中国东北地区，有时会达到45天左右。</p>
+<h3>相关活动</h3>
+<div id="latest-activity" class="row">
+    <div class="span3">
+        <img src="http://placehold.it/150x100" alt="" />
+        <h4>期末考试</h4>
+        <p>一学期即将结束时，学校通过试卷的形式对各门学科该学期应掌握的知识的检测。</p>
+    </div>
+    <div class="span3">
+        <img src="http://placehold.it/150x100" alt="" />
+        <h4>大学英语等级考试</h4>
+        <p>全国大学英语等级考试是教育部主管的一项全国性的教学考试，其目的是对大学生的实际英语能力进行客观、准确的测量，为大学英语教学提供服务。 大学英语考试也是一项大规模标准化考试，在设计上必须满足教育测量理论对大规模标准化考试的质量要求，是一个“标准关联的常模参照测验”。
+</p>
+    </div>
+    <div class="span3">
+        <img src="http://placehold.it/150x100" alt="" />
+        <h4>期中考试</h4>
+        <p>为了检验学生半学期所学的知识所进行的一次考试,有利于学生比较正式地检验一次自己即时学习的水平，根据这个成绩，学生可及时调整学习心态和方法，更有效率的进行下一阶段的学习。 </p>
+    </div>
+</div>
+{% endblock main %}
+
+{% block side %}
+<h3>参与者
+    <small>(31415926)</small></h3>
+<ul class="media-grid avatar">
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+</ul>
+<h3>友情小组
+    <small>(42)</small></h3>
+<ul class="media-grid avatar">
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+</ul>
+<h3>日历</h3>
+<img src="http://placehold.it/320x200" />
+{% endblock side %}

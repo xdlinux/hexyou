@@ -4,9 +4,11 @@
             <div class="container">
                 <a href="#" class="brand">NearsideBindings</a>
                 <ul class="nav">
+                    {% block nav %}
                     <li class="{{ topbar|active:"home" }}"><a href="#">我的主页</a></li>
                     <li class="{{ topbar|active:"groups" }}"><a href="/groups">组织与团队</a></li>
-                    <li class="{{ topbar|active:"activities" }}"><a href="#">活动</a></li>
+                    <li class="{{ topbar|active:"activities" }}"><a href="/activities">活动</a></li>
+                    {% endblock nav %}
                 </ul>
             </div>
         </div>

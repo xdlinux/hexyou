@@ -29,7 +29,7 @@ img.avatar { padding:1px; border:1px solid #eee; border-radius:6px; }
 #front-login .remember { text-align:left; padding:0; }
 #front-login .forgot { line-height:22px; margin-left:10px; }
 #front-login .holding { display:inline; margin-bottom:8px; }
-#front-login .holding .holder { left:7px;  line-height:16px; }
+#front-login .holding .holder { left:7px; line-height:16px; }
 
 /* front-signup */
 #front-signup { width:340px; font-size:15px; }
@@ -49,10 +49,28 @@ img.avatar { padding:1px; border:1px solid #eee; border-radius:6px; }
 #friends-link>h5 { float:left; line-height:40px; }
 #friends-link>li>a:hover { color:#00438a; text-decoration:underline; }
 
-/* inner-main */
+
+/* inner */
+#header-action { float:right; margin-top:-30px; }
+#footer { border:0; margin:0; }
 #main .hero-unit { padding:25px;border:1px #f0f0f0 solid }
 #main .hero-unit p { font-size:13px; line-height:18px; font-weight:normal; }
 #main #profile { margin-top:22px; }
+ul.list { list-style:none; }
+ul.list .meta { float:left; margin-right:14px; text-align:center; }
+ul.list .content { float:left; }
+ul.list .content p { margin-bottom:2px; }
+#main ul.list>li { float:left; margin-right:3px; width:274px; }
+#main ul.list .meta { float:left; width:72px;  }
+#main ul.list .content { float:left; width:205px; }
+#side ul.list .meta { width:72px; }
+#side ul.list .content { width:214px; }
+#activity-type { margin-left:6px; }
+#activity-type dt { margin:6px 0; }
+#activity-search .holding { display:inline; margin-bottom:8px; }
+#activity-search .holding .holder { left:9px; line-height:16px; }
+#activity-search .search-input { padding:9px; width:255px; }
+#activity-search .add-on { padding:9px; }
 
 /* accounts  */
 #account { font-size:15px; }
@@ -62,7 +80,6 @@ img.avatar { padding:1px; border:1px solid #eee; border-radius:6px; }
 #account .holding .remember { padding:0; position:absolute; top:9px; left:272px; }
 #account .holding p { margin:0; position:absolute; top:9px; width:130px; text-align:right; left:280px; }
 #policy { width:340px; height:300px; background:#f0f0a0; padding:0; }
-#policy iframe{width:340px;height:100%}
-#account #reset,#account #submit{width:120px;}
+#policy iframe { width:340px;height:100% }
 
 #member-counter { margin-left:30px; }
