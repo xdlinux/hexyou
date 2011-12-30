@@ -1,9 +1,6 @@
 {% extends "topbar.html" %}
 {% load topbar %}
 
-{% block nav %}
-                    <li class="{{ topbar|active:"home" }}"><a href="#">我的主页</a></li>
-                    <li class="{{ topbar|active:"groups" }}"><a href="/groups">组织与团队</a></li>
-                    <li class="{{ topbar|active:"activities" }}"><a href="#">活动</a></li>
+{% block extranav %}
                     <li class="{{ topbar|active:"members" }}"><a href="#">成员</a></li>
-{% endblock nav %}
+{% endblock extranav %}

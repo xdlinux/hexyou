@@ -6,6 +6,9 @@ def index(request):
     """index"""
     return render_to_response("index.html",locals(),context_instance=RequestContext(request))
 
+def home(request):
+    """timeline"""
+    return render_to_response("home.html")
 
 def signup(request):
     """page for signup"""
