@@ -6,10 +6,10 @@
 <div class="topbar">
     <div class="fill">
         <div class="container">
-            <a href="#" class="brand">NearsideBindings</a>
+            <a href="/" class="brand">NearsideBindings</a>
         <ul class="nav secondary-nav">
             <li>
-                <a href="/signin">登陆</a>
+                <a href="/login">登陆</a>
             </li>
         </ul>
         </div>
@@ -36,30 +36,31 @@
             请在右边的表单中如实填写您的账户信息。这些个人信息将有助于您参与活动、加入或组建团队等。关于这些个人信息的安全性问题，请参考我们的<a href="#">隐私协议</a>。
             </p>
         </div>
-        <div class="span6">
-            <form action="" id="account">
+        <div class="span12">
+            <form action="" id="account" method="POST">
+                {% csrf_token %}
                 <h3>个人信息</h3>
                 <div class="holding">
-                    <input type="text" rel="popover" data-content="请输入您的真实姓名，以便使用本站提供的各项服务。" data-original-title="姓名" />
+                    {{ form.fullname }}
                     <span class="holder">全名</span>
                 </div> 
                 
                 <div class="holding">
-                    <input type="email" rel="popover" data-content="请输入您的常用邮箱，此邮箱将会成为您的登陆邮箱和忘记密码时使用的安全邮箱。" data-original-title="电子邮箱" />
+                    {{ form.email }}
                     <span class="holder">电子邮箱</span>
                 </div> 
                 <div class="holding">
-                    <input type="text" rel="popover" data-content="请正确输入您的学号，本站将依据此学号识别您的院系和专业。" data-original-title="学号" />
+                    {{ form.student_num }}
                     <span class="holder">学号</span>
                 </div> 
                 <div class="holding">&nbsp;</div>
                 <h3>登陆</h3>
                 <div class="holding">
-                    <input type="password"  rel="popover" data-content="请输入一串由字母、数字、下划线和常用英文标点符号（空格除外）组成的密码，此密码是您登陆本站的唯一凭证，请妥善保存。" data-original-title="密码"/>
+                    {{ form.password1 }}
                     <span class="holder" >密码</span>
                 </div> 
                 <div class="holding">
-                    <input type="password" rel="popover" data-content="请重复输入上面指定的密码，以确认输入正确" data-original-title="重复密码"/>
+                    {{ form.password2 }}
                     <span class="holder">重复密码</span>
                 </div> 
                 <div class="holding">&nbsp;</div>

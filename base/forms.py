@@ -1,0 +1,48 @@
+# -*- coding: utf-8 -*-  
+from django import forms
+from django.utils.safestring import mark_safe
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+
+def popover(self,title,content):
+    self.widget.attrs['rel']="popover"
+    self.widget.attrs['data-content']=content.encode('utf-8')
+    self.widget.attrs['data-original-title']=title.encode('utf-8')
+
+forms.Field.popover=popover
+
+def getitem(self,sp,s):
+    if sp.errors:
+        self.fields[s].widget.attrs['class']=sp.css_classes('error')
+        ms=("<span class='error help-inline'>%s</span>" % sp.errors[0])
+        return mark_safe(mark_safe(str(sp).decode('utf-8'))+ms)
+    else: return mark_safe(str(sp))
+
+
+class LoginForm(forms.Form):
+    """docstring"""
+    username=forms.CharField(max_length=32, required=True)
+    password=forms.CharField(max_length=32,min_length=6,required=True,widget=forms.PasswordInput)
+    def __getitem__(self,s):
+        return getitem(self,forms.Form.__getitem__(self,s),s)
+
+class SignupForm(UserCreationForm):
+    fullname = forms.CharField(max_length=45,required=True)
+    email = forms.EmailField(max_length=75,required=True)
+    student_num = forms.CharField(max_length=8,min_length=8)
+
+    def __init__(self,data=None):
+        UserCreationForm.__init__(self,data)
+        self.fields['fullname'].popover(u'姓名',u'请输入您的真实姓名，以便更好地使用本站服务')
+        self.fields['email'].popover(u'电子邮箱',u'请输入您的常用电子邮箱，此邮箱将会成为您的登陆邮箱和找回密码时的安全邮箱')
+        self.fields['student_num'].popover(u'学号',u'请正确输入您的学号，以便我们识别出您的院系和专业')
+        self.fields['password1'].popover(u'密码',u'密码由字母、数字和下划线组成，请妥善保管！')
+        self.fields['password2'].popover(u'重复密码',u'重复输入密码以确认输入无误')
+
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2","fullname","student_num")
+    def __getitem__(self,s):
+        return getitem(self,UserCreationForm.__getitem__(self,s),s)

@@ -6,12 +6,12 @@
 <div class="topbar">
     <div class="fill">
         <div class="container">
-            <a href="#" class="brand">NearsideBindings</a>
-        <ul class="nav secondary-nav">
-            <li>
+            <a href="/" class="brand">NearsideBindings</a>
+            <ul class="nav secondary-nav">
+                <li>
                 <a href="/signup">注册</a>
-            </li>
-        </ul>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
@@ -27,24 +27,23 @@
         <div class="span4">
             <h2>输入您的凭证</h2>
             <p>
-                请在右边的表单中正确输入您的登陆凭证。
+            请在右边的表单中正确输入您的登陆凭证。
             </p>
         </div>
         <div class="span11" style="padding-left:19px; border-left:1px solid #eee; min-height:500px;">
-            <form action="" id="account">
+            <form action="" id="account" method="POST" accept-charset="utf-8">
+                {% csrf_token %}
                 <div class="holding">
-                    <input type="text" />
-                    <span class="holder">登陆邮箱</span>
-                    <label for="" class="remember">
-                        <input type="checkbox" />
-                        <span>记住我</span>
-                    </label>
+                    {{ form.username }}
+                    <span class="holder">用户名/邮箱地址</span>
                 </div> 
                 <div class="holding">
-                    <input type="password" />
+                    {{ form.password }}
                     <span class="holder">密码</span>
-                    <p><a href="" title="">忘记密码？</a></p>
                 </div>                
+                <p>
+                     <a href="">忘记密码?</a>
+                </p>
                 <input type="submit" class="btn primary" value="登陆"/>
                 <input type="reset" class="btn" value="重置"/>
             </form>
@@ -52,17 +51,17 @@
     </div>
 </div>
 <footer id="footer">
-    <div class="container">
-        <ul id="friends-link" class="nav">
-            <h5>友情链接</h5>
-            <li><a href="#">Example.com</a></li>
-            <li><a href="#">Example.com</a></li>
-            <li><a href="#">Example.com</a></li>
-            <li><a href="#">Example.com</a></li>
-            <li><a href="#">Example.com</a></li>
-            <li><a href="#">Example.com</a></li>
-        </ul>
-        <p id="copyright">&copy; Trypsin 2011</p>
-    </div>
+<div class="container">
+    <ul id="friends-link" class="nav">
+        <h5>友情链接</h5>
+        <li><a href="#">Example.com</a></li>
+        <li><a href="#">Example.com</a></li>
+        <li><a href="#">Example.com</a></li>
+        <li><a href="#">Example.com</a></li>
+        <li><a href="#">Example.com</a></li>
+        <li><a href="#">Example.com</a></li>
+    </ul>
+    <p id="copyright">&copy; Trypsin 2011</p>
+</div>
 </footer>
 {% endblock %}

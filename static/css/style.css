@@ -111,3 +111,17 @@ ul.list .content p { margin-bottom:2px; }
 #policy iframe { width:340px;height:100% }
 
 #member-counter { margin-left:30px; }
+
+span.help-inline.error{
+  color: #b94a48;
+}
+input.error{
+  color: #b94a48;
+  border-color: #ee5f5b;
+}
+input.error:focus {
+  border-color: #e9322d;
+  -webkit-box-shadow: 0 0 6px #f8b9b7;
+  -moz-box-shadow: 0 0 6px #f8b9b7;
+  box-shadow: 0 0 6px #f8b9b7;
+}

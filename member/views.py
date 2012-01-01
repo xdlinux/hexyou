@@ -1,5 +1,7 @@
 # Create your views here.
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response,redirect
+from django.contrib import auth
+
 
 def frontpage(request):
     """docstring for person"""
