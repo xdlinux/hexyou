@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load bootstrap %}
 
 {% block title %}注册{% endblock title %}
 
@@ -40,30 +41,21 @@
             <form action="" id="account" method="POST">
                 {% csrf_token %}
                 <h3>个人信息</h3>
-                <div class="holding">
-                    {{ form.fullname }}
-                    <span class="holder">全名</span>
-                </div> 
-                
-                <div class="holding">
-                    {{ form.email }}
-                    <span class="holder">电子邮箱</span>
-                </div> 
-                <div class="holding">
-                    {{ form.student_num }}
-                    <span class="holder">学号</span>
-                </div> 
+                {{ form.fullname|holding:"全名" }}
+                {{ form.email|holding:"电子邮件" }}
+                {{ form.student_num|holding:"学号" }}
                 <div class="holding">&nbsp;</div>
-                <h3>登陆</h3>
-                <div class="holding">
-                    {{ form.password1 }}
-                    <span class="holder" >密码</span>
-                </div> 
-                <div class="holding">
-                    {{ form.password2 }}
-                    <span class="holder">重复密码</span>
-                </div> 
+                <h3>账户</h3>
+                {{ form.password1|holding:"密码" }}
+                {{ form.password2|holding:"重复密码" }}
                 <div class="holding">&nbsp;</div>
+                <h3>联系方式
+                <small>(选填)</small>
+                </h3>
+                {{ form.contact_twitter|prepend:"@|Twitter ID" }}
+                {{ form.contact_qq|holding:"QQ"}}
+                {{ form.contact_msn|holding:"MSN"}}
+                {{ form.contact_sina|holding:"新浪微博"}}
                 <h3>服务协议</h3>
                 <div class="well" id="policy">
                     <iframe src="/static/html/policy.html" frameborder="0"></iframe>

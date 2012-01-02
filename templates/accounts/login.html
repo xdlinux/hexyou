@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load bootstrap %}
 
 {% block title %}登录{% endblock title %}
 
@@ -33,14 +34,8 @@
         <div class="span11" style="padding-left:19px; border-left:1px solid #eee; min-height:500px;">
             <form action="" id="account" method="POST" accept-charset="utf-8">
                 {% csrf_token %}
-                <div class="holding">
-                    {{ form.username }}
-                    <span class="holder">用户名/邮箱地址</span>
-                </div> 
-                <div class="holding">
-                    {{ form.password }}
-                    <span class="holder">密码</span>
-                </div>                
+                {{ form.username|holding:"用户名/邮箱地址" }}
+                {{ form.password|holding:"密码" }}
                 <p>
                      <a href="">忘记密码?</a>
                 </p>

@@ -9,6 +9,7 @@ def popover(self,title,content):
     self.widget.attrs['rel']="popover"
     self.widget.attrs['data-content']=content.encode('utf-8')
     self.widget.attrs['data-original-title']=title.encode('utf-8')
+    return self
 
 forms.Field.popover=popover
 
@@ -16,9 +17,9 @@ def getitem(self,sp,s):
     if sp.errors:
         self.fields[s].widget.attrs['class']=sp.css_classes('error')
         ms=("<span class='error help-inline'>%s</span>" % sp.errors[0])
-        return mark_safe(mark_safe(str(sp).decode('utf-8'))+ms)
-    else: return mark_safe(str(sp))
-
+        return str(sp).decode('utf-8')+ms
+    else:
+        return sp
 
 class LoginForm(forms.Form):
     """docstring"""
@@ -30,7 +31,15 @@ class LoginForm(forms.Form):
 class SignupForm(UserCreationForm):
     fullname = forms.CharField(max_length=45,required=True)
     email = forms.EmailField(max_length=75,required=True)
-    student_num = forms.CharField(max_length=8,min_length=8)
+    student_num = forms.RegexField(regex=r'\d{8}',error_messages={'invalid':'请输入正确的学号'})
+
+    contact_qq = forms.RegexField(regex=r'\d+',required=False,
+            min_length=4,
+            error_messages={'invalid':'请输入正确的QQ号(由纯数字组成)'}
+            )
+    contact_msn = forms.RegexField(regex=r'\S+',required=False)
+    contact_sina = forms.RegexField(regex=r'\S+',required=False)
+    contact_twitter = forms.RegexField(regex=r'\w+',required=False)
 
     def __init__(self,data=None):
         UserCreationForm.__init__(self,data)
@@ -43,6 +52,16 @@ class SignupForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("username", "email", "password1", "password2","fullname","student_num")
+        fields = ("username",
+                "email",
+                "password1",
+                "password2",
+                "fullname",
+                "student_num",
+                "contact_qq",
+                "contact_msn",
+                "contact_sina",
+                "contact_twitter",
+                )
     def __getitem__(self,s):
         return getitem(self,UserCreationForm.__getitem__(self,s),s)

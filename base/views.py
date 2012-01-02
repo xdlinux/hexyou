@@ -13,12 +13,16 @@ def home(request):
     return render_to_response("home.html")
 
 def signup(request):
-    if request.method=="POST":
+    if request.method=="POST" and (not request.POST.has_key('from_mainpage')):
         form=SignupForm(request.POST)
         if form.is_valid():
             print "do something to create an user"
             return ""
-    else: form=SignupForm()
+    else:
+        form=SignupForm()
+        for name in ['fullname','email','student_num']:
+            if request.POST.has_key(name):
+                form.fields[name].widget.attrs['value']=request.POST[name]
     return render_to_response("accounts/signup.html",{'form':form},context_instance=RequestContext(request))
 
 

@@ -82,17 +82,18 @@
         <div class="span6 offset2">
             <h2>加入我们</h2>
             <form action="signup" method="post" accept-charset="utf-8" id="front-signup">{% csrf_token %}
+                <input  type="hidden" value="from_mainpage" name="from_mainpage"/>
                 <div class="holding">
-                    <input type="text" name="username" class="span6" />
-                    <span class="holder">用户名</span>
+                    <input type="text" name="fullname" class="span6" />
+                    <span class="holder">全名</span>
                 </div>
                 <div class="holding">
                     <input type="email" name="email" class="span6" />
                     <span class="holder">邮箱</span>
                 </div>
                 <div class="holding">
-                    <input type="password" name="password" class="span6" />
-                    <span class="holder">密码</span>
+                    <input type="text" name="student_num" class="span6" />
+                    <span class="holder">学号</span>
                 </div>
                 <input type="submit" name="submit" value="注册" class="btn primary" />
             </form>

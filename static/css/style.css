@@ -112,6 +112,10 @@ ul.list .content p { margin-bottom:2px; }
 
 #member-counter { margin-left:30px; }
 
+#account .input-prepend .holder{left:50px}
+#account .input-prepend>input{width:280px}
+#account .input-prepend .add-on{width:20px;font-size:20px;padding:9px}
+
 span.help-inline.error{
   color: #b94a48;
 }
