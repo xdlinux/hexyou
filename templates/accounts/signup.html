@@ -40,14 +40,15 @@
         <div class="span12">
             <form action="" id="account" method="POST">
                 {% csrf_token %}
-                <h3>个人信息</h3>
-                {{ form.fullname|holding:"全名" }}
-                {{ form.email|holding:"电子邮件" }}
-                {{ form.student_num|holding:"学号" }}
-                <div class="holding">&nbsp;</div>
                 <h3>账户</h3>
+                {{ form.username|holding:"用户名" }}
                 {{ form.password1|holding:"密码" }}
                 {{ form.password2|holding:"重复密码" }}
+                <div class="holding">&nbsp;</div>
+                <h3>个人信息</h3>
+                {{ form.last_name|holding:"全名" }}
+                {{ form.email|holding:"电子邮件" }}
+                {{ form.student_num|holding:"学号" }}
                 <div class="holding">&nbsp;</div>
                 <h3>联系方式
                 <small>(选填)</small>
@@ -55,7 +56,7 @@
                 {{ form.contact_twitter|prepend:"@|Twitter ID" }}
                 {{ form.contact_qq|holding:"QQ"}}
                 {{ form.contact_msn|holding:"MSN"}}
-                {{ form.contact_sina|holding:"新浪微博"}}
+                {{ form.contact_fanfou|holding:"饭否"}}
                 <h3>服务协议</h3>
                 <div class="well" id="policy">
                     <iframe src="/static/html/policy.html" frameborder="0"></iframe>

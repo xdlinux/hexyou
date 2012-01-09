@@ -1,9 +1,11 @@
 {% extends "members/base.html" %}
 
-{% block title %}Kim Jong II{% endblock title %}
+{% block title %}
+{{ user.last_name }}
+{% endblock title %}
 
 {% block subtitle %}
-<a href="">@kimjongii</a>
+<a href="">({{ user }})</a>
 {% endblock subtitle %}
 
 {% block main %}
@@ -18,13 +20,13 @@
             <dt>主页</dt>
             <dd><a href="http://www.korea-dpr.com/">http://www.korea-dpr.com/</a></dd>
             <dt>注册日期</dt>
-            <dd>1942年2月16日</dd>
+            <dd>{{ user.date_joined|date:"Y-m-d H:i"}}</dd>
         </dl>
         <p>朝鲜民主主义人民共和国的第二代最高领导人，原朝鲜劳动党总书记、国防委员会委员长、朝鲜人民军最高司令官，拥有共和国元帅军衔。</p>
     </div>
 </div>
 <p class="extra align-right">
-    <a href="#" class="btn primary">联系Kim Jong II</a>
+<a href="#" class="btn primary">联系{{ user.fullname }}</a>
     <a href="#" class="btn">咻！</a>
 </p>
 <h3>参加的活动</h3>

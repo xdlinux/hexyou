@@ -5,7 +5,8 @@ register=template.Library()
 
 @register.filter
 def holding(holding,holder):
-    return mark_safe("<div class='holding'>\n%s\n<span class='holder'>%s</span>\n</div>"%(holding,holder))
+    s="<div class='holding'>\n%s\n<span class='holder'>%s</span>\n</div>"% (holding,holder)
+    return mark_safe(s)
 
 @register.filter
 def prepend(content,prepend):
