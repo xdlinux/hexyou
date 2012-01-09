@@ -5,7 +5,8 @@ from django.template import RequestContext
 from NearsideBindings.base.forms import LoginForm,SignupForm
 
 def index(request):
-    """index"""
+    if request.user.is_authenticated():
+        return redirect('/members/%s/'% request.user.username)
     return render_to_response("index.html",locals(),context_instance=RequestContext(request))
 
 def home(request):
@@ -13,12 +14,19 @@ def home(request):
     return render_to_response("home.html")
 
 def signup(request):
-    if request.method=="POST":
+    if request.method=="POST" and (not request.POST.has_key('from_mainpage')):
         form=SignupForm(request.POST)
+        print form.errors
         if form.is_valid():
-            print "do something to create an user"
-            return ""
-    else: form=SignupForm()
+            new_user=form.save()
+            login_user=auth.authenticate(username=new_user.username,password=request.POST['password1'])
+            auth.login(request,login_user)
+            return redirect('/members/%s/' % new_user.username)
+    else:
+        form=SignupForm()
+        for name in ['last_name','email','student_num']:
+            if request.POST.has_key(name):
+                form.fields[name].widget.attrs['value']=request.POST[name]
     return render_to_response("accounts/signup.html",{'form':form},context_instance=RequestContext(request))
 
 
@@ -31,9 +39,9 @@ def login(request):
             user=auth.authenticate(username=username,password=password)
             if user!=None:
                 auth.login(request,user)
-                return redirect('/%s/' % user.id)
+                return redirect('/members/%s/' % user.username)
             else:
-                return render_to_response('accounts/login.html',{'error','认证失败，请确认您的用户名和密码输入正确'},context_instance=RequestContext(request))
+                return render_to_response('accounts/login.html',context_instance=RequestContext(request))
     else: form=LoginForm()
     return render_to_response('accounts/login.html',{'form':form},context_instance=RequestContext(request))
     
