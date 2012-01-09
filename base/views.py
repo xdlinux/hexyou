@@ -5,7 +5,8 @@ from django.template import RequestContext
 from NearsideBindings.base.forms import LoginForm,SignupForm
 
 def index(request):
-    """index"""
+    if request.user.is_authenticated():
+        return redirect('/members/%s/'% request.user.username)
     return render_to_response("index.html",locals(),context_instance=RequestContext(request))
 
 def home(request):
