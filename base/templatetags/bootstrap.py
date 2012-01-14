@@ -19,10 +19,6 @@ def prepend(content,prepend):
 
 @register.filter
 def label(field,label):
-    args=label.split('|')
-    if len(args)==2:
-        s="<div class='clearfix'>\n<label for='%s'>%s</label>\n<div class='input'>%s</div>\n</div>" % (args[1], args[0], field)
-    else:
-        s="<div class='clearfix'>\n<label>%s</label>\n<div class='input'>%s</div>\n</div>" % (args[0], field)
+    s="<div class='clearfix'>\n<label for='%s'>%s</label>\n<div class='input'>%s</div>\n</div>" % (field.auto_id, label, field)
     return mark_safe(s)
 
