@@ -100,6 +100,19 @@ ul.list .content p { margin-bottom:2px; }
 .side-counter-block:last-child { margin:0; padding:0; border:0; text-align:left; }
 .side-counter-block .description { display:block; }
 #side-invition:after { clear:both; content:'.'; visibility:hidden; display:block; line-height:0; width:100% }
+.inner-post .holding { margin-bottom:12px; }
+.inner-post .holding>input, .inner-post>select { padding:9px; }
+.inner-post>select { height:37px; line-height:37px; }
+.inner-post .holder { left:10px; line-height:38px; }
+.inner-post label { width:60px; }
+.inner-post .input { margin-left:80px; }
+.inner-post textarea { width:480px; min-height:120px; }
+.inner-post .datetime input { width:120px; }
+.inner-post .actions { padding-left:80px; }
+#side-activity-invition .holding { display:inline; margin-bottom:8px; }
+#side-activity-invition input { padding:9px; width:255px; }
+#side-activity-invition .add-on { padding:9px; }
+#side-activity-invition .holding .holder { left:12px; line-height:16px; }
 
 /* accounts  */
 #account { font-size:15px; }
