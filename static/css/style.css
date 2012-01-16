@@ -109,6 +109,8 @@ ul.list .content p { margin-bottom:2px; }
 .inner-post textarea { width:480px; min-height:120px; }
 .inner-post .datetime input { width:120px; }
 .inner-post .actions { padding-left:80px; }
+.inner-post .input ul { list-style:none; margin:0; }
+.inner-post .input ul label { float:none; }
 #side-activity-invition .holding { display:inline; margin-bottom:8px; }
 #side-activity-invition input { padding:9px; width:255px; }
 #side-activity-invition .add-on { padding:9px; }
