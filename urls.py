@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     url(r'^members/(\w[a-zA-Z0-9_]{1,20})/?$','NearsideBindings.member.views.single'),
     url(r'^groups/?$','NearsideBindings.group.views.frontpage'),
     url(r'^groups/single/?$','NearsideBindings.group.views.single'),
+    url(r'^groups/found/?$','NearsideBindings.group.views.found'),
      url(r'^admin/', include(admin.site.urls)),
 )
 urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_ROOT )
