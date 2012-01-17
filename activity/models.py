@@ -8,9 +8,9 @@ class Location(models.Model):
 class Activity(models.Model):
     name = models.CharField(max_length=30)
     date = models.DateField()
-    begin_time = models.TimeField()
-    end_time = models.TimeField()
-    description = models.TextField(null=True, blank=True)
+    begin_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    description = models.TextField()
     location = models.ForeignKey(Location)
     participator = models.ManyToManyField(User)
     hosts = models.ManyToManyField(Group)
