@@ -1,6 +1,6 @@
 {% extends "groups/base.html" %}
 
-{% block title %}CPC{% endblock title %}
+{% block title %}{{ group }}{% endblock title %}
 
 {% block subtitle %}<span class="label important">执政党</span>{% endblock subtitle %}
 
@@ -16,9 +16,9 @@
     <div class="span7">
         <dl id="profile">
             <dt>创始人</dt>
-            <dd>Mao</dd>
+            <dd>{{ group.founder }}</dd>
             <dt>始于</dt>
-            <dd>1921年7月</dd>
+            <dd>{{ group.create_date|date:"Y-m-d" }}</dd>
             <dt>链接</dt>
             <dd><a href="http://www.cpcnews.cn/">http://www.cpcnews.cn/</a></dd>
         </dl>
@@ -29,7 +29,15 @@
     <a href="#" class="btn">+65535</a>
 </p>
 <h3>简介</h3>
-<p class="intro">洋說時東訴速著西出，可光景童場位：法國油著無配親最的。也化即感施落手法幾個記農，兩告數深。後一術是邊太們，了心生子。兩人這識藝，觀不時變著。本消亞頭打不一日體腦裡眾依決幾值地的角她子適我地選係的面，我樂友率間什走美營：心他會公不……及如如情現關地著……也她內景但後證會象光是，女海我眾看中政別！統鄉就……各童上……紅紙力神月林們先去火呢。學樂斷語都晚自陸一來國市業有任愛這沒專班卻員能布民痛所歷去思們這狀那這一燈藝了黃代技家天來念是看能樂在母這動後辦聲叫原是動象價位住明手父為接得希每登親一步……會配大前英重日組入我非我人的想觀求不子，於賣海不局口在，廠變重式臺獎！健能報只起增進因！團人們知：業過使我女了高，國文開工會最是數？學過到朋政型全臺事南；平小上到兒，過學社年下看，得或？</p>
+<p class="intro">
+{% if group.description %}
+{{ group.description }}
+{% else %}
+<small>
+    这个组织很懒，什么都没写
+</small>
+{% endif %}
+</p>
 <h3>最近活动</h3>
 <div id="latest-activity" class="row">
     <div class="span3">

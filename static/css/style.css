@@ -135,7 +135,7 @@ ul.list .content p { margin-bottom:2px; }
 span.help-inline.error{
   color: #b94a48;
 }
-input.error{
+input.error,select.error{
   color: #b94a48;
   border-color: #ee5f5b;
 }

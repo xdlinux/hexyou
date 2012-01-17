@@ -39,6 +39,8 @@ def login(request):
             user=auth.authenticate(username=username,password=password)
             if user!=None:
                 auth.login(request,user)
+                if request.GET and request.GET.has_key('next'):
+                    return redirect(request.GET['next'])
                 return redirect('/members/%s/' % user.username)
             else:
                 return render_to_response('accounts/login.html',context_instance=RequestContext(request))
