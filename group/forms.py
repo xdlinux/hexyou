@@ -1,21 +1,29 @@
 # -*- coding: utf-8 -*-  
 from django import forms
 from django.utils.safestring import mark_safe
+from NearsideBindings.group.models import Group,MemberShip
 
-CONDITIONS = (
-    ('public','允许任何人加入'),
-    ('managed','需要管理员批准才能加入'),
-    ('private','只有被邀请的人才能加入'),
-)
 
-GROUP_TYPES = (
-    ('real','实体组织'),
-    ('virtual','虚拟组织'),
-)
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model=Group
+        exclude = ('founder','members','avatar')
+    
+    def create_group(self,user):
+        if self.is_valid():
+            group=self.save()
+            group.founder=user
+            group.save()
+            membership=MemberShip.objects.create(user=user,group=group,is_admin=True)
+            return (True,group,membership)
+        else: return (False,None,None)
+    def __getitem__(self,name):
+        field=forms.ModelForm.__getitem__(self,name)
+        if field.errors:
+            print "error: %s" % name
+            self.fields[name].widget.attrs['class']=field.css_classes('error')
+        return field
 
-class FoundGroup(forms.Form):
-    name = forms.CharField(max_length=20)
-    description = forms.CharField(widget=forms.Textarea)
-    types = forms.ChoiceField(choices=GROUP_TYPES,widget=forms.RadioSelect)
-    condition = forms.ChoiceField(choices=CONDITIONS,widget=forms.RadioSelect)
-    avatar = forms.ImageField()
+
+        
+

@@ -2,5 +2,9 @@
 {% load topbar %}
 
 {% block header %}
+{% topbar profile %}
+{% if is_me %}
+{% else %}
 {% topbar members members/topbar.html %}
+{% endif %}
 {% endblock %}

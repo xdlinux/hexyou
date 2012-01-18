@@ -9,7 +9,7 @@ ACTIVITY_TYPES = (
     ('a','广大人民群众喜闻乐见'),
 )
 
-class HostActivity(forms.Form):
+class ActivityForm(forms.Form):
     title = forms.CharField(max_length=45,required=True)
     types = forms.ChoiceField(choices=ACTIVITY_TYPES)
     start = forms.DateTimeField()

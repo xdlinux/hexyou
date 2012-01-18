@@ -6,21 +6,26 @@
 {% block subtitle %}自己不曾拥有，就快乐地欣赏别人的拥有{% endblock subtitle %}
 
 {% block main %}
-<form id="found-group" class="inner-post" enctype="multipart/form-data" action="activities/host" method="post" accept-charset="utf-8">
+<form id="found-group" class="inner-post" enctype="multipart/form-data" action="" method="post" accept-charset="utf-8">
     {% csrf_token %}
     <div class="row">
         <div class="span7">
-            {{ form.avatar|label:"头图" }}
             {{ form.name|label:"名称" }}
-            {{ form.types|label:"类型" }}
-            {{ form.condition|label:"门槛" }}
-        </div>
-        <div class="span3">
-            <img src="http://placehold.it/150x150" class="avatar" />
+            {{ form.condition|label:"组织类型" }}
+            {{ form.group_type|label:"门槛" }}
         </div>
     </div>
     {{ form.description|label:"介绍" }}
     <div class="actions">
+        {% if form.errors %}
+        <ul class="errors">            
+        {% for error in form.errors %}
+        <li>
+        {{ error }}
+        </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
         <input class="btn primary" type="submit" value="创建组织">
         <button class="btn" type="reset">取消</button>
     </div>
