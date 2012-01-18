@@ -30,6 +30,7 @@ urlpatterns = patterns('',
     url(r'^groups/single/(\d+)$','NearsideBindings.group.views.single'),
     url(r'^groups/new/?$','NearsideBindings.group.views.new'),
      url(r'^admin/', include(admin.site.urls)),
+     url(r'^avatar/', include('avatar.urls')),
 )
 urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_ROOT )
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT )
