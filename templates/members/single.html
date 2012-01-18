@@ -1,17 +1,18 @@
 {% extends "members/base.html" %}
+{% load avatar_tags %}
 
 {% block title %}
 {{ user.last_name }}
 {% endblock title %}
 
 {% block subtitle %}
-<a href="">({{ user }})</a>
+<a href="/members/{{ user }}">({{ user }})</a>
 {% endblock subtitle %}
 
 {% block main %}
 <div class="row">
     <div class="span3">
-        <img src="http://placehold.it/150x150" class="avatar" alt="" />
+        <div class="avatar">{% avatar user 150 %}</div>
         <p id="member-counter">发起活动 <span class="label success">31</span>
         <br />参加活动 <span class="label warning">4159</span></p>
     </div>

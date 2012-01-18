@@ -11,7 +11,7 @@ textarea { resize:vertical; }
 .extra { text-align:center; margin-top:8px; padding:8px; border-top:1px solid #eee; }
 ul.avatar { margin-left:0; }
 ul.avatar a { margin-left:10px; padding:1px; }
-img.avatar { padding:1px; border:1px solid #eee; border-radius:6px; }
+div.avatar img { padding:1px; border:1px solid #eee; border-radius:6px; }
 .align-right { text-align:right }
 .align-left { text-align:left }
 .intro { background:#f7f7f7; padding:10px; border-radius:5px; border:1px #f0f0f0 solid }
