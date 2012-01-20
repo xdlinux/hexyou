@@ -10,12 +10,12 @@ class GroupForm(ModelForm):
         exclude = ('founder','members')
         widgets = {
             'condition': RadioSelect(),
-            'avatar' : HiddenInput(),
+            'avatar': HiddenInput(),
         }
     
     def create_group(self,user):
         if self.is_valid():
-            group=self.save()
+            group=self.save(commit=False)
             group.founder=user
             group.save()
             membership=MemberShip.objects.create(user=user,group=group,is_admin=True)

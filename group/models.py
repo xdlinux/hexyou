@@ -23,7 +23,7 @@ class Group(models.Model):
     description = models.TextField(null=True, blank=True)
     condition = models.ForeignKey(Condition,default=1)
     group_type = models.ForeignKey(GroupType,default=1)
-    avatar = models.FilePathField(default='/static/images/group_default.jpg')
+    avatar = models.CharField(max_length=512,default='/static/images/group_default.jpg')
     def __unicode__(self):
         return self.name
     
