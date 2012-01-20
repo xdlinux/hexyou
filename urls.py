@@ -3,8 +3,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
-from NearsideBindings.base.views  import *
-from NearsideBindings.group.views import *
+from NearsideBindings.base.views import *
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -27,9 +26,12 @@ urlpatterns = patterns('',
     url(r'^members/?$','NearsideBindings.member.views.frontpage'),
     url(r'^members/(\w[a-zA-Z0-9_]{1,20})/?$','NearsideBindings.member.views.single'),
     url(r'^groups/?$','NearsideBindings.group.views.frontpage'),
-    url(r'^groups/single/(\d+)$','NearsideBindings.group.views.single'),
+    url(r'^groups/(\d+)$','NearsideBindings.group.views.single'),
     url(r'^groups/new/?$','NearsideBindings.group.views.new'),
      url(r'^admin/', include(admin.site.urls)),
+     url(r'^avatar/', include('avatar.urls')),
+     url(r'^upload/?$',upload),
+     url(r'^crop/(\w+)/?$',crop)
 )
 urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_ROOT )
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT )

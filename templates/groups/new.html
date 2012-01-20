@@ -10,9 +10,17 @@
     {% csrf_token %}
     <div class="row">
         <div class="span7">
+            <div class="clearfix">
+                <label>头图</label>
+                <div class="input">{% include "ajaxcrop.html" %}</div>
+            </div>
+            {{ form.avatar }}
             {{ form.name|label:"名称" }}
-            {{ form.condition|label:"组织类型" }}
-            {{ form.group_type|label:"门槛" }}
+            {{ form.group_type|label:"组织类型" }}
+            {{ form.condition|label:"门槛" }}
+        </div>
+        <div class="span3 avatar" style="text-align:center">
+            <img id="preview" class="avatar" src="http://placehold.it/150x150" />
         </div>
     </div>
     {{ form.description|label:"介绍" }}

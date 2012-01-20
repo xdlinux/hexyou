@@ -3,6 +3,9 @@
 *.pyc
 local_settings.py
 *.db
+*.sqlite
 export.sh
 PYSMELLTAGS
 PYSMELLTAGS.*
+.ropeproject
+media/*

@@ -2,7 +2,13 @@
 from django.shortcuts import render_to_response,redirect
 from django.contrib import auth
 from django.template import RequestContext
-from NearsideBindings.base.forms import LoginForm,SignupForm
+from NearsideBindings.base.forms import LoginForm,SignupForm,ImageCrop,ImageUpload
+from NearsideBindings.base.utils import JsonResponse, upload_image
+from NearsideBindings.settings import MEDIA_ROOT, MEDIA_URL, IMAGE_SAVE_CHOICES
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
+import Image, os
 
 def index(request):
     if request.user.is_authenticated():
@@ -46,5 +52,60 @@ def login(request):
                 return render_to_response('accounts/login.html',context_instance=RequestContext(request))
     else: form=LoginForm()
     return render_to_response('accounts/login.html',{'form':form},context_instance=RequestContext(request))
-    
 
+@csrf_exempt
+def upload(request):
+    if request.method == "POST":
+        form = ImageUpload(request.POST, request.FILES)
+        if form.is_valid():
+            rlpath = upload_image(request.FILES['Filedata'])
+            if rlpath:
+                return JsonResponse({'path':rlpath})
+            else:
+                return HttpResponse('Uploading error')
+        else:
+            return HttpResponse('Invalid content')
+    else:
+        return HttpResponse('Bad request')
+
+def crop(request,save_to):
+    if request.method == "POST" and save_to in IMAGE_SAVE_CHOICES:
+        form = ImageCrop(request.POST)
+        if form.is_valid():
+            now = datetime.now()
+            x = form.cleaned_data['x']
+            y = form.cleaned_data['y']
+            w = form.cleaned_data['w']
+            h = form.cleaned_data['h']
+            cw = form.cleaned_data['cw']
+            ch = form.cleaned_data['ch']
+            path = form.cleaned_data['path']
+            filename = os.path.basename(path)
+            abs_path = os.path.join(MEDIA_ROOT,'tmp',os.path.basename(path))
+            img = Image.open(abs_path)
+            rw = img.size[0]
+            rh = img.size[1]
+            x_rate = float(rw)/float(cw)
+            y_rate = float(rh)/float(ch)
+            x1 = int(round(x_rate*x))
+            y1 = int(round(y_rate*y))
+            x2 = int(round(x_rate*(x+w)))
+            y2 = int(round(y_rate*(y+h)))
+            box = (x1,y1,x2,y2)
+            crop = img.crop(box)
+            size = 150,150
+            crop.thumbnail(size,Image.ANTIALIAS)
+            base_path=os.path.join(MEDIA_ROOT,save_to)
+            if not os.path.isdir(base_path):
+                os.mkdir(base_path)
+            date = now.strftime('%Y%m')
+            date_path=os.path.join(base_path,date)
+            if not os.path.isdir(date_path):
+                os.mkdir(date_path)
+            full_path = os.path.join(date_path,filename)
+            crop.save(full_path)
+            return JsonResponse({'path':os.path.join(MEDIA_URL,save_to,date,filename)})
+        else:
+            return HttpResponse('Bad Request')
+    else:
+        return HttpResponse('Permission Denied')
