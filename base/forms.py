@@ -67,3 +67,15 @@ class SignupForm(UserCreationForm):
                 )
     def __getitem__(self,s):
         return getitem(self,UserCreationForm.__getitem__(self,s),s)
+
+class ImageUpload(forms.Form):
+    Filedata = forms.ImageField(required=True)
+
+class ImageCrop(forms.Form):
+    path = forms.CharField(required=True)
+    x = forms.IntegerField(required=True)
+    y = forms.IntegerField(required=True)
+    w = forms.IntegerField(required=True)
+    h = forms.IntegerField(required=True)
+    cw = forms.IntegerField(required=True)
+    ch = forms.IntegerField(required=True)

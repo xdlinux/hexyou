@@ -6,3 +6,4 @@ local_settings.py
 *.sqlite
 export.sh
 .ropeproject
+media/*

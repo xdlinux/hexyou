@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response,redirect,get_object_or_404
 from NearsideBindings.group.forms import GroupForm
 from NearsideBindings.group.models import Group
+from NearsideBindings.base.forms import ImageUpload, ImageCrop
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.http import HttpResponseForbidden
@@ -20,7 +21,7 @@ def new(request):
         form = GroupForm(request.POST)
         success,group,membership=form.create_group(request.user)
         if success:
-            return redirect('/groups/single/%d' % group.id)
+            return redirect('/groups/%d' % group.id)
     else:
         form=GroupForm()
     return render_to_response('groups/new.html', {

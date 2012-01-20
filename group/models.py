@@ -21,9 +21,9 @@ class Group(models.Model):
     members = models.ManyToManyField(User,related_name='members',through='MemberShip')
     create_date = models.DateField(auto_now_add=True)
     description = models.TextField(null=True, blank=True)
-    condition = models.ForeignKey(Condition)
-    group_type = models.ForeignKey(GroupType)
-    avatar = models.ImageField(upload_to="avatar/%Y/%m/%d/", null=True)
+    condition = models.ForeignKey(Condition,default=1)
+    group_type = models.ForeignKey(GroupType,default=1)
+    avatar = models.FilePathField(default='/static/images/group_default.jpg')
     def __unicode__(self):
         return self.name
     

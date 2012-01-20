@@ -163,3 +163,8 @@ LOGGING = {
                 },
             }
         }
+
+IMAGE_SAVE_CHOICES = (
+    'groups',
+    'activities'
+)
