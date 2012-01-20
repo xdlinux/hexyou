@@ -4,3 +4,5 @@
 local_settings.py
 *.db
 export.sh
+PYSMELLTAGS
+PYSMELLTAGS.*
