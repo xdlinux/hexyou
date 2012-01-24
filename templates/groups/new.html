@@ -16,11 +16,12 @@
             </div>
             {{ form.avatar }}
             {{ form.name|label:"名称" }}
+            {{ form.slug|label:"Slug" }}
             {{ form.group_type|label:"组织类型" }}
             {{ form.condition|label:"门槛" }}
         </div>
         <div class="span3 avatar" style="text-align:center">
-            <img id="preview" class="avatar" src="http://placehold.it/150x150" />
+            <img id="preview" class="avatar" src="/static/images/no_avatar.png" />
         </div>
     </div>
     {{ form.description|label:"介绍" }}
@@ -49,8 +50,11 @@
 <form id="side-activity-invition" action="" method="post" accept-charset="utf-8">
     <div class="input-prepend holding">
         <span class="add-on">@</span>
-        <input class="inform-input" type="text" name="" value="">
+        <input id="inform-input" type="text" name="" value="" request-type="user">
+        <textarea id="inform-list" name="inform" class="hide"></textarea>
         <span class="holder">邀请好友</span>
+    </div>
+    <div id="label-list">
     </div>
 </form>
 {% endblock side %}

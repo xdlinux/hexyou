@@ -42,8 +42,11 @@
 <form id="side-activity-invition" action="" method="post" accept-charset="utf-8">
     <div class="input-prepend holding">
         <span class="add-on">@</span>
-        <input class="inform-input" type="text" name="" value="">
+        <input id="inform-input" type="text" name="" value="" request-type="all">
+        <textarea id="inform-list" name="inform" class="hide"></textarea>
         <span class="holder">邀请好友</span>
+    </div>
+    <div id="label-list">
     </div>
 </form>
 {% endblock side %}

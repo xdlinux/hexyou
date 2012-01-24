@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date
+import md5, time
 
 # Create your models here.
 
@@ -17,6 +18,7 @@ class GroupType(models.Model):
 class Group(models.Model):
     """Group"""
     name = models.CharField(max_length=20,unique=True)
+    slug = models.SlugField(unique=True,default=md5.new(str(time.time())).hexdigest())
     founder = models.ForeignKey(User,related_name='founder')
     members = models.ManyToManyField(User,related_name='members',through='MemberShip')
     create_date = models.DateField(auto_now_add=True)

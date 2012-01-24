@@ -116,6 +116,9 @@ ul.list .content p { margin-bottom:2px; }
 #side-activity-invition input { padding:9px; width:255px; }
 #side-activity-invition .add-on { padding:9px; }
 #side-activity-invition .holding .holder { left:12px; line-height:16px; }
+#side-activity-invition #label-list { margin-top:8px; }
+#side-activity-invition #label-list .label { text-transform:none; margin-right:4px; cursor:pointer; font-size:13px; font-weight:normal; }
+#side-activity-invition #label-list .label-close { font-size:14px; }
 
 /* accounts  */
 #account { font-size:15px; }

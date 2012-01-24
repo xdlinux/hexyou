@@ -10,7 +10,9 @@ def frontpage(request):
 
 def single(request,username):
     """docstring for person"""
-    if request.user.is_authenticated(): 
+    if request.user.is_authenticated():
+        if not request.user.last_name:
+            request.user.last_name = request.user.username
         return render_to_response('members/single.html',{'user':request.user,'is_me':request.user.username==username})
     else: return redirect('/')
 

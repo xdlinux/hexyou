@@ -2,13 +2,15 @@
 from django.shortcuts import render_to_response,redirect
 from django.contrib import auth
 from django.template import RequestContext
-from NearsideBindings.base.forms import LoginForm,SignupForm,ImageCrop,ImageUpload
+from NearsideBindings.base.forms import LoginForm,SignupForm,ImageCrop,ImageUpload, InformAutocomplete
 from NearsideBindings.base.utils import JsonResponse, upload_image
 from NearsideBindings.settings import MEDIA_ROOT, MEDIA_URL, IMAGE_SAVE_CHOICES
+from NearsideBindings.group.models import Group
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
-import Image, os
+import Image, os, urllib
 
 def index(request):
     if request.user.is_authenticated():
@@ -109,3 +111,36 @@ def crop(request,save_to):
             return HttpResponse('Bad Request')
     else:
         return HttpResponse('Permission Denied')
+
+REQUEST_TYPES = (
+    'all',
+    'user',
+    'group',
+)
+
+def json(request):
+    if request.method == "POST":
+        form = InformAutocomplete(request.POST)
+        if form.is_valid():
+            request_type = form.cleaned_data['request_type']
+            request_phrase = form.cleaned_data['request_phrase']
+            if not request_type in REQUEST_TYPES:
+                return HttpResponse('Bad Request')
+            users,groups = [],[]
+            if not request_type == "user":
+                groups = get_groups(request_phrase)
+            if not request_type == "group":
+                users = get_users(request_phrase)
+            return JsonResponse(users+groups)
+        else:
+            return HttpResponse('Bad Request')
+    else:
+        return HttpResponse('Permission Denied')
+
+def get_users(request_phrase):
+    users = User.objects.filter(username__contains=request_phrase).order_by('username')[0:5]
+    return [{'avatar':user.avatar,'name':user.last_name,'slug':user.username,'category':urllib.quote('用户')} for user in users]
+
+def get_groups(request_phrase):
+    groups = Group.objects.filter(slug__contains=request_phrase).order_by('name')[0:5]
+    return [{'avatar':group.avatar,'name':group.name,'slug':group.slug,'category':urllib.quote('成员')} for group in groups]

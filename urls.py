@@ -29,9 +29,9 @@ urlpatterns = patterns('',
     url(r'^groups/(\d+)$','NearsideBindings.group.views.single'),
     url(r'^groups/new/?$','NearsideBindings.group.views.new'),
      url(r'^admin/', include(admin.site.urls)),
-     url(r'^avatar/', include('avatar.urls')),
      url(r'^upload/?$',upload),
-     url(r'^crop/(\w+)/?$',crop)
+     url(r'^crop/(\w+)/?$',crop),
+     url(r'^json/?$',json)
 )
 urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_ROOT )
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT )

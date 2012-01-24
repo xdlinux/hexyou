@@ -79,3 +79,7 @@ class ImageCrop(forms.Form):
     h = forms.IntegerField(required=True)
     cw = forms.IntegerField(required=True)
     ch = forms.IntegerField(required=True)
+
+class InformAutocomplete(forms.Form):
+    request_type = forms.SlugField(required=True)
+    request_phrase = forms.CharField(required=True)

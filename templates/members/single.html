@@ -1,5 +1,5 @@
 {% extends "members/base.html" %}
-{% load avatar_tags %}
+{% load gravatar %}
 
 {% block title %}
 {{ user.last_name }}
@@ -12,22 +12,30 @@
 {% block main %}
 <div class="row">
     <div class="span3">
-        <div class="avatar">{% avatar user 150 %}</div>
+        <div class="avatar"><img src="{% avatar user %}" /></div>
         <p id="member-counter">发起活动 <span class="label success">31</span>
         <br />参加活动 <span class="label warning">4159</span></p>
     </div>
     <div class="span7">
         <dl id="profile">
             <dt>主页</dt>
-            <dd><a href="http://www.korea-dpr.com/">http://www.korea-dpr.com/</a></dd>
+            {% if user.site %}
+            <dd><a href="{{ user.site }}/">{{ user.site }}</a></dd>
+            {% else %}
+            <dd><a href="{/members/{{ user.username }}}">{{ user.last_name }}@嘿咻</a></dd>
+            {% endif %}
             <dt>注册日期</dt>
             <dd>{{ user.date_joined|date:"Y-m-d H:i"}}</dd>
         </dl>
-        <p>朝鲜民主主义人民共和国的第二代最高领导人，原朝鲜劳动党总书记、国防委员会委员长、朝鲜人民军最高司令官，拥有共和国元帅军衔。</p>
+        {% if user.bio %}
+        <p class="intro">{{ user.bio }}</p>
+        {% else %}
+        <p class="intro">这个家伙很懒，什么都没有留下</p>
+        {% endif %}
     </div>
 </div>
 <p class="extra align-right">
-<a href="#" class="btn primary">联系{{ user.last_name }}</a>
+<a href="#" class="btn primary">联系 {{ user.last_name }}</a>
     <a href="#" class="btn">咻！</a>
 </p>
 <h3>参加的活动</h3>
