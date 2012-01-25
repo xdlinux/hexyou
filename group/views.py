@@ -11,8 +11,8 @@ def frontpage(request):
     """docstring for group"""
     return render_to_response('groups/frontpage.html')
 
-def single(request,group_id):
-    group = get_object_or_404(Group,id=group_id)
+def single(request,group_slug):
+    group = get_object_or_404(Group,slug=group_slug)
     return render_to_response('groups/single.html',locals())
 
 @login_required(login_url='/login/')
@@ -21,7 +21,7 @@ def new(request):
         form = GroupForm(request.POST)
         success,group,membership=form.create_group(request.user)
         if success:
-            return redirect('/groups/%d' % group.id)
+            return redirect('/groups/%s' % group.slug)
     else:
         form=GroupForm()
     return render_to_response('groups/new.html', {

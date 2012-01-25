@@ -9,7 +9,7 @@
 ### just make sure to update the "default" image path below
 
 from django import template
-import urllib, hashlib
+from NearsideBindings.base.utils import get_gravatar_url
 
 register = template.Library()
 
@@ -22,14 +22,7 @@ class GravatarUrlNode(template.Node):
             email = self.email.resolve(context)
         except template.VariableDoesNotExist:
             return ''
-
-        default = "/static/images/no_avatar.png"
-        size = 150
-
-        gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
-        gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
-
-        return gravatar_url
+        return get_gravatar_url(email)
 
 @register.tag
 def gravatar_url(parser, token):
@@ -44,8 +37,4 @@ def avatar(user):
     if user.avatar:
         return user.avatar
     else:
-        default = "/static/images/no_avatar.png"
-        size = 150
-        gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(user.email.lower()).hexdigest() + "?"
-        gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
-        return gravatar_url
+        return get_gravatar_url(user.email)

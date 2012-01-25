@@ -80,13 +80,21 @@ $(document).ready(function(){
     label.fadeOut('normal',function(){$(this).remove()})
   }
 
+  function getCategoryName(category){
+    category_name = {
+      'user':'用户',
+      'group':'组织',
+    }
+    return eval('category_name.'+category)
+  }
+
   $.widget( "custom.catcomplete", $.ui.autocomplete, {
     _renderMenu: function( ul, items ) {
       var self = this,
         currentCategory = "";
       $.each( items, function( index, item ) {
         if ( item.category != currentCategory ) {
-          ul.append( "<div class='ui-autocomplete-category'><small>" + decodeURIComponent(item.category) + "</small></div>" );
+          ul.append( "<div class='ui-autocomplete-category'><small>" + getCategoryName(item.category) + "</small></div>" );
           currentCategory = item.category;
         }
         self._renderItem( ul, item );
@@ -134,14 +142,14 @@ $(document).ready(function(){
     select: function(event,ui){
       $("#inform-input").val("")
       list = $("#inform-list").val()
-      index = list.indexOf(ui.item.value)
+      index = list.indexOf(ui.item.value + ',')
       if(index==-1){
         if(list){
           $("#inform-list").val(list + ui.item.value + ',')
         }else{
          $("#inform-list").val(ui.item.value + ',')
         }
-        $("#label-list").append('<span class="label"' + 'slug="' + ui.item.value + '">' + ui.item.name + ' <span class="label-close">×</span></span>')
+        $("#label-list").append('<span class="label ' + ui.item.category + '"' + 'slug="' + ui.item.value + '">' + ui.item.name + ' <span class="label-close">×</span></span>')
       }
       $(".label .label-close").click(function(){
           removeLabel($(this).parent('.label'))
@@ -150,4 +158,25 @@ $(document).ready(function(){
     },
     minLength:2
   }).data("autocomplete")
+
+
+/* dropdowns */
+
+  $('.topbar .menu').dropdown()
+
+  $.ajax({
+    url : '/json/',
+    type : 'POST',
+    dataType : 'json',
+    data : {
+      request_type : 'current_user',
+      request_phrase : 'current_user',
+    },
+    success:function(data){
+      data=data[0]
+      $('#session-avatar>img').attr({'src':data.avatar})
+      $('#session>a').append(data.name)
+    }
+  })
+
 });

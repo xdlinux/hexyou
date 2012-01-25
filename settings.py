@@ -167,3 +167,16 @@ IMAGE_SAVE_CHOICES = (
     'groups',
     'activities'
 )
+
+RESERVED_GROUP_SLUGS = (
+    'new',
+    'admin',
+    'disband',
+    'random',
+)
+
+RESERVED_ACTIVITI_SLUGS = (
+    'create',
+    'edit',
+    'random',
+)

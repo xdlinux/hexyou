@@ -2,8 +2,8 @@
 from django.shortcuts import render_to_response,redirect
 from django.contrib import auth
 from django.template import RequestContext
-from NearsideBindings.base.forms import LoginForm,SignupForm,ImageCrop,ImageUpload, InformAutocomplete
-from NearsideBindings.base.utils import JsonResponse, upload_image
+from NearsideBindings.base.forms import LoginForm,SignupForm,ImageCrop,ImageUpload, AjaxStandard
+from NearsideBindings.base.utils import JsonResponse, upload_image, get_gravatar_url
 from NearsideBindings.settings import MEDIA_ROOT, MEDIA_URL, IMAGE_SAVE_CHOICES
 from NearsideBindings.group.models import Group
 from django.contrib.auth.models import User
@@ -112,35 +112,42 @@ def crop(request,save_to):
     else:
         return HttpResponse('Permission Denied')
 
+
+def get_users(request,request_phrase):
+    users = User.objects.filter(username__contains=request_phrase).order_by('username')[0:5]
+    return [{'avatar':user.avatar or get_gravatar_url(user.email),'name':user.last_name,'slug':user.username,'category':'user'} for user in users]
+
+def get_groups(request,request_phrase):
+    groups = Group.objects.filter(slug__contains=request_phrase).order_by('name')[0:5]
+    return [{'avatar':group.avatar,'name':group.name,'slug':group.slug,'category':'group'} for group in groups]
+
+def get_current_user(request,request_phrase):
+    if request.user.is_authenticated():
+        return get_users(request,request.user.username)
+    else:
+        return [{'avatar':"/static/images/no_avatar.png",'name':"游客",'slug':'guest','category':'user'}]
+
 REQUEST_TYPES = (
-    'all',
-    'user',
-    'group',
+    ('all',[get_users,get_groups]),
+    ('user',[get_users,]),
+    ('group',[get_groups,]),
+    ('current_user',[get_current_user]),
 )
 
+@csrf_exempt
 def json(request):
     if request.method == "POST":
-        form = InformAutocomplete(request.POST)
+        form = AjaxStandard(request.POST)
         if form.is_valid():
             request_type = form.cleaned_data['request_type']
             request_phrase = form.cleaned_data['request_phrase']
-            if not request_type in REQUEST_TYPES:
-                return HttpResponse('Bad Request')
-            users,groups = [],[]
-            if not request_type == "user":
-                groups = get_groups(request_phrase)
-            if not request_type == "group":
-                users = get_users(request_phrase)
-            return JsonResponse(users+groups)
+            for val in REQUEST_TYPES:
+                if request_type==val[0]:
+                    result = []
+                    for func in val[1]:
+                        result += func(request,request_phrase)
+            return JsonResponse(result)
         else:
             return HttpResponse('Bad Request')
     else:
         return HttpResponse('Permission Denied')
-
-def get_users(request_phrase):
-    users = User.objects.filter(username__contains=request_phrase).order_by('username')[0:5]
-    return [{'avatar':user.avatar,'name':user.last_name,'slug':user.username,'category':urllib.quote('用户')} for user in users]
-
-def get_groups(request_phrase):
-    groups = Group.objects.filter(slug__contains=request_phrase).order_by('name')[0:5]
-    return [{'avatar':group.avatar,'name':group.name,'slug':group.slug,'category':urllib.quote('成员')} for group in groups]

@@ -3,7 +3,7 @@ from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.utils import simplejson
 from NearsideBindings.settings import MEDIA_ROOT, MEDIA_URL
-import os, ImageFile, md5, time
+import os, ImageFile, md5, time, urllib, hashlib
 
 class JsonResponse(HttpResponse):
     def __init__(self, object):
@@ -32,3 +32,13 @@ def upload_image(request_file):
         os.mkdir(path)
     img.save(os.path.join(path,filename))
     return os.path.join(MEDIA_URL,'tmp',filename)
+
+def get_gravatar_url(email):
+    default = "/static/images/no_avatar.png"
+    size = 150
+    gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
+    gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
+    return gravatar_url
+
+def timebaseslug():
+    return md5.new(str(time.time())).hexdigest()

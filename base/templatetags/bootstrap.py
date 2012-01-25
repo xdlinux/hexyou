@@ -19,6 +19,9 @@ def prepend(content,prepend):
 
 @register.filter
 def label(field,label):
-    s="<div class='clearfix'>\n<label for='%s'>%s</label>\n<div class='input'>%s</div>\n</div>" % (field.auto_id, label, field)
+    s="<div class='clearfix'>\n<label for='%s'>%s</label>\n<div class='input'>%s</div>" % (field.auto_id, label, field)
+    if field.help_text:
+        s+="<div class='help-text'>%s</div>" % field.help_text
+    s+="\n</div>"
     return mark_safe(s)
 

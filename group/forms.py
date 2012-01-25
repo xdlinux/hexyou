@@ -1,12 +1,22 @@
 # -*- coding: utf-8 -*-  
+from django import forms
 from django.forms import ModelForm, RadioSelect, HiddenInput
 from django.utils.safestring import mark_safe
 from NearsideBindings.group.models import Group,MemberShip
+from NearsideBindings.base.utils import timebaseslug
+from django.core.validators import validate_slug
+from django.core.exceptions import ValidationError
+from NearsideBindings.settings import RESERVED_GROUP_SLUGS
 
+def validate_slug_access(slug):
+    if len(slug)<4 or slug in RESERVED_GROUP_SLUGS:
+        raise ValidationError(u'"%s" is too short or reserved ' % slug)
 
 class GroupForm(ModelForm):
+
+    slug = forms.SlugField(required=True,validators=[validate_slug,validate_slug_access,],initial=timebaseslug,help_text="用于url，例如http://example.com/groups/slug")
     class Meta:
-        model=Group
+        model = Group
         exclude = ('founder','members')
         widgets = {
             'condition': RadioSelect(),
