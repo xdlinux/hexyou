@@ -65,6 +65,9 @@ $(document).ready(function(){
 
   $(".alert-message").alert()
 
+/* tabs */
+  $('.tabs').tabs()
+
 /* autocomplete */
 
   $("#inform-list").val("")

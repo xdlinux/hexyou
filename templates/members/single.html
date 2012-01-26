@@ -22,7 +22,7 @@
             {% if user.site %}
             <dd><a href="{{ user.site }}/">{{ user.site }}</a></dd>
             {% else %}
-            <dd><a href="{/members/{{ user.username }}}">{{ user.last_name }}@嘿咻</a></dd>
+            <dd><a href="/members/{{ user.username }}">{{ user.last_name }}@嘿咻</a></dd>
             {% endif %}
             <dt>注册日期</dt>
             <dd>{{ user.date_joined|date:"Y-m-d H:i"}}</dd>

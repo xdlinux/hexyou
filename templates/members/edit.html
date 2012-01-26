@@ -1,0 +1,72 @@
+{% extends "members/base.html" %}
+{% load bootstrap %}
+
+{% block title %}编辑资料{% endblock title %}
+
+{% block subtitle %}一艺之成，当尽毕生之力{% endblock subtitle %}
+
+{% block main %}
+<ul class="tabs">
+    <li class="active"><a href="#tab-customization" title="">定制</a></li>
+    <li><a href="#tab-security" title="">安全</a></li>
+    <li><a href="#tab-contact" title="">联系方式</a></li>
+</ul>
+<form id="edit-profile" class="inner-post" enctype="multipart/form-data" action="" method="post" accept-charset="utf-8">
+{% csrf_token %}
+    <div class="pill-content">
+        <div class="active" id="tab-customization">
+            <div class="row">
+                <div class="span7">
+                    <div class="clearfix">
+                        <label>用户名</label>
+                        <div class="input"><span class="uneditable-input">{{ user }}</span></div>
+                    </div>
+                    <div class="clearfix">
+                        <label>头像</label>
+                        <div class="input">{% include "ajaxcrop.html" %}</div>
+                    </div>
+                    {{ form.avatar }}
+                    {{ form.last_name|label:"全名" }}
+                    {{ form.site|label:"站点" }}
+                </div>
+                <div class="span3 avatar" style="text-align:center">
+                    <img id="preview" class="avatar" src="/static/images/no_avatar.png" />
+                </div>
+            </div>
+            {{ form.bio|label:"简介" }}
+        </div>
+        <div id="tab-security">
+            {{ form.email|label:"邮箱" }}
+            {{ form.password|label:"新密码" }}
+            {{ form.password_confirm|label:"确认" }}
+        </div>
+        <div id="tab-contact">
+            {{ form.student_num|label:"学号" }}
+            {{ form.contact_twitter|label:"Twitter"}}
+            {{ form.contact_qq|label:"QQ"}}
+            {{ form.contact_fanfou|label:"饭否"}}
+        </div>
+    </div>
+    <div class="actions">
+        {% if form.errors %}
+        <ul class="errors">            
+        {% for error in form.errors %}
+        <li>
+        {{ error }}
+        </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        <input class="btn primary" type="submit" value="确认更改">
+        <button class="btn" type="reset">取消</button>
+    </div>
+</form>
+{% endblock main %}
+
+{% block side %}
+<h4>非礼勿视</h4>
+<p>用户名作为唯一标识不可修改，用于个人页面的URL和站内通知</p>
+<p>如果您没有上传头像，将自动使用您的 <a href="http://gravatar.com/" alt="Gravatar"/><img src="http://gravatar.com/favicon.ico" style="vertical-align:text-top;"/>Gravatar</a> ，两者都没有的情况下头像默认显示为丑陋的默认占位图</p>
+<p>如果您没有自己的网站，个人页面上此栏将会显示个人页面的链接</p>
+<p>据说邮箱不仅可以用来登陆，也可以用来找回密码</p>
+{% endblock side %}

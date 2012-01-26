@@ -2,6 +2,8 @@
 
 $(document).ready(function(){
 
+    $('form').has('#image-uploader').find('img#preview').attr({'src':$('.span7>input[type="hidden"]').val()})
+
     var jcrop_api;
 
     $('.jcrop-holder').hide();

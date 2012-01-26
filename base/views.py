@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-  
 from django.shortcuts import render_to_response,redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from django.template import RequestContext
 from NearsideBindings.base.forms import LoginForm,SignupForm,ImageCrop,ImageUpload, AjaxStandard
@@ -54,6 +55,11 @@ def login(request):
                 return render_to_response('accounts/login.html',context_instance=RequestContext(request))
     else: form=LoginForm()
     return render_to_response('accounts/login.html',{'form':form},context_instance=RequestContext(request))
+
+@login_required(login_url = '/login/')
+def logout(request):
+    auth.logout(request)
+    return redirect('/')
 
 @csrf_exempt
 def upload(request):
@@ -151,3 +157,6 @@ def json(request):
             return HttpResponse('Bad Request')
     else:
         return HttpResponse('Permission Denied')
+
+def help(request):
+    return render_to_response('help.html')

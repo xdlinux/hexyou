@@ -26,7 +26,7 @@ class Group(models.Model):
     description = models.TextField(null=True, blank=True)
     condition = models.ForeignKey(Condition,default=1)
     group_type = models.ForeignKey(GroupType,default=1)
-    avatar = models.CharField(max_length=512,default='/static/images/no_avatar.jpg')
+    avatar = models.CharField(max_length=512,default='/static/images/no_avatar.png')
     def __unicode__(self):
         return self.name
     

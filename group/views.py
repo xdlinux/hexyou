@@ -1,10 +1,8 @@
 from django.shortcuts import render_to_response,redirect,get_object_or_404
 from NearsideBindings.group.forms import GroupForm
 from NearsideBindings.group.models import Group
-from NearsideBindings.base.forms import ImageUpload, ImageCrop
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-from django.http import HttpResponseForbidden
 
 
 def frontpage(request):

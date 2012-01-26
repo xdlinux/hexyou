@@ -19,6 +19,8 @@ div.avatar img { padding:1px; border:1px solid #eee; border-radius:6px; }
 .float-right { float:right }
 .inline { display:inline; }
 .modal-body { max-height:350px;overflow:auto; }
+.tabs { padding:0 22px; margin:0 -14px 18px -14px; }
+.tabs>li>a { outline:none; }
 
 /* front-general */
 #frontpage { background-image:url(/static/images/b7f24bc1-c588-4527-bc81-533cb7aeeaff_5.jpg)}
