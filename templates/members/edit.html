@@ -36,9 +36,9 @@
             {{ form.bio|label:"简介" }}
         </div>
         <div id="tab-security">
-            {{ form.email|label:"邮箱" }}
-            {{ form.password|label:"新密码" }}
-            {{ form.password_confirm|label:"确认" }}
+            {{ passform.old_password|label:"当前密码"  }}
+            {{ passform.new_password1|label:"新密码"  }}
+            {{ passform.new_password2|label:"确认"  }}
         </div>
         <div id="tab-contact">
             {{ form.student_num|label:"学号" }}

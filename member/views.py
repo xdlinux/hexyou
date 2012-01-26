@@ -2,10 +2,12 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response,redirect
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordChangeForm
 from NearsideBindings.member.forms import EditProfileForm
 from django import forms
 from NearsideBindings.base.utils import get_gravatar_url
 from django.template import RequestContext
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 def frontpage(request):
@@ -26,6 +28,13 @@ def edit_profile(request):
     request.user.avatar = request.user.avatar or get_gravatar_url(request.user.email)
     if request.POST:
         form = EditProfileForm(request.POST,instance=request.user)
+        if form.is_valid(): form.save()
+        if request.POST.has_key('old_password'):
+            passform=PasswordChangeForm(request.user,request.POST)
+            if passform.is_valid() : passform.save()
+        else:
+            passform=PasswordChangeForm(request.user)
     else:
         form = EditProfileForm(instance=request.user)
-    return render_to_response('members/edit.html',{'user':request.user,'form':form,'is_me':True},context_instance=RequestContext(request))
+        passform=PasswordChangeForm(request.user)
+    return render_to_response('members/edit.html',{'user':request.user,'form':form,'is_me':True,'passform':passform},context_instance=RequestContext(request))
