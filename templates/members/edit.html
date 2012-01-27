@@ -42,7 +42,7 @@
         </div>
         <div id="tab-contact">
             {{ form.student_num|label:"学号" }}
-            {{ form.contact_twitter|label:"Twitter"}}
+            {{ form.contact_twitter|label:"<img src='/static/images/icon-twitter.ico' class='icon' /> Twitter"}}
             {{ form.contact_qq|label:"QQ"}}
             {{ form.contact_fanfou|label:"饭否"}}
         </div>
@@ -66,7 +66,7 @@
 {% block side %}
 <h4>非礼勿视</h4>
 <p>用户名作为唯一标识不可修改，用于个人页面的URL和站内通知</p>
-<p>如果您没有上传头像，将自动使用您的 <a href="http://gravatar.com/" alt="Gravatar"/><img src="http://gravatar.com/favicon.ico" style="vertical-align:text-top;"/>Gravatar</a> ，两者都没有的情况下头像默认显示为丑陋的默认占位图</p>
+<p>如果您没有上传头像，将自动使用您的 <a href="http://gravatar.com/" alt="Gravatar"/><img src="http://gravatar.com/favicon.ico" class="icon" />Gravatar</a> ，两者都没有的情况下头像默认显示为丑陋的默认占位图</p>
 <p>如果您没有自己的网站，个人页面上此栏将会显示个人页面的链接</p>
 <p>据说邮箱不仅可以用来登陆，也可以用来找回密码</p>
 {% endblock side %}
