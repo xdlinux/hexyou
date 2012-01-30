@@ -58,7 +58,7 @@ $(document).ready(function(){
 /* modal */
 
   $('.modal').modal({
-    'backdrop':true,
+    backdrop:true
   });
 
 /* alerts */
@@ -67,6 +67,29 @@ $(document).ready(function(){
 
 /* tabs */
   $('.tabs').tabs()
+
+/* datepicker */
+
+  $(".datetime input").datetimepicker({
+    showButtonPanel:false,
+    showAnim:'slideDown',
+    currentText:"现在",
+    closeText:"确认",
+    monthNames:['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+    dayNamesMin:['日','一','二','三','四','五','六'],
+    minDate:new Date(),
+    yearSuffix:'年',
+    dateFormat:'yy-mm-dd',
+    timeFormat: 'hh:mm',
+    separator: ' ', // fixed the space ends the datetime string
+  });
+
+  $('form').has('.datetime').submit(function(){
+    inputs = $('.datetime input')
+    if(new Date(inputs[0].value)>=new Date(inputs[1].value)){
+      return false
+    }
+  })
 
 /* autocomplete */
 
@@ -87,6 +110,8 @@ $(document).ready(function(){
     category_name = {
       'user':'用户',
       'group':'组织',
+      'location':'地点',
+      'activity':'活动',
     }
     return eval('category_name.'+category)
   }
@@ -179,6 +204,98 @@ $(document).ready(function(){
       data=data[0]
       $('#session-avatar>img').attr({'src':data.avatar})
       $('#session>a').append(data.name)
+    }
+  })
+
+
+/* location */
+
+  function getLocations(a){
+    ul = a.parent().parent()
+    $.ajax({
+      url : '/json/',
+      type : 'POST',
+      dataType : 'json',
+      data : {
+        request_type : 'location',
+        request_phrase : a.attr('request-phrase')
+      },
+      success:function(data){
+        if(data.length){
+          $("#location-no-child").slideUp()
+          ul.nextAll().slideUp('normal',function(){
+            $(this).not("#location-no-child").remove()
+          })
+          s=""
+          $.map(data,function(item){
+            s+="<li><a href='#' request-phrase='" + item.id + "'>" + item.name + "</a></li>\n"
+          })
+          $("<ul class='location-parent hide'></ul>").append(s).appendTo(ul.parent()).slideDown().find('a').click(function(){
+            clickLocation($(this))
+          })
+        }else{
+          ul.nextAll('ul').slideUp('normal',function(){
+            $(this).remove()
+          })
+          $("#location-no-child").slideDown()
+        }
+      }
+    })
+  }
+
+  function clickLocation(a){
+    if(!a.hasClass('active')){
+      $('#location-no-selected').slideUp()
+      a.parent().parent().find('a').removeClass('active')
+      a.toggleClass('active')
+      getLocations(a)
+      $('#location-selected').data('location_name',a.text())
+      $('#location-selected').data('location_id',a.attr('request-phrase'))
+    }
+  }
+
+  $('#location-root>li>a').click(function(){
+    clickLocation($(this))
+  })
+
+  $('#location-select-modal').bind('hide',function(){
+    $('#location-select-input').val($('#location-selected').data('location_name'))
+    $('#id_location').val($('#location-selected').data('location_id'))
+  })
+
+  $('#location-select-input').click(function(){
+    $('#location-select-modal').modal('show')
+  })
+
+  $('#location-select-confirm').click(function(){
+    $('#location-select-modal').modal('hide')
+  })
+
+  $('#location-select-create').click(function(){
+    if(!$('#location-selected').data('location_id')){
+      $('#location-no-selected').slideDown('normal',function(){
+        setTimeout(function(){$('#image-crop-error').slideUp()},5000)
+      })
+    }else{
+      r = '{"name":"'+$('#location-selected').val()+'",'+'"parent":"'+$('#location-selected').data('location_id')+'"}'
+      $.ajax({
+        url : '/json/',
+        type : 'POST',
+        dataType : 'json',
+        data : {
+          request_type : 'create_location',
+          request_phrase : r
+        },
+        success:function(data){
+          if(data){
+            $('#location-duplicate').slideDown('normal',function(){
+              setTimeout(function(){$('#location-duplicate').slideUp()},5000)
+            })
+          }else{
+            
+          }
+        }
+      })
     }
   })
 

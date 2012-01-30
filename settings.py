@@ -165,7 +165,8 @@ LOGGING = {
 
 IMAGE_SAVE_CHOICES = (
     'groups',
-    'activities'
+    'activities',
+    'profile',
 )
 
 RESERVED_GROUP_SLUGS = (
@@ -175,7 +176,7 @@ RESERVED_GROUP_SLUGS = (
     'random',
 )
 
-RESERVED_ACTIVITI_SLUGS = (
+RESERVED_ACTIVITY_SLUGS = (
     'create',
     'edit',
     'random',

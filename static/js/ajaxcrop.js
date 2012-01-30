@@ -75,7 +75,7 @@ $(document).ready(function(){
         success:  function(data){
             data.path = data.path.replace(/\\\\/g,"\\");
             data.path = data.path.replace(/\\/g,"/");
-            $('#id_avatar').val(data.path)
+            $('.span7>input[type="hidden"]').val(data.path)
             $('#image-crop').modal("hide");
             $('#preview').attr({'src':data.path})
           },

@@ -3,11 +3,14 @@ from django.shortcuts import render_to_response,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from django.template import RequestContext
+from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseServerError
 from NearsideBindings.base.forms import LoginForm,SignupForm,ImageCrop,ImageUpload, AjaxStandard
-from NearsideBindings.base.utils import JsonResponse, upload_image, get_gravatar_url
+from NearsideBindings.base.utils import JsonResponse, upload_image, get_gravatar_url, simplejson
 from NearsideBindings.settings import MEDIA_ROOT, MEDIA_URL, IMAGE_SAVE_CHOICES
 from NearsideBindings.group.models import Group
+from NearsideBindings.activity.models import Location
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
@@ -70,11 +73,11 @@ def upload(request):
             if rlpath:
                 return JsonResponse({'path':rlpath})
             else:
-                return HttpResponse('Uploading error')
+                return HttpResponseServerError('Uploading error')
         else:
-            return HttpResponse('Invalid content')
+            return HttpResponseBadRequest('Invalid content')
     else:
-        return HttpResponse('Bad request')
+        return HttpResponseBadRequest()
 
 def crop(request,save_to):
     if request.method == "POST" and save_to in IMAGE_SAVE_CHOICES:
@@ -114,9 +117,9 @@ def crop(request,save_to):
             crop.save(full_path)
             return JsonResponse({'path':os.path.join(MEDIA_URL,save_to,date,filename)})
         else:
-            return HttpResponse('Bad Request')
+            return HttpResponseBadRequest()
     else:
-        return HttpResponse('Permission Denied')
+        return HttpResponseForbidden()
 
 
 def get_users(request,request_phrase):
@@ -133,11 +136,28 @@ def get_current_user(request,request_phrase):
     else:
         return [{'avatar':"/static/images/no_avatar.png",'name':"游客",'slug':'guest','category':'user'}]
 
+def get_child_location(request,request_phrase):
+    locations = Location.objects.filter(parent=int(request_phrase)) 
+    return [{'name':location.name,'id':location.id} for location in locations ]
+
+def create_location(request,request_phrase):
+    d = simplejson.loads(request_phrase)
+    new_location = Location(name=d['name'],parent=Location.objects.get(id=int(d['parent'])))
+    try:
+        new_location.save()
+    except IntegrityError:
+        return [{'error':'Duplicate name',},]
+    else:
+        return ""
+
+
 REQUEST_TYPES = (
-    ('all',[get_users,get_groups]),
-    ('user',[get_users,]),
-    ('group',[get_groups,]),
-    ('current_user',[get_current_user]),
+    ('all',[get_users,get_groups],False),
+    ('user',[get_users,],False,),
+    ('group',[get_groups,],False,),
+    ('current_user',[get_current_user,],True),
+    ('location',[get_child_location,],False),
+    ('create_location',[create_location,],False),
 )
 
 @csrf_exempt
@@ -150,13 +170,15 @@ def json(request):
             for val in REQUEST_TYPES:
                 if request_type==val[0]:
                     result = []
+                    if not (request.user.is_authenticated() or val[2]):
+                        return HttpResponseForbidden()
                     for func in val[1]:
                         result += func(request,request_phrase)
             return JsonResponse(result)
         else:
-            return HttpResponse('Bad Request')
+            return HttpResponseBadRequest()
     else:
-        return HttpResponse('Permission Denied')
+        return HttpResponseForbidden()
 
 def help(request):
     return render_to_response('help.html')
