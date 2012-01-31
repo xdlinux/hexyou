@@ -21,7 +21,7 @@ class Group(models.Model):
     name = models.CharField(max_length=20,unique=True)
     slug = models.SlugField(unique=True)
     founder = models.ForeignKey(User,related_name='founder')
-    members = models.ManyToManyField(User,related_name='members',through='MemberShip')
+    members = models.ManyToManyField(User,through='MemberShip')
     create_date = models.DateField(auto_now_add=True)
     description = models.TextField(null=True, blank=True)
     condition = models.ForeignKey(Condition,default=1)
