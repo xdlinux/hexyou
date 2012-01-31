@@ -13,6 +13,7 @@ class ActivityType(models.Model):
     def __unicode__(self):
         return self.title
 
+
 class Activity(models.Model):
     title = models.CharField(max_length=30)
     slug = models.SlugField(unique=True)
@@ -24,5 +25,23 @@ class Activity(models.Model):
     location = models.ForeignKey(Location)
     participators = models.ManyToManyField(User, related_name='participators')
     hosts = models.ManyToManyField(User, related_name='hosts')
-    host_groups = models.ManyToManyField(Group)
+    host_groups = models.ManyToManyField(Group, through='HostShip')
+    def ask_groups_to_host(self,user,*groups):
+        user_groups= set(user.groups.all())
+        request_groups= set(groups)
+        allowed_groups=user_groups & request_groups
+        if not allowed_groups:
+            raise Exception('You can only ask groups that you have atended to host an activity!')
+        for group in allowed_groups:
+            if not isinstance(group,Group):
+                raise Exception('You can only ask a group to host an activity, not %s'% type(group) )
+            else:
+                HostShip.objects.create(group=group,activity=self)
+    def accepted_host_groups(self):
+        return [hostship.group for hostship in self.hostship_set.filter(accepted=True).all()]
 
+class HostShip(models.Model):
+   """hostship between group and Activity"""
+   group = models.ForeignKey(Group)
+   activity = models.ForeignKey(Activity)
+   accepted = models.BooleanField(default=False)
