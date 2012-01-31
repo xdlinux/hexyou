@@ -244,14 +244,16 @@ $(document).ready(function(){
   }
 
   function clickLocation(a){
-    if(!a.hasClass('active')){
+    if(a.hasClass('active')){
+      getLocations(a)
+    }else{
       $('#location-no-selected').slideUp()
       a.parent().parent().find('a').removeClass('active')
       a.toggleClass('active')
       getLocations(a)
-      $('#location-selected').data('location_name',a.text())
-      $('#location-selected').data('location_id',a.attr('request-phrase'))
     }
+    $('#location-selected').data('location_name',a.text())
+    $('#location-selected').data('location_id',a.attr('request-phrase'))
   }
 
   $('#location-root>li>a').click(function(){
