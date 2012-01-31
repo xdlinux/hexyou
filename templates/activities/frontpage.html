@@ -138,18 +138,13 @@
 <h3>活动分类</h3>
 <dl id="activity-type">
     <dt>类型</dt>
-    <dd>广大人民群众喜闻乐见的</dd>
-    <dd>丧心病狂</dd>
-    <dd>讲座</dd>
-    <dd>聚会</dd>
-    <dd>旅行</dd>
-    <dd>阿鲁巴</dd>
+    {% for val in types %}
+    <dd>{{ val }}</dd>
+    {% endfor %}
     <dt>地点</dt>
-    <dd>乌托邦</dd>
-    <dd>大洋国</dd>
-    <dd>艾泽拉斯大陆</dd>
-    <dd>湿地草原</dd>
-    <dd>龙之溪谷</dd>
+    {% for location in location_roots %}
+    <dd>{{ location }}</dd>
+    {% endfor %}
 </dl>
 <h3>热门活动</h3>
 <ul class="list">

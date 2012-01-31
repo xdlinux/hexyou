@@ -92,6 +92,7 @@ ul.list .content p { margin-bottom:2px; }
 #side ul.list>li:after { clear:both; content:'.'; visibility:hidden; display:block; line-height:0; }
 #side ul.list .meta { width:72px; }
 #side ul.list .content { width:214px; }
+#side ul.media-grid img { width:64px; }
 #activity-type { margin-left:6px; }
 #activity-type dt { margin:6px 0; }
 #side-search .holding { display:inline; margin-bottom:8px; }
