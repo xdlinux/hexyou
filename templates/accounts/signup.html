@@ -4,11 +4,11 @@
 {% block title %}注册{% endblock title %}
 
 {% block header %}
-<div class="topbar">
-    <div class="fill">
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
         <div class="container">
             <a href="/" class="brand">嘿咻</a>
-        <ul class="nav secondary-nav">
+        <ul class="nav nav pull-right">
             <li>
                 <a href="/login">登陆</a>
             </li>
@@ -30,14 +30,14 @@
         </h1> 
     </div>
     <div class="row">
-        <div class="span4">
+        <div class="span3">
             <h2> 填写信息
             </h2>
             <p>
             请在右边的表单中如实填写您的账户信息。这些个人信息将有助于您参与活动、加入或组建团队等。关于这些个人信息的安全性问题，请参考我们的<a href="#">隐私协议</a>。
             </p>
         </div>
-        <div class="span12">
+        <div class="span9">
             <form action="" id="account" method="POST">
                 {% csrf_token %}
                 <h3>账户</h3>
@@ -61,7 +61,7 @@
                 <div class="well" id="policy">
                     <iframe src="/static/html/policy.html" frameborder="0"></iframe>
                 </div>
-                <input  class="btn large span6 primary"  type="submit" value="我接受如上服务协议，现在创建我的账户！"/>
+                <input class="btn btn-large btn-primary"  type="submit" value="我接受如上服务协议，现在创建我的账户！"/>
             </form>
         </div>
         </div>
@@ -70,16 +70,7 @@
 </div>
 <footer id="footer">
     <div class="container">
-        <ul id="friends-link" class="nav">
-            <h5>友情链接</h5>
-            <li><a href="#">Example.com</a></li>
-            <li><a href="#">Example.com</a></li>
-            <li><a href="#">Example.com</a></li>
-            <li><a href="#">Example.com</a></li>
-            <li><a href="#">Example.com</a></li>
-            <li><a href="#">Example.com</a></li>
-        </ul>
-        <p id="copyright">&copy; Trypsin 2011</p>
+        <p id="copyright">&copy; HexYou 2011</p>
     </div>
 </footer>
 {% endblock %}

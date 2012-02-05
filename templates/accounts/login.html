@@ -4,11 +4,11 @@
 {% block title %}登录{% endblock title %}
 
 {% block header %}
-<div class="topbar">
-    <div class="fill">
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
         <div class="container">
             <a href="/" class="brand">嘿咻</a>
-            <ul class="nav secondary-nav">
+            <ul class="nav pull-right">
                 <li>
                 <a href="/signup">注册</a>
                 </li>
@@ -25,13 +25,13 @@
         </h1> 
     </div>
     <div class="row">
-        <div class="span4">
+        <div class="span3">
             <h2>输入您的凭证</h2>
             <p>
             请在右边的表单中正确输入您的登陆凭证。
             </p>
         </div>
-        <div class="span11" style="padding-left:19px; border-left:1px solid #eee; min-height:500px;">
+        <div class="span9">
             <form action="" id="account" method="POST" accept-charset="utf-8">
                 {% csrf_token %}
                 {{ form.username|holding:"用户名/邮箱地址" }}
@@ -47,16 +47,7 @@
 </div>
 <footer id="footer">
 <div class="container">
-    <ul id="friends-link" class="nav">
-        <h5>友情链接</h5>
-        <li><a href="#">Example.com</a></li>
-        <li><a href="#">Example.com</a></li>
-        <li><a href="#">Example.com</a></li>
-        <li><a href="#">Example.com</a></li>
-        <li><a href="#">Example.com</a></li>
-        <li><a href="#">Example.com</a></li>
-    </ul>
-    <p id="copyright">&copy; Trypsin 2011</p>
+    <p id="copyright">&copy; HexYou 2011</p>
 </div>
 </footer>
 {% endblock %}

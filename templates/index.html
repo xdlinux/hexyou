@@ -6,11 +6,11 @@
 <div id="front-top">
     <div class="container">
         <div class="row">
-            <div class="span8">
+            <div class="span6">
                 <img src="static/images/logo.png" alt="Trypsin" />
             </div>
-            <div class="span6 offset2" id="front-login">
-                <form action="login" method="post" accept-charset="utf-8">{% csrf_token %}
+            <div class="span5 offset1" id="front-login">
+                <form class="form-inline" action="login" method="post" accept-charset="utf-8">{% csrf_token %}
                     <div class="holding">
                         <input type="text" name="username" />
                         <span class="holder">用户名</span>
@@ -24,7 +24,7 @@
                         <input type="checkbox" name="remember_me" />
                         <span>记住我</span>
                     </label>
-                    <p><a class="forgot" href="forgot">忘记密码？</a></p>
+                    <span class="forgot"><a href="forgot">忘记密码？</a></span>
                 </form>
             </div>
         </div>
@@ -34,68 +34,54 @@
 
 {% block container %}
     <div class="row">
-        <div class="span8">
+        <div class="span6">
             <h2>头条</h2>
-                <ul class="media-grid" id="front-promotion">
-                    <li class="display-all clearfix">
-                        <a href="#"><img src="http://placehold.it/90x90" alt="" class="thumbnail"></a>
-                        <p>此处做一个slideshow如何？近加送著建會，應然家次司。你異亞性程指，們標腳然生大所基那。今爭未戲向易世心感然，把度媽來實做終美。現的法可情西爭自我的者情圖去以的員細準，想不自引往！</p>
-                    </li>
-                    <li class="display-image-only">
-                        <a href="#"><img src="http://placehold.it/90x90" alt="" class="thumbnail"></a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    </li>
-                    <li class="display-image-only">
-                        <a href="#"><img src="http://placehold.it/90x90" alt="" class="thumbnail"></a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    </li>
-                    <li class="display-image-only">
-                        <a href="#"><img src="http://placehold.it/90x90" alt="" class="thumbnail"></a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    </li>
-                    <li class="display-image-only">
-                        <a href="#"><img src="http://placehold.it/90x90" alt="" class="thumbnail"></a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    </li>
-                </ul>
+            <div id="front-promotion" class="carousel slide">
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <img src="http://placehold.it/460x240" />
+                        <div class="carousel-caption">
+                            <h4>Test1234</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="http://placehold.it/460x240" />
+                        <div class="carousel-caption">
+                            <h4>Test1234</h4>
+                            <p>djiafusodpaufipasduf</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="http://placehold.it/460x240" />
+                        <div class="carousel-caption">
+                            <h4>Test1234</h4>
+                            <p>asdfjasfkosajfoi</p>
+                        </div>
+                    </div>
+                </div>
+                <a class="left carousel-control" data-slide="prev" href="#front-promotion">‹</a>
+                <a class="right carousel-control" data-slide="next" href="#front-promotion">›</a>
+            </div>
         </div>
-        <div class="span6 offset2">
+        <div class="span5 offset1">
             <h2>加入我们</h2>
             <form action="signup" method="post" accept-charset="utf-8" id="front-signup">{% csrf_token %}
                 <input  type="hidden" value="from_mainpage" name="from_mainpage"/>
                 <div class="holding">
-                    <input type="text" name="fullname" class="span6" />
+                    <input type="text" name="fullname" class="span" />
                     <span class="holder">全名</span>
                 </div>
                 <div class="holding">
-                    <input type="email" name="email" class="span6" />
+                    <input type="email" name="email" class="span" />
                     <span class="holder">邮箱</span>
                 </div>
                 <div class="holding">
-                    <input type="text" name="student_num" class="span6" />
+                    <input type="text" name="student_num" class="span" />
                     <span class="holder">学号</span>
                 </div>
-                <input type="submit" name="submit" value="注册" class="btn btn-primary" />
+                <button type="submit" class="btn btn-primary btn-large float-right" />注册</button>
             </form>
         </div>
     </div>

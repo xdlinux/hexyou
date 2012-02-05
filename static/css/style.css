@@ -39,10 +39,10 @@ td img.avatar { border:1px solid #ccc; border-radius:6px; box-shadow:0 0 8px #cc
 /* front-top */
 #front-top { padding-bottom:20px; border-bottom:1px solid #ddd; width:100%; background:-moz-linear-gradient(center top , #ffffff 60%, #f7f7f7 100%) repeat scroll 0 0 transparent; background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#f7f7f7)); box-shadow:0 2px 2px #eee; }
 #front-login { padding-top:28px; }
-#front-login input[type=text], #front-login input[type=password] { width:125px; }
+#front-login input[type=text], #front-login input[type=password] { width:133px; }
 #front-login button { margin-left:1px; }
 #front-login .remember { text-align:left; padding:0; }
-#front-login .forgot { line-height:22px; margin-left:10px; }
+#front-login .forgot { margin-left:88px; }
 #front-login .holding { display:inline; margin-bottom:8px; }
 #front-login .holding .holder { left:7px; line-height:16px; }
 
