@@ -6,7 +6,6 @@ from django.contrib.auth.forms import PasswordChangeForm
 from NearsideBindings.group.models import MemberShip
 from NearsideBindings.member.forms import EditProfileForm
 from django import forms
-from NearsideBindings.base.utils import get_gravatar_url
 from django.template import RequestContext
 from django.contrib.auth.forms import PasswordChangeForm
 
@@ -29,7 +28,6 @@ def profile(request):
 
 @login_required(login_url='/login/')
 def edit_profile(request):
-    request.user.avatar = request.user.avatar or get_gravatar_url(request.user.email)
     if request.POST:
         form = EditProfileForm(request.POST,instance=request.user)
         if form.is_valid(): form.save()

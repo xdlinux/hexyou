@@ -1,9 +1,20 @@
 # -*- coding: utf-8 -*-  
 from django import forms
 from django.utils.safestring import mark_safe
+from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 
+def validate_iurl(iurl):
+    if not iurl.index(':') == False:
+        return ValidationError(u'Not a internal url')
+
+class iURLField(forms.CharField):
+    default_error_messages = {
+        'invalid': _(u"Invalid internal url"),
+    }
+    default_validators = []
 
 def popover(self,title,content):
     self.widget.attrs['rel']="popover"

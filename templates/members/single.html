@@ -11,12 +11,12 @@
 
 {% block main %}
 <div class="row">
-    <div class="span3">
+    <div class="span large-avatar">
         <div class="avatar"><img src="{% avatar user %}" /></div>
         <p id="member-counter">发起活动 <span class="label success">31</span>
         <br />参加活动 <span class="label warning">4159</span></p>
     </div>
-    <div class="span7">
+    <div class="span summary">
         <dl id="profile">
             <dt>主页</dt>
             {% if user.site %}
@@ -27,15 +27,11 @@
             <dt>注册日期</dt>
             <dd>{{ user.date_joined|date:"Y-m-d H:i"}}</dd>
         </dl>
-        {% if user.bio %}
-        <p class="intro">{{ user.bio }}</p>
-        {% else %}
-        <p class="intro">这个家伙很懒，什么都没有留下</p>
-        {% endif %}
+        <p class="well">{{ user.bio|default:"这个家伙很懒，什么都没有留下" }}</p>
     </div>
 </div>
 <p class="extra align-right">
-<a href="#" class="btn primary">联系 {{ user.last_name }}</a>
+<a href="#" class="btn btn-primary">联系 {{ user.last_name }}</a>
     <a href="#" class="btn">咻！</a>
 </p>
 <h3>参加的活动</h3>
@@ -69,11 +65,11 @@
 {% block side %}
 <h3>所在组织
     <small>({{ group_counter }})</small></h3>
-<ul class="media-grid avatar">
+<ul class="avatar">
     {% for group in groups %}
     <li><a href="/groups/{{ group.slug }}"><img src="{{ group.avatar }}" alt=""></a></li>
     {% endfor %}
 </ul>
 <h3>日历</h3>
-<img src="http://placehold.it/320x200" />
+<img src="http://placehold.it/280x175" />
 {% endblock side %}

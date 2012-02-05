@@ -39,5 +39,12 @@ class GroupForm(ModelForm):
         return field
 
 
-        
+class AdminGroupForm(ModelForm):
+    class Meta:
+        model = Group
+        exclude = ('founder','group_type','members')
+        widgets = {
+            'condition': RadioSelect(),
+            'avatar': HiddenInput(),
+        }
 

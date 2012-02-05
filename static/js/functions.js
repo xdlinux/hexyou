@@ -53,20 +53,10 @@ $(document).ready(function(){
       $(this).siblings('.holder').show();
     }
   })
-  $('input[rel=popover]').popover({'trigger':'focus','offset':32});
-  
-/* modal */
+ 
+ // To fixed
+ // $('input[rel=popover]').popover({'trigger':'focus','offset':32});
 
-  $('.modal').modal({
-    backdrop:true
-  });
-
-/* alerts */
-
-  $(".alert-message").alert()
-
-/* tabs */
-  $('.tabs').tabs()
 
 /* datepicker */
 
@@ -187,10 +177,43 @@ $(document).ready(function(){
     minLength:2
   }).data("autocomplete")
 
+  $('#side-search .search-input').catcomplete({
+    source: function(request,response){
+      $.ajax({
+        url : '/json/',
+        type : 'POST',
+        dataType : 'json',
+        data : {
+          request_type : $('#side-search .search-input').attr("request-type"),
+          request_phrase : request.term,
+        },
+        success : function(data){
+          response(
+            $.map(data,function(item){
+              if (!item.name){
+                item.name=item.slug
+              }
+              if (!item.avatar){
+                item.avatar="/static/images/no_avatar.png"
+              }
+              return {
+                name: item.name,
+                avatar: item.avatar,
+                value: item.slug,
+                category: item.category,
+              }
+            })
+          )
+        },
+      })
+    },
+    select:function(event,ui){
+      window.location.href='/'+$('#side-search .search-input').attr("redirect-type")+'/'+ui.item.value
+    }
+  })
+
 
 /* dropdowns */
-
-  $('.topbar .menu').dropdown()
 
   $.ajax({
     url : '/json/',
@@ -203,7 +226,7 @@ $(document).ready(function(){
     success:function(data){
       data=data[0]
       $('#session-avatar>img').attr({'src':data.avatar})
-      $('#session>a').append(data.name)
+      $('#session>a>b').before(data.name)
     }
   })
 
@@ -260,7 +283,7 @@ $(document).ready(function(){
     clickLocation($(this))
   })
 
-  $('#location-select-modal').bind('hide',function(){
+  $('#location-select-modal').on('hide',function(){
     $('#location-select-input').val($('#location-selected').data('location_name'))
     $('#id_location').val($('#location-selected').data('location_id'))
   })
@@ -301,4 +324,26 @@ $(document).ready(function(){
     }
   })
 
-});
+/* buttons */
+  $('#join-group').one('click',function(){
+    join_group_btn = $(this)
+    join_group_btn.addClass('disabled').text('请稍等...')
+    $.ajax({
+      url:'/json/',
+      type:'POST',
+      data:{
+        request_type:'join_group',
+        request_phrase:window.location.pathname.match(/groups\/(\w+)\\?/)[1],
+      },
+      success:function(){
+        var group_name = $('h1').text()
+        group_name = group_name.substr(0,group_name.indexOf('<')-1)
+        join_group_btn.text('已加入 '+$('h1').text().match(/(.+[^<\n])/)[0])
+      }
+    })
+  })
+
+
+/* alert */
+  $(".alert-message").alert()
+})

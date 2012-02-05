@@ -6,13 +6,13 @@
 {% block subtitle %}自己不曾拥有，就快乐地欣赏别人的拥有{% endblock subtitle %}
 
 {% block main %}
-<form id="found-group" class="inner-post" enctype="multipart/form-data" action="" method="post" accept-charset="utf-8">
+<form id="found-group" class="form-horizontal inner-post" enctype="multipart/form-data" action="" method="post" accept-charset="utf-8">
     {% csrf_token %}
     <div class="row">
-        <div class="span7">
-            <div class="clearfix">
-                <label>头图</label>
-                <div class="input">{% include "ajaxcrop.html" %}</div>
+        <div class="span summary">
+            <div class="control-group">
+                <label class="control-label">头图</label>
+                <div class="controls">{% include "ajaxcrop.html" %}</div>
             </div>
             {{ form.avatar }}
             {{ form.name|label:"名称" }}
@@ -20,12 +20,12 @@
             {{ form.group_type|label:"组织类型" }}
             {{ form.condition|label:"门槛" }}
         </div>
-        <div class="span3 avatar" style="text-align:center">
+        <div class="span large-avatar avatar" style="text-align:center">
             <img id="preview" class="avatar" src="/static/images/no_avatar.png" />
         </div>
     </div>
     {{ form.description|label:"介绍" }}
-    <div class="actions">
+    <div class="form-actions">
         {% if form.errors %}
         <ul class="errors">            
         {% for error in form.errors %}
@@ -35,18 +35,18 @@
         {% endfor %}
         </ul>
         {% endif %}
-        <input class="btn primary" type="submit" value="创建组织">
+        <input class="btn btn-primary" type="submit" value="创建组织">
         <button class="btn" type="reset">取消</button>
     </div>
 </form>
 {% endblock main %}
 
 {% block side %}
-<h4>中国特色小组创建精神</h4>
+<h3>中国特色小组创建精神</h3>
 <p>实体组织的创建需要通过审核，请确保创始人的联系方式正确。审核结果会以邮件告知，请耐心等待。</p>
 <p>虚拟组织名称请不要与实体组织相同。</p>
 </ul>
-<h4>三人行，必有我师</h4>
+<h3>三人行，必有我师</h3>
 <form id="side-activity-invition" action="" method="post" accept-charset="utf-8">
     <div class="input-prepend holding">
         <span class="add-on">@</span>

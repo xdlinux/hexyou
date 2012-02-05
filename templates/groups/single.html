@@ -1,22 +1,26 @@
 {% extends "groups/base.html" %}
+{% load gravatar %}
 
 {% block title %}{{ group }}{% endblock title %}
 
-{% block subtitle %}{% ifequal group.group_type.id 1 %}<span class="label important">实体组织</span>{% else %}<span class="label notice">虚拟组织</span>{% endifequal %}{% endblock subtitle %}
+{% block subtitle %}{% ifequal group.group_type.id 1 %}<span class="label label-important">实体组织</span>{% else %}<span class="label label-info">虚拟组织</span>{% endifequal %}{% endblock subtitle %}
 
 {% block headeraction %}
-<a href="/groups/{{ group.slug }}/admin" class="btn small danger">管理小组</a>
+{% if is_admin %}
+<a href="/groups/{{ group.slug }}/admin" class="btn btn-small btn-danger">管理小组</a>
+{% endif %}
+<a href="/groups/{{ group.slug }}/members" class="btn btn-small">查看成员</a>  
 {% endblock headeraction %}
 
 {% block main %}
 <div class="row">
-    <div class="span3 avatar">
+    <div class="span large-avatar avatar">
         <img src="{{ group.avatar }}" class="avatar" alt="" />
     </div>
-    <div class="span7">
+    <div class="span summary">
         <dl id="profile">
             <dt>创始人</dt>
-            <dd>{{ group.founder }}</dd>
+            <dd><a href="/members/{{ group.founder }}">{{ group.founder.last_name }}</a></dd>
             <dt>始于</dt>
             <dd>{{ group.create_date|date:"Y-m-d" }}</dd>
             <dt>链接</dt>
@@ -25,18 +29,16 @@
     </div>
 </div>
 <p class="extra align-right">
-    <a href="#" class="btn primary">加入 {{ group }}</a>
+    {% if is_member %}
+    <a href="#" class="btn btn-primary disabled">已加入 {{ group }}</a>
+    {% else %}
+    <a id="join-group" href="#" class="btn btn-primary">加入 {{ group }}</a>
+    {% endif %}
     <a href="#" class="btn">咻！</a>
 </p>
 <h3>简介</h3>
-<p class="intro">
-{% if group.description %}
-{{ group.description }}
-{% else %}
-<small>
-    这个组织很懒，什么都没写
-</small>
-{% endif %}
+<p class="well">
+{{ group.description|linebreaksbr|default:"这个组织的人都很懒，什么都没写" }}
 </p>
 <h3>最近活动</h3>
 <div id="latest-activity" class="row">
@@ -60,16 +62,11 @@
 
 {% block side %}
 <h3>成员
-    <small>(233)</small></h3>
+    <small>({{ member_counter }})</small></h3>
 <ul class="media-grid avatar">
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    {% for member in members %}
+    <li><a href="/members/{{ member }}"><img src="{% avatar member %}" alt=""></a></li>
+    {% endfor %}
 </ul>
 <h3>友情小组
     <small>(42)</small></h3>

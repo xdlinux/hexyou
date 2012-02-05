@@ -1,4 +1,5 @@
 from django.core.serializers import json, serialize
+from django.core.paginator import Paginator
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.utils import simplejson
@@ -15,6 +16,13 @@ class JsonResponse(HttpResponse):
                 ensure_ascii=False)
         super(JsonResponse, self).__init__(
             content, content_type='application/json')
+
+class ExPaginator(Paginator):
+    def page(self,number):
+        self._slice_start = (number/self.per_page)*self.per_page
+        self._slice_end = (number/self.per_page+1)*self.per_page
+        self.page_range_slice = self.page_range[self._slice_start:self._slice_end]
+        return super(ExPaginator,self).page(number)
 
 def upload_image(request_file):
     parser = ImageFile.Parser()
@@ -34,7 +42,7 @@ def upload_image(request_file):
     return os.path.join(MEDIA_URL,'tmp',filename)
 
 def get_gravatar_url(email):
-    default = "/static/images/no_avatar.png"
+    default = "http://localhost/static/images/no_avatar.png"
     size = 150
     gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
     gravatar_url += urllib.urlencode({'d':default, 's':str(size)})

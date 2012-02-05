@@ -1,9 +1,7 @@
 /* image uploader and crop */
 
 $(document).ready(function(){
-
-    $('form').has('#image-uploader').find('img#preview').attr({'src':$('.span7>input[type="hidden"]').val()})
-
+  
     var jcrop_api;
 
     $('.jcrop-holder').hide();
@@ -53,10 +51,10 @@ $(document).ready(function(){
       return false;
     }; 
 
-    $('#image-crop').bind('shown',function(){
+    $('#image-crop').on('shown',function(){
       $('#image-crop-target').width(350).show();
       initJcrop();
-    }).bind('hide',destroyJcrop)
+    }).on('hide',destroyJcrop)
 
     $('#image-crop-confirm').click(function(){
       $.ajax({
@@ -75,7 +73,7 @@ $(document).ready(function(){
         success:  function(data){
             data.path = data.path.replace(/\\\\/g,"\\");
             data.path = data.path.replace(/\\/g,"/");
-            $('.span7>input[type="hidden"]').val(data.path)
+            $('#id_avatar').val(data.path)
             $('#image-crop').modal("hide");
             $('#preview').attr({'src':data.path})
           },
@@ -106,7 +104,7 @@ $(document).ready(function(){
         $('#image-crop-target').one('load',destroyJcrop);
         $('#image-path').val(response.path)
         $('#image-crop-target').one('load',function() {
-          $('#image-crop').modal('show');
+          $('#image-crop').modal();
         })
       },
     })

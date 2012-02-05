@@ -6,39 +6,39 @@
 {% block subtitle %}志不立，天下无可成之事{% endblock subtitle %}
 
 {% block main %}
-<form id="host-activity" class="inner-post" enctype="multipart/form-data" action="" method="post" accept-charset="utf-8">
+<form id="host-activity" class="form-horizontal inner-post" enctype="multipart/form-data" action="" method="post" accept-charset="utf-8">
     {% csrf_token %}
     <div class="row">
-        <div class="span7">
-            <div class="clearfix">
-                <label>头图</label>
-                <div class="input">{% include "ajaxcrop.html" %}</div>
+        <div class="span summary">
+            <div class="control-group">
+                <label class="control-label">头图</label>
+                <div class="controls">{% include "ajaxcrop.html" %}</div>
             </div>
             {{ form.avatar }}
             {{ form.title|label:"标题" }}
             {{ form.slug|label:"Slug" }}
             {{ form.activity_type|label:"类型" }}
-            <div class="clearfix datetime">
-                <label for="">时间</label>
-                <div class="input">
+            <div class="control-group datetime">
+                <label class="control-label" for="">时间</label>
+                <div class="controls">
                 {{ form.begin_time }} 至
                 {{ form.end_time }}
                 </div>
             </div>
-            <div class="clearfix">
-                <label>地点</label>
-                <div class="input">
+            <div class="control-group">
+                <label class="control-label">地点</label>
+                <div class="controls">
                     <input id="location-select-input" type="text" />
                     {{ form.location }}
                 </div>
             </div>
         </div>
-        <div class="span3 avatar">
+        <div class="span large-avatar avatar">
             <img id="preview" class="avatar" src="/static/images/no_avatar.png" />
         </div>
     </div>
     {{ form.description|label:"介绍" }}
-    <div class="actions">
+    <div class="form-actions">
         {% if form.errors %}
         <ul class="errors">            
         {% for error in form.errors %}
@@ -48,7 +48,7 @@
         {% endfor %}
         </ul>
         {% endif %}
-        <input class="btn primary" type="submit" value="发起活动">
+        <input class="btn btn-primary" type="submit" value="发起活动">
         <button class="btn" type="reset">预览</button>
         <button class="btn" type="reset">取消</button>
     </div>
@@ -79,16 +79,16 @@
     <div class="modal-footer">
             <input id="location-selected" type="text" name="" value="" placeholder="">
             <a id="location-select-create" class="btn" href="#">创建地点</a>
-        <a id="location-select-confirm" class="btn primary" href="#">选择地点</a>
+        <a id="location-select-confirm" class="btn btn-primary" href="#">选择地点</a>
     </div>
 </div>
 {% endblock main %}
 
 {% block side %}
-<h4>银河系活动发布指南</h4>
+<h3>银河系活动发布指南</h3>
 <p>组织活动和合作活动需要相应组织管理员的审核，审核结果将会以邮件告知，请耐心等待或联系组织管理员</p>
 <p>少即是多，宁缺毋滥，以及头图是基本上无害的</p>
-<h4>独乐乐不如众乐乐</h4>
+<h3>独乐乐不如众乐乐</h3>
 <form id="side-activity-invition" action="" method="post" accept-charset="utf-8">
     <div class="input-prepend holding">
         <span class="add-on">@</span>

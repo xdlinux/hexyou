@@ -10,24 +10,24 @@
     <input type="hidden" id="y" name="y" />
     <input type="hidden" id="w" name="w" />
     <input type="hidden" id="h" name="h" />
-    <div id="image-crop" class="modal fade" title="">
-        <div class="modal-header">
-            <a class="close" href="#">×</a>
-            <h3>裁剪</h3>
+</div>
+<div id="image-crop" class="modal fade">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>裁剪</h3>
+    </div>
+    <div class="modal-body">
+        <div id="image-crop-error" class="alert alert-error hide" data-alert="alert">
+            裁剪时发生错误，请重试或联系管理员
         </div>
-        <div class="modal-body">
-            <div id="image-crop-error" class="alert-message error hide" data-alert="alert">
-                <p>裁剪时发生错误，请重试或联系管理员</p>
+        <div style="width:150px;height:150px;overflow:hidden;display:none;float:right;margin-left:360px;position:fixed;">
+            <div style="width:150px;height:150px;overflow:hidden">
+                <img id="image-preview" />
             </div>
-            <div style="width:150px;height:150px;overflow:hidden;display:none;float:right;margin-left:360px;position:fixed;">
-                <div style="width:150px;height:150px;overflow:hidden">
-                    <img id="image-preview" />
-                </div>
-            </div>
-            <img id="image-crop-target" src="" style="display:none;margin-top:6px;"/>
         </div>
-        <div class="modal-footer">
-            <a id="image-crop-confirm" class="btn primary" href="#">确认裁剪</a>
-        </div>
+        <img id="image-crop-target" src="" style="display:none;margin-top:6px;"/>
+    </div>
+    <div class="modal-footer">
+        <a id="image-crop-confirm" class="btn btn-primary" href="#">确认裁剪</a>
     </div>
 </div>

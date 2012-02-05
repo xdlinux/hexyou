@@ -1,3 +1,81 @@
 {% extends "groups/base.html" %}
+{% load bootstrap %}
 
 {% block title %}管理小组{% endblock title %}
+
+{% block subtitle %}室雅何须大，花香不在多{% endblock subtitle %}
+
+{% block headeraction %}
+<a href="/groups/{{ group.slug }}" class="btn btn-small">返回小组</a>
+{% endblock headeraction %}
+
+{% block main %}
+<ul class="tabs nav nav-tabs">
+    <li class="active"><a href="#tab-customization" data-toggle="tab" title="">定制</a></li>
+    <li><a href="#tab-membership" data-toggle="tab" title="">成员</a></li>
+    <li><a href="#tab-activity" data-toggle="tab" title="">活动</a></li>
+    <li><a href="#tab-disband" data-toggle="tab" title="">解散组织</a></li>
+</ul>
+<form id="admin-group" class="form-horizontal inner-post" enctype="multipart/form-data" action="" method="post" accept-charset="utf-8">
+{% csrf_token %}
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="tab-customization">
+            <div class="row">
+                <div class="span summary">
+                    <div class="control-group">
+                        <label class="control-label">头像</label>
+                        <div class="controls">{% include "ajaxcrop.html" %}</div>
+                    </div>
+                    {{ form.avatar }}
+                    {{ form.name|label:"名称" }}
+                    {{ form.slug|label:"Slug" }}
+                    {{ form.condition|label:"门槛" }}
+                </div>
+                <div class="span large-avatar avatar" style="text-align:center">
+                    <img id="preview" class="avatar" src="{{ form.avatar.value }}" />
+                </div>
+            </div>
+            {{ form.description|label:"简介" }}
+        </div>
+        <div id="tab-membership" class="tab-pane fade in">
+            <ul>
+                {% for member in members %}
+                <li>{{ member }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="tab-disband" class="tab-pane fade in">
+            <p class="align-center"><a href="#disband-modal" class="btn btn-danger btn-large" data-toggle="modal">解散 {{ form.name.value }}</a></p>
+            <p class="align-center">权力越大，责任越大 :)</p>
+            <div id="disband-modal" class="modal fade">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3>确认解散</h3>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li>组织解散后不可恢复</li>
+                        <li>组织活动会被转换为活动发起人的个人活动</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-danger" href="/groups/{{ form.slug.value }}/disband">确认解散</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-actions">
+        {% if form.errors %}
+        <ul class="errors">            
+        {% for error in form.errors %}
+        <li>
+        {{ error }}
+        </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        <input class="btn btn-primary" type="submit" value="确认更改">
+        <button class="btn" type="reset">取消</button>
+    </div>
+</form>
+{% endblock main %}

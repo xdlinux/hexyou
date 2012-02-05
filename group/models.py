@@ -30,7 +30,6 @@ class Group(models.Model):
     def __unicode__(self):
         return self.name
     
-    
 
 class MemberShip(models.Model):
     user = models.ForeignKey(User)

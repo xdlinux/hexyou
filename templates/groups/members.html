@@ -1,0 +1,99 @@
+{% extends "groups/base.html" %}
+{% load gravatar %}
+{% load bootstrap %}
+
+{% block title %}{{ group }}的成员{% endblock title %}
+
+{% block subtitle %}改变自己，才能改变别人{% endblock subtitle %}
+
+{% block headeraction %}
+{% if is_admin %}
+<a href="/groups/{{ group.slug }}/admin" class="btn small danger">管理小组</a>
+{% endif %}
+<a href="/groups/{{ group.slug }}" class="btn small">返回小组</a>
+{% endblock headeraction %}
+
+{% block main %}
+<h3>管理员</h3>
+<table class="table">
+    {% for admin in admins %}
+    <tr>
+        <td class="avatar">
+            <img class="avatar" src="{% avatar admin %}">
+        </td>
+        <td>
+            <h4>{{ admin.last_name }}
+                <small>(<a href="/members/{{ admin }}">{{ admin }}</a>)</small>
+            </h4>
+            <p>{{ admin.bio|default:"这个家伙很懒，什么都没有留下"|words:50 }}</p>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<h3>成员</h3>
+<table class="table">
+    {% for member in members.object_list %}
+    <tr>
+        <td class="avatar">
+            <img class="avatar" src="{% avatar member %}">
+        </td>
+        <td>
+            <h4>{{ member.last_name }}
+                <small>(<a href="/members/{{ member }}">{{ member }}</a>)</small>
+            </h4>
+            <p>{{ member.bio|default:"这个家伙很懒，什么都没有留下"|words:50 }}</p>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td class="avatar">
+            <img class="avatar" src="/static/images/no_avatar.png">
+        </td>
+        <td>
+            <h4>暂无成员</h4>
+            <p>第一个会是你吗？</p>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<div class="pagination pagination-centered">
+    <ul>
+        {% if members.has_previous %}
+        <li>
+            <a href="?page={{ members.previous_page_number }}">«</a>
+        </li>
+        {% else %}
+        <li class="disabled">
+            <a href="#">«</a>
+        </li>
+        {% endif %}
+        {{ members.page_range }}
+        {% for val in paginator.page_range_slice %}
+        <li {% ifequal page val %}class="active"{% endifequal %}>
+            <a href="?page={{ val }}">{{ val }}</a>
+        </li>
+        {% endfor %}
+        {% if paginator.page_range_slice|last < paginator.num_pages %}
+        <li class="disabled">
+            <a href="#">...</a>
+        </li>
+        <li>
+            <a href="?page={{ paginator.num_pages }}" {% ifequal page val %}class="active"{% endifequal %}>{{ paginator.num_pages }}</a>
+        </li>
+        {% endif %}
+        {% if members.has_next %}
+        <li>
+            <a href="?page={{ members.next_page_number }}" class="disabled">»</a>
+        </li>
+        {% else %}
+        <li class="disabled">
+            <a href="#">»</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock main %}
+
+{% block side %}
+    
+{% endblock side %}

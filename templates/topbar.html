@@ -1,6 +1,6 @@
 {% load topbar %}
-    <div class="topbar">
-        <div class="fill">
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
             <div class="container">
                 <a href="/" class="brand">嘿咻</a>
                 <ul class="nav">
@@ -11,10 +11,11 @@
                     {% block extranav %}
                     {% endblock extranav %}
                 </ul>
-                <ul class="nav secondary-nav">
-                    <li id="session" class="menu">
-                        <a href="#" class="dropdown-toggle">
+                <ul class="nav nav pull-right">
+                    <li id="session" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <span id="session-avatar"><img src="/static/images/no_avatar.png" /></span>
+                            <b class="caret"></b>
                         </a>
                         <ul id="session-actions" class="dropdown-menu">
                             <li><a href="/profile/edit" title="">设置</a></li>

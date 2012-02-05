@@ -7,10 +7,11 @@ from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpRespo
 from NearsideBindings.base.forms import LoginForm,SignupForm,ImageCrop,ImageUpload, AjaxStandard
 from NearsideBindings.base.utils import JsonResponse, upload_image, get_gravatar_url, simplejson
 from NearsideBindings.settings import MEDIA_ROOT, MEDIA_URL, IMAGE_SAVE_CHOICES
-from NearsideBindings.group.models import Group
+from NearsideBindings.group.models import Group, MemberShip
 from NearsideBindings.activity.models import Location
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from django.db.models import Q
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
@@ -18,7 +19,7 @@ import Image, os, urllib
 
 def index(request):
     if request.user.is_authenticated():
-        return redirect('/members/%s/'% request.user.username)
+        return redirect('/home/')
     return render_to_response("index.html",locals(),context_instance=RequestContext(request))
 
 def home(request):
@@ -127,8 +128,17 @@ def get_users(request,request_phrase):
     return [{'avatar':user.avatar or get_gravatar_url(user.email),'name':user.last_name,'slug':user.username,'category':'user'} for user in users]
 
 def get_groups(request,request_phrase):
-    groups = Group.objects.filter(slug__contains=request_phrase).order_by('name')[0:5]
+    groups=Group.objects.filter(Q(slug__contains=request_phrase) | Q(name__contains=request_phrase))[0:5]
     return [{'avatar':group.avatar,'name':group.name,'slug':group.slug,'category':'group'} for group in groups]
+
+def join_group(request,request_phrase):
+    new_membership = MemberShip(user=request.user,group=Group.objects.get(slug=request_phrase),is_admin=False)
+    try:
+        new_membership.save()
+    except IntegrityError:
+        return [{'error':'You have joined this group',},]
+    else:
+        return ""
 
 def get_current_user(request,request_phrase):
     if request.user.is_authenticated():
@@ -155,6 +165,7 @@ REQUEST_TYPES = (
     ('all',[get_users,get_groups],False),
     ('user',[get_users,],False,),
     ('group',[get_groups,],False,),
+    ('join_group',[join_group,],True),
     ('current_user',[get_current_user,],True),
     ('location',[get_child_location,],False),
     ('create_location',[create_location,],False),

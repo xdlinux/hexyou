@@ -1,61 +1,94 @@
 {% extends "groups/base.html" %}
+{% load bootstrap %}
 
 {% block title %}组织与团队{% endblock title %}
 
 {% block subtitle %}我们都是来自五湖四海，为了一个共同的革命目标，走到一起来了{% endblock subtitle %}
 
 {% block headeraction %}
-<a href="/groups/new" class="btn small info">创建小组</a>
-<a href="/groups/random" class="btn small ">随便转转</a>
+<a href="/groups/new" class="btn btn-small btn-info">创建小组</a>
+<a href="/groups/random" class="btn btn-small ">随便转转</a>
 {% endblock headeraction %}
 
 {% block main %}
+{% if top_group_display %}
 <div class="hero-unit">
     <div class="row">
-        <div class="span3">
-            <img src="http://placehold.it/150x150" class="avatar" alt="" />
+        <div class="span large-avatar avatar">
+            <a href="{% url NearsideBindings.group.views.single top_group.slug %}"><img src="{{ top_group.avatar }}" class="avatar" alt="" /></a>
         </div>
-        <div class="span6">
-            <h2>组织名称</h2>
-            <p>然大情證冷看；裡子時紀且易、我是問馬戰未，樹但哥有分山們友銀基。最老頭住……便要銷保給陸細談，務日師野了點最果不灣？集氣的唱就前不臺，口解車魚子用時識時單代變山有於生刻體整性主經持加接來給問林頭型：天家真兩始才於對間常出北，進後格，書驚心水語言業商怎清場。視的小綠灣下一……試過解，易元要黨那聲府報數在修紅臺物到當。</p>
+        <div class="span5">
+            <h2><a href="{% url NearsideBindings.group.views.single top_group.slug %}">{{ top_group }}</a>
+                <small><a href="{% url NearsideBindings.group.views.members top_group.slug %}">({{ top_group_members }})</a></small></h2>
+            <p style="margin-left:12px;">始于{{ top_group.create_date|date:"Y年m月d日" }}</p>
+            {{ top_group.description|linebreaks|first_p }}
             <p class="align-right">
-                <a href="#" class="btn primary">详细信息</a>
+                <a href="/groups/{{ top_group.slug }}" class="btn btn-primary">详细信息</a>
             </p>
         </div>
     </div>
 </div>
-<h3>活跃组织</h3>
-<table>
+{% endif %}
+<h3>发现组织</h3>
+<table class="table">
     <tbody>
+        {% for group in groups.object_list %}
         <tr>
-            <td>
-                <img src="http://placehold.it/64x64" class="avatar" alt="" />
+            <td class="avatar">
+                <a href="{% url NearsideBindings.group.views.single group.slug %}"><img class="avatar" src="{{ group.avatar }}" /></a>
             </td>
             <td>
-                <h4>组织名称 
-                <small>(12)</small></h4>
-                <p>院教野子領過氣林陸開！這知酒到李，無落足不把的果女里大座的的覺輕趣、醫是死上家怎度我門打打營謝別人少候朋早來離基？中真經一片要這，卻新電，者和常眼不非道負位以更基流分果？灣體水隊、父實會自止關把正家館，此好例緊，教令考表生久備：內式業獎用為有樣投縣果響子情會實不的論相？</p>
+                <h4><a href="{% url NearsideBindings.group.views.single group.slug %}">{{ group }}</a>
+                    <small><a href="{% url NearsideBindings.group.views.members group.slug %}">({{ group.members_count }})</a></small></h4>
+                <p>{{ group.description|words:50 }}</p>
             </td>
         </tr>
-        <tr>
-            <td>
-                <img src="http://placehold.it/64x64" class="avatar" alt="" />
-            </td>
-            <td>
-                <h4>组织名称
-                <small>(16)</small></h4>
-                <p>能面題白者設子認。下本而一羅次開實下黨提陽寫度這廣西頭刻班個異輕小都我生社會都老單近即！房一親的感眼然親陸園是流廣傳一明育來遠像頭不人！主和來的母的難服施團何政總道麼人中經父始定公己且。</p>
-            </td>
-        </tr>
+        {% endfor %}
     </tbody>
 </table>
+<div class="pagination pagination-centered">
+    <ul>
+        {% if groups.has_previous %}
+        <li>
+            <a href="?page={{ groups.previous_page_number }}">«</a>
+        </li>
+        {% else %}
+        <li class="disabled">
+            <a href="#">«</a>
+        </li>
+        {% endif %}
+        {{ groups.page_range }}
+        {% for val in paginator.page_range_slice %}
+        <li {% ifequal page val %}class="active"{% endifequal %}>
+            <a href="?page={{ val }}">{{ val }}</a>
+        </li>
+        {% endfor %}
+        {% if paginator.page_range_slice|last < paginator.num_pages %}
+        <li class="disabled">
+            <a href="#">...</a>
+        </li>
+        <li>
+            <a href="?page={{ paginator.num_pages }}" {% ifequal page val %}class="active"{% endifequal %}>{{ paginator.num_pages }}</a>
+        </li>
+        {% endif %}
+        {% if groups.has_next %}
+        <li>
+            <a href="?page={{ groups.next_page_number }}" class="disabled">»</a>
+        </li>
+        {% else %}
+        <li class="disabled">
+            <a href="#">»</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
 {% endblock main %}
 
 {% block side %}
 <form id="side-search" action="" method="post" accept-charset="utf-8">
     <div class="input-prepend holding">
         <span class="add-on">搜索</span>
-        <input class="search-input" type="text" name="" value="">
+        <input class="search-input" type="text" name="" value="" request-type="group" redirect-type="groups">
         <span class="holder">找到组织</span>
     </div>
 </form>
@@ -82,5 +115,5 @@
 <p>尚未加入组织，<a href="/groups/random">随便转转</a></p>
 {% endif %}
 <h3>日历</h3>
-<img src="http://placehold.it/320x200" />
+<img src="http://placehold.it/280x175" />
 {% endblock side %}

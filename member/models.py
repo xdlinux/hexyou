@@ -22,7 +22,7 @@ class Profile(object):
 class UserProfile(Profile):
     bio = models.TextField(blank=True)
     site = models.URLField(blank=True)
-    avatar = models.CharField(max_length=256,blank=True)
+    avatar = models.CharField(max_length=100,blank=True)
     student_num = models.CharField(max_length=8, blank=True)
     contact_twitter = models.CharField(max_length=32, blank=True)
     contact_qq = models.CharField(max_length=20, blank=True)

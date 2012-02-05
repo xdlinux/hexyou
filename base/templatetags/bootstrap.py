@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-  
 from django import template
 from django.utils.safestring import mark_safe
+import re
 
 register=template.Library()
 
@@ -19,9 +20,22 @@ def prepend(content,prepend):
 
 @register.filter
 def label(field,label):
-    s="<div class='clearfix'>\n<label for='%s'>%s</label>\n<div class='input'>%s</div>" % (field.auto_id, label, field)
+    s="<div class='control-group'>\n<label class='control-label' for='%s'>%s</label>\n<div class='controls'>%s" % (field.auto_id, label, field)
     if field.help_text:
-        s+="<div class='help-text'>%s</div>" % field.help_text
-    s+="\n</div>"
+        s+="<p class='help-block'>%s</p>" % field.help_text
+    s+="</div>\n</div>"
     return mark_safe(s)
 
+@register.filter
+def words(text,count):
+    if len(text)>count:
+        return mark_safe(text[0:count]+'...')
+    return mark_safe(text)
+
+@register.filter
+def first_p(text):
+    pattern = re.compile(r'(<p>([^<]*)<\/p>)?')
+    match_text = pattern.match(text).groups()[1]
+    if match_text[-1] in (u'.',u'。',u'!',u'！',u'?',u'？',):
+        match_text = match_text[:-1] + '...'
+    return mark_safe('<p>'+match_text+'</p>')
