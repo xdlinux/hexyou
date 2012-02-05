@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
+from NearsideBindings.group.models import MemberShip
 from NearsideBindings.member.forms import EditProfileForm
 from django import forms
 from NearsideBindings.base.utils import get_gravatar_url
@@ -17,11 +18,14 @@ def frontpage(request):
 @login_required(login_url='/login/')
 def single(request,username):
     """docstring for person"""
-    return render_to_response('members/single.html',{'user':User.objects.get(username=username),'is_me':request.user.username==username})
+    user = User.objects.get(username=username)
+    groups = [ membership.group for membership in MemberShip.objects.filter(user=user) ]
+    return render_to_response('members/single.html',{'user':user,'groups':groups,'group_counter':len(groups),'is_me':request.user.username==username})
 
 @login_required(login_url='/login/')
 def profile(request):
-    return render_to_response('members/single.html',{'user':request.user,'is_me':True})
+    return single(request,request.user.username)
+    # return render_to_response('members/single.html',{'user':request.user,'is_me':True})
 
 @login_required(login_url='/login/')
 def edit_profile(request):

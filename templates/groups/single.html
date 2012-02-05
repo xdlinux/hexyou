@@ -5,7 +5,7 @@
 {% block subtitle %}{% ifequal group.group_type.id 1 %}<span class="label important">实体组织</span>{% else %}<span class="label notice">虚拟组织</span>{% endifequal %}{% endblock subtitle %}
 
 {% block headeraction %}
-<a href="#" class="btn small danger">管理小组</a>
+<a href="/groups/{{ group.slug }}/admin" class="btn small danger">管理小组</a>
 {% endblock headeraction %}
 
 {% block main %}

@@ -60,29 +60,27 @@
     </div>
 </form>
 <h3>我管理的组织
-    <small>(233)</small></h3>
+    <small>({{ managed_counter }})</small></h3>
+{% if managed_counter %}
 <ul class="media-grid avatar">
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    {% for managed_group in managed_groups %}
+    <li><a href="/groups/{{ managed_group.slug }}" title=""><img src="{{ managed_group.avatar }}" alt=""></a></li>
+    {% endfor %}
 </ul>
+{% else %}
+<p>尚未创建组织，<a href="/groups/create">创建小组</a></p>
+{% endif %}
 <h3>我参加的组织
-    <small>(42)</small></h3>
+    <small>({{ joined_counter }})</small></h3>
+{% if joined_counter %}
 <ul class="media-grid avatar">
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    {% for joined_group in joined_groups %}
+    <li><a href="/groups/{{ joined_group.slug }}" title=""><img src="{{ joined_group.avatar }}" alt=""></a></li>
+    {% endfor %}
 </ul>
+{% else %}
+<p>尚未加入组织，<a href="/groups/random">随便转转</a></p>
+{% endif %}
 <h3>日历</h3>
 <img src="http://placehold.it/320x200" />
 {% endblock side %}

@@ -67,17 +67,12 @@
 {% endblock main %}
 
 {% block side %}
-<h3>参加的组织
-    <small>(12)</small></h3>
+<h3>所在组织
+    <small>({{ group_counter }})</small></h3>
 <ul class="media-grid avatar">
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    {% for group in groups %}
+    <li><a href="/groups/{{ group.slug }}"><img src="{{ group.avatar }}" alt=""></a></li>
+    {% endfor %}
 </ul>
 <h3>日历</h3>
 <img src="http://placehold.it/320x200" />
