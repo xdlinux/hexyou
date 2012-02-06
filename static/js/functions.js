@@ -198,7 +198,8 @@ $(document).ready(function(){
               return {
                 name: item.name,
                 avatar: item.avatar,
-                value: item.slug,
+                slug:item.slug,
+                value: item.id,
                 category: item.category,
               }
             })
@@ -207,7 +208,7 @@ $(document).ready(function(){
       })
     },
     select:function(event,ui){
-      window.location.href='/'+$('#side-search .search-input').attr("redirect-type")+'/'+ui.item.value
+      window.location.href='/'+$('#side-search .search-input').attr("redirect-type")+'/'+ui.item.slug
     }
   })
 

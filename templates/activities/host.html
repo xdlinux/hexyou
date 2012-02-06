@@ -27,7 +27,7 @@
             <div class="control-group">
                 <label class="control-label">地点</label>
                 <div class="controls">
-                    <input id="location-select-input" name="location" type="text" />
+                    <input id="location-select-input" name="" type="text" />
                     {{ form.location }}
                 </div>
             </div>
@@ -43,8 +43,8 @@
             <div class="input-prepend">
                 <span class="add-on">@</span>
                 <input id="inform-input" type="text" request-type="all">
-                <textarea class="inform-list user" name="host_groups" style="display:none;"></textarea>
-                <textarea class="inform-list group" name="inform_users" style="display:none;"></textarea>
+                <textarea class="inform-list user" name="inform_users" style="display:none;"></textarea>
+                <textarea class="inform-list group" name="host_groups" style="display:none;"></textarea>
                 <div id="label-list">
             </div>
         </div>
@@ -97,11 +97,9 @@
 {% endblock main %}
 
 {% block side %}
-<h3>银河系活动发布指南</h3>
-<p>组织活动和合作活动需要相应组织管理员的审核，审核结果将会以邮件告知，请耐心等待或联系组织管理员</p>
-<p>少即是多，宁缺毋滥，以及头图是基本上无害的</p>
 <h3>独乐乐不如众乐乐</h3>
+<p>活动发布可用站内信 <a href="#inform-input">通知</a> 好友，也可通知组织认领。被组织认领的活动将作为 <strong>组织活动</strong>，被多个组织认领的活动将作为 <strong>合作活动</strong>。</p>
+<p><strong>组织活动</strong> 和 <strong>合作活动</strong> 需要相应组织管理员的认领，认领结果将会以站内信告知，请耐心等待或联系组织管理员。</p>
 <form id="side-activity-invition" action="" method="post" accept-charset="utf-8">
-
 </form>
 {% endblock side %}

@@ -12,15 +12,13 @@ class IdListField(forms.CharField):
     def to_python(self,value):
         if value in EMPTY_VALUES:
             return []
-        return value.split(',')
-
-    def validate(self,value):
-        super(IdListField, self).validate(value)
+        value = value.split(',')
         try:
-            [ int(single) for single in value if single ]
+            value = [ int(single) for single in value if single ]
         except (ValueError,TypeError):
             raise ValidationError(u'Invalid id list')
         return value
+
 
 class ActivityForm(forms.ModelForm):
 

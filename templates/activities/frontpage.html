@@ -18,9 +18,10 @@
         </div>
         <div class="span5">
             <h2>{{ top_activity.title }}
-                <small>{% for group in top_activity.host_groups %}<a href="/groups/{{ group.slug }}">{{ group.name }}</a>{% endfor %}</small>
+                <small>{% for group in top_activity_groups %}<a href="/groups/{{ groups.slug }}">{{ group }}</a>{% endfor %}</small>
             </h2>
-            <p>{{ top_activity.description|first_p }}</p>
+            <p style="margin-left:12px;">开始于 {{ top_activity.begin_time|date:"Y年m月d日 H:m" }}，在 {{ top_activity.location.name }} </p>
+            <p>{{ top_activity.description|linebreaks|first_p }}</p>
             <p class="align-right">
                 <a href="/activities/{{ top_activity.id }}" class="btn btn-primary">详细信息</a>
             </p>
