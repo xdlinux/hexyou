@@ -119,7 +119,7 @@ ul.list .content p { margin-bottom:2px; }
 .inner-post label { width:60px; }
 .inner-post .control-group>label { width:60px; }
 .inner-post .controls { margin-left:80px; }
-.inner-post textarea { min-height:120px; width:500px; }
+.inner-post textarea { min-height:80px; width:500px; }
 .inner-post .datetime input { width:120px; }
 .inner-post .form-actions { padding-left:80px; }
 .inner-post .controls ul { list-style:none; margin:0; }

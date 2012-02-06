@@ -175,9 +175,3 @@ RESERVED_GROUP_SLUGS = (
     'disband',
     'random',
 )
-
-RESERVED_ACTIVITY_SLUGS = (
-    'create',
-    'edit',
-    'random',
-)

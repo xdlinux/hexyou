@@ -81,16 +81,16 @@ $(document).ready(function(){
 
 /* autocomplete */
 
-  $("#inform-list").val("")
+  $(".inform-list").val("")
 
-  function removeLabel(label){
-    labels = $("#inform-list").val().split(',')
+  function removeLabel(label,category){
+    labels = $(".inform-list."+category).val().split(',')
     for(var i=0;i<labels.length;i++){
-      if(labels[i]==label.attr('slug')){
+      if(labels[i]==label.attr('value')){
         labels.splice(i,1)
       }
     }
-    $("#inform-list").val(labels.join(','))
+    $(".inform-list."+category).val(labels.join(','))
     label.fadeOut('normal',function(){$(this).remove()})
   }
 
@@ -119,7 +119,7 @@ $(document).ready(function(){
     _renderItem: function(ul, item){
       return $( "<li></li>" )
           .data( "item.autocomplete", item )
-          .append( "<a>" + "<img src=\"" + item.avatar + "\" style=\"width:24px;height:24px;\" />" + item.name + '(' + item.value + ')' + "</a>" )
+          .append( "<a>" + "<img src=\"" + item.avatar + "\" style=\"width:24px;height:24px;\" />" + item.name + '(' + item.slug + ')' + "</a>" )
           .appendTo( ul )
       }
   });
@@ -147,7 +147,8 @@ $(document).ready(function(){
               return {
                 name: item.name,
                 avatar: item.avatar,
-                value: item.slug,
+                slug: item.slug,
+                value: item.id,
                 category: item.category,
               }
             })
@@ -157,22 +158,22 @@ $(document).ready(function(){
     },
     select: function(event,ui){
       $("#inform-input").val("")
-      list = $("#inform-list").val()
+      listclass = ".inform-list."+ui.item.category
+      list = $(listclass).val()
       index = list.indexOf(ui.item.value + ',')
       if(index==-1){
         if(list){
-          $("#inform-list").val(list + ui.item.value + ',')
+          $(listclass).val(list + ui.item.value + ',')
         }else{
-         $("#inform-list").val(ui.item.value + ',')
+         $(listclass).val(ui.item.value + ',')
         }
-        $("#label-list").append('<span class="label ' + ui.item.category + '"' + 'slug="' + ui.item.value + '">' + ui.item.name + ' <span class="label-close">×</span></span>')
+        $("#label-list").append('<span class="label ' + ui.item.category + '"' + 'slug="' + ui.item.slug + '" value="' + ui.item.value + '">' + ui.item.name + ' <span class="label-close">×</span></span>')
       }
       $(".label .label-close").click(function(){
-          removeLabel($(this).parent('.label'))
+          removeLabel($(this).parent('.label'),ui.item.category)
       })
       return false;
     },
-    minLength:2
   }).data("autocomplete")
 
   $('#side-search .search-input').catcomplete({
@@ -291,7 +292,13 @@ $(document).ready(function(){
   })
 
   $('#location-select-confirm').click(function(){
-    $('#location-select-modal').modal('hide')
+    if($('#location-selected').data('location_name')){
+      $('#location-select-modal').modal('hide')
+    }else{
+      $('#location-no-selected').slideDown('normal',function(){
+        setTimeout(function(){$('#location-duplicate').slideUp()},5000)
+      })
+    }
   })
 
   $('#location-select-create').click(function(){

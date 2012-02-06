@@ -16,7 +16,6 @@
             </div>
             {{ form.avatar }}
             {{ form.title|label:"标题" }}
-            {{ form.slug|label:"Slug" }}
             {{ form.activity_type|label:"类型" }}
             <div class="control-group datetime">
                 <label class="control-label" for="">时间</label>
@@ -28,7 +27,7 @@
             <div class="control-group">
                 <label class="control-label">地点</label>
                 <div class="controls">
-                    <input id="location-select-input" type="text" />
+                    <input id="location-select-input" name="location" type="text" />
                     {{ form.location }}
                 </div>
             </div>
@@ -38,6 +37,19 @@
         </div>
     </div>
     {{ form.description|label:"介绍" }}
+    <div class="control-group">
+        <label class="control-label">通知</label>
+        <div class="controls">
+            <div class="input-prepend">
+                <span class="add-on">@</span>
+                <input id="inform-input" type="text" request-type="all">
+                <textarea class="inform-list user" name="host_groups" style="display:none;"></textarea>
+                <textarea class="inform-list group" name="inform_users" style="display:none;"></textarea>
+                <div id="label-list">
+            </div>
+        </div>
+    </div>
+    </div>
     <div class="form-actions">
         {% if form.errors %}
         <ul class="errors">            
@@ -55,15 +67,15 @@
 </form>
 <div id="location-select-modal" class="modal fade">
     <div class="modal-header">
-        <a class="close" href="#">×</a>
+        <a class="close" href="#" data-dismiss="modal">×</a>
         <h3>地点</h3>
     </div>
     <div class="modal-body">
-        <div id="location-no-selected" class="alert-message error hide">
-            <p>请选择一个地点</p>
+        <div id="location-no-selected" class="alert alert-error hide" data-alert="alert">
+            请选择一个地点
         </div>
-        <div id="location-duplicate" class="alert-message error hide">
-            <p>该地点已存在</p>
+        <div id="location-duplicate" class="alert alert-error hide" data-alert="alert">
+            该地点已存在或无效的地点名称
         </div>
         <div id="location-select">
             <ul id="location-root" class="location-parent">
@@ -90,13 +102,6 @@
 <p>少即是多，宁缺毋滥，以及头图是基本上无害的</p>
 <h3>独乐乐不如众乐乐</h3>
 <form id="side-activity-invition" action="" method="post" accept-charset="utf-8">
-    <div class="input-prepend holding">
-        <span class="add-on">@</span>
-        <input id="inform-input" type="text" name="" value="" request-type="all">
-        <textarea id="inform-list" name="inform" class="hide"></textarea>
-        <span class="holder">邀请好友</span>
-    </div>
-    <div id="label-list">
-    </div>
+
 </form>
 {% endblock side %}

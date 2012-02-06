@@ -16,7 +16,6 @@ class ActivityType(models.Model):
 
 class Activity(models.Model):
     title = models.CharField(max_length=30)
-    slug = models.SlugField(unique=True)
     avatar = models.CharField(max_length=100,default='/static/images/no_avatar.png')
     activity_type = models.ForeignKey(ActivityType,default=1)
     begin_time = models.DateTimeField()

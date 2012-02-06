@@ -27,6 +27,7 @@ class Group(models.Model):
     condition = models.ForeignKey(Condition,default=1)
     group_type = models.ForeignKey(GroupType,default=1)
     avatar = models.CharField(max_length=512,default='/static/images/no_avatar.png')
+    friend_groups = models.ManyToManyField('Group')
     def __unicode__(self):
         return self.name
     
@@ -36,4 +37,3 @@ class MemberShip(models.Model):
     group = models.ForeignKey(Group)
     joined_date = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
-

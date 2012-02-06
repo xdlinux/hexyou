@@ -125,11 +125,11 @@ def crop(request,save_to):
 
 def get_users(request,request_phrase):
     users = User.objects.filter(username__contains=request_phrase).order_by('username')[0:5]
-    return [{'avatar':user.avatar or get_gravatar_url(user.email),'name':user.last_name,'slug':user.username,'category':'user'} for user in users]
+    return [{'avatar':user.avatar or get_gravatar_url(user.email),'name':user.last_name,'slug':user.username,'category':'user','id':user.id} for user in users]
 
 def get_groups(request,request_phrase):
     groups=Group.objects.filter(Q(slug__contains=request_phrase) | Q(name__contains=request_phrase))[0:5]
-    return [{'avatar':group.avatar,'name':group.name,'slug':group.slug,'category':'group'} for group in groups]
+    return [{'avatar':group.avatar,'name':group.name,'slug':group.slug,'category':'group','id':group.id} for group in groups]
 
 def join_group(request,request_phrase):
     new_membership = MemberShip(user=request.user,group=Group.objects.get(slug=request_phrase),is_admin=False)
