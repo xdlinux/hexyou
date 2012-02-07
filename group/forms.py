@@ -12,12 +12,12 @@ def validate_slug_access(slug):
     if len(slug)<4 or slug in RESERVED_GROUP_SLUGS:
         raise ValidationError(u'"%s" is too short or reserved ' % slug)
 
-class GroupForm(ModelForm):
+class NewGroupForm(ModelForm):
 
     slug = forms.SlugField(required=True,validators=[validate_slug,validate_slug_access,],initial=timebaseslug,help_text="用于url，例如http://example.com/groups/slug")
     class Meta:
         model = Group
-        exclude = ('founder','members')
+        exclude = ('founder','members','friend_groups')
         widgets = {
             'condition': RadioSelect(),
             'avatar': HiddenInput(),

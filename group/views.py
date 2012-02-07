@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response,redirect,get_object_or_404
-from NearsideBindings.group.forms import GroupForm, AdminGroupForm
+from NearsideBindings.group.forms import NewGroupForm, AdminGroupForm
 from NearsideBindings.group.models import Group,MemberShip
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
@@ -54,12 +54,12 @@ def random(request):
 @login_required(login_url='/login/')
 def new(request):
     if request.POST:
-        form = GroupForm(request.POST)
+        form = NewGroupForm(request.POST)
         success,group,membership=form.create_group(request.user)
         if success:
             return redirect('/groups/%s' % group.slug)
     else:
-        form=GroupForm()
+        form=NewGroupForm()
     return render_to_response('groups/new.html', {
         'form':form
         }, context_instance=RequestContext(request)
@@ -69,14 +69,14 @@ def new(request):
 def admin(request,group_slug):
     group = get_object_or_404(Group,slug=group_slug)
     admins = [ membership.user for membership in MemberShip.objects.filter(group=group,is_admin=1) ]
-    members = [ membership.user for membership in MemberShip.objects.filter(group=group,is_admin=0) ]
+    memberships = MemberShip.objects.filter(group=group)[0:4]
     if request.POST:
         form = AdminGroupForm(request.POST,instance=group)
         if form.is_valid():
             form.save()
     else:
         form = AdminGroupForm(instance=group)
-    return render_to_response('groups/admin.html',{'form':form,'members':members,'admins':admins},context_instance=RequestContext(request))
+    return render_to_response('groups/admin.html',{'form':form,'memberships':memberships,'admins':admins},context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
 def members(request,group_slug):

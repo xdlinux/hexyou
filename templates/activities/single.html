@@ -2,7 +2,7 @@
 
 {% block title %}{{ activity.title }}{% endblock title %}
 
-{% block subtitle %}{% for hostship in fullhostship %}<a href="/members/{{ hostship.host }}">{{ hostship.host.last_name }}</a>@{% for group in hostship.groups %}<a href="/groups/{{ group.slug }}">{{ group }}{% if not forloop.last %},{% endif %}</a>{% endfor %}{% endfor %}{% endblock subtitle %}
+{% block subtitle %}by {% for hostship in fullhostship %}<a href="/members/{{ hostship.host }}">{{ hostship.host.last_name }}</a>@{% for group in hostship.groups %}<a href="/groups/{{ group.slug }}">{{ group }}{% if not forloop.last %},{% endif %}</a>{% endfor %}{% endfor %}{% endblock subtitle %}
 
 {% block headeraction %}
 <a href="#" class="btn small danger">编辑活动</a>
@@ -25,7 +25,7 @@
     </div>
 </div>
 <p class="extra align-right">
-    <a href="#" class="btn btn-primary">参加{{ activity.title }}</a>
+    <a href="#" class="btn btn-primary">参加 {{ activity.title }}</a>
     <a href="#" class="btn">咻！</a>
 </p>
 <h3>简介</h3>

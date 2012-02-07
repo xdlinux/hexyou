@@ -26,6 +26,7 @@ class Group(models.Model):
     description = models.TextField(null=True, blank=True)
     condition = models.ForeignKey(Condition,default=1)
     group_type = models.ForeignKey(GroupType,default=1)
+    site = models.URLField(null=True,blank=True)
     avatar = models.CharField(max_length=512,default='/static/images/no_avatar.png')
     friend_groups = models.ManyToManyField('Group')
     def __unicode__(self):

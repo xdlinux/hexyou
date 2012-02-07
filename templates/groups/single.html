@@ -63,14 +63,14 @@
 {% block side %}
 <h3>成员
     <small>({{ member_counter }})</small></h3>
-<ul class="media-grid avatar">
+<ul id="members" class="avatar">
     {% for member in members %}
     <li><a href="/members/{{ member }}"><img src="{% avatar member %}" alt=""></a></li>
     {% endfor %}
 </ul>
 <h3>友情小组
     <small>(42)</small></h3>
-<ul class="media-grid avatar">
+<ul id="friend-groups" class="avatar">
     <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
     <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
     <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>

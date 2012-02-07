@@ -104,6 +104,14 @@ $(document).ready(function(){
     return eval('category_name.'+category)
   }
 
+  function words(text,length){
+    if(text.length>length){
+      return text.substr(0,length)+"..."
+    }else{
+      return text
+    }
+  }
+
   $.widget( "custom.catcomplete", $.ui.autocomplete, {
     _renderMenu: function( ul, items ) {
       var self = this,
@@ -119,7 +127,7 @@ $(document).ready(function(){
     _renderItem: function(ul, item){
       return $( "<li></li>" )
           .data( "item.autocomplete", item )
-          .append( "<a>" + "<img src=\"" + item.avatar + "\" style=\"width:24px;height:24px;\" />" + item.name + '(' + item.slug + ')' + "</a>" )
+          .append( "<a>" + "<img src=\"" + item.avatar + "\" style=\"width:24px;height:24px;\" />" + item.name + '(' + words(item.slug,16) + ')' + "</a>" )
           .appendTo( ul )
       }
   });
@@ -212,6 +220,76 @@ $(document).ready(function(){
     }
   })
 
+  $('#member-search').data('digest','').keyup(function(){
+    term = $(this).val()
+    if(!term){return}
+    $.ajax({
+      url:'/json/',
+      type:'POST',
+      dataType:'json',
+      data:{
+        request_type:'member',
+        request_phrase:'{"group":"'+window.location.pathname.match(/groups\/(\w+)\\?/)[1]+'","term":"'+term+'"}',
+      },
+      success:function(data){
+        data=data[0]
+        if($('#member-search').data('digest')==data.digest){
+          return
+        }else{
+          $('#member-search-result').html('')
+          $('#member-search').data('digest',data.digest)
+          $('#member-search-result').removeClass('in')
+          setTimeout(function(){
+            data=data.data
+            if(data.length){
+              $.map(data,function(item){
+                if(!item.avatar){
+                  item.avatar='/static/images/no_avatar.png'
+                }
+                buttons=$('<td></td>').addClass('member-actions').append("\n")
+                if(item.is_admin){
+                  buttons.append(
+                    $('<a></a>').addClass('btn btn-success disabled').append(
+                      $('<i></i>').addClass('icon-ok icon-white')
+                    ).append('\n已为管理员')
+                  )
+                }else{
+                  buttons.append(
+                    $('<a></a>').addClass('btn btn-warning').append(
+                      $('<i></i>').addClass('icon-user icon-white')
+                    ).append('\n设为管理员')
+                  )
+                }
+                buttons.append("\n").append(
+                  $('<a></a>').addClass('btn btn-danger').append(
+                    $('<i></i>').addClass('icon-remove icon-white')
+                  ).append('\n移除')
+                )
+                $('<tr></tr>').append(
+                  $('<td></td>').addClass('avatar').append(
+                    $('<a></a>').attr('href','/members/'+item.slug).append(
+                      $('<img>').addClass('avatar').attr('src',item.avatar)
+                    )
+                  )
+                ).append(
+                  $('<td></td>').append($('<h4></h4>').text(item.name).append(
+                    $('<small><small>').append(
+                      $('<a></a>').attr('href','/members/'+item.slug).text(item.slug)
+                      )
+                    )
+                  ).append($('<p></p>').text(item.description))
+                ).append(buttons).appendTo($('#member-search-result'))
+              })
+            }else{
+              $('#member-search-result').text('没有匹配的成员，请重试')
+            }
+            $('#member-search-result').addClass('in')
+          },150)
+        }
+      }
+    })
+  })
+
 
 /* dropdowns */
 
@@ -225,6 +303,7 @@ $(document).ready(function(){
     },
     success:function(data){
       data=data[0]
+      $('#session').data('current_user',data)
       $('#session-avatar>img').attr({'src':data.avatar})
       $('#session>a>b').before(data.name)
     }
@@ -331,6 +410,14 @@ $(document).ready(function(){
   })
 
 /* buttons */
+  function updateAvatarList(id,url_prefix){
+    var selector = '#'+id+'>li'
+    if($(selector).size()==8){
+      $(selector+':first').hide(200,function(){$(this).remove()})
+    }
+    $(selector+':first').clone().find('a').attr('href','/'+url_prefix+'/'+$('#session').data('current_user').slug).end().find('img').attr('src',$('#session').data('current_user').avatar).end().prependTo($('#'+id)).hide().show('slide',{direction:'left'})
+  }
+
   $('#join-group').one('click',function(){
     join_group_btn = $(this)
     join_group_btn.addClass('disabled').text('请稍等...')
@@ -345,6 +432,7 @@ $(document).ready(function(){
         var group_name = $('h1').text()
         group_name = group_name.substr(0,group_name.indexOf('<')-1)
         join_group_btn.text('已加入 '+$('h1').text().match(/(.+[^<\n])/)[0])
+        updateAvatarList('members','members')
       }
     })
   })

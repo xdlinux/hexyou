@@ -5,10 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator,MaxLengthValidator, EMPTY_VALUES
 from NearsideBindings.activity.models import Activity, Location
 
-
-
 class IdListField(forms.CharField):
-
     def to_python(self,value):
         if value in EMPTY_VALUES:
             return []
@@ -21,7 +18,6 @@ class IdListField(forms.CharField):
 
 
 class ActivityForm(forms.ModelForm):
-
     host_groups = IdListField(required=False)
     inform_users = IdListField(required=False)
     class Meta:

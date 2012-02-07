@@ -1,5 +1,6 @@
 {% extends "groups/base.html" %}
 {% load bootstrap %}
+{% load gravatar %}
 
 {% block title %}管理小组{% endblock title %}
 
@@ -38,11 +39,56 @@
             {{ form.description|label:"简介" }}
         </div>
         <div id="tab-membership" class="tab-pane fade in">
-            <ul>
-                {% for member in members %}
-                <li>{{ member }}</li>
+            <div class="control-group">
+                <label for="member-search" class="control-label">搜索成员</label>
+                <div class="controls">
+                    <input id="member-search" class="input-medium search-query" type="text">
+                </div>
+            </div>
+            <table id="member-search-result" class="table fade in">
+                {% for membership in memberships %}
+                {% with member=membership.user %}
+                <tr>
+                    <td class="avatar">
+                        <img class="avatar" src="{% avatar member %}">
+                    </td>
+                    <td>
+                        <h4>{{ member.last_name }}
+                            <small>(<a href="/members/{{ member }}">{{ member }}</a>)</small>
+                        </h4>
+                        <p>{{ member.bio|default:"这个家伙很懒，什么都没有留下"|words:50 }}</p>
+                    </td>
+                    <td>
+                        {% if membership.is_admin %}
+                            <a class="btn btn-success disabled">
+                            <i class="icon-ok icon-white"></i>
+                            已为管理员
+                        </a>
+                        {% else %}                            
+                        <a class="btn btn-warning" href="#">
+                            <i class="icon-user icon-white"></i>
+                            设为管理员
+                        </a>
+                        {% endif %}
+                        <a class="btn btn-danger" href="#">
+                            <i class="icon-remove icon-white"></i>
+                            移除
+                        </a>
+                    </td>
+                </tr>
+                {% endwith %}
+                {% empty %}
+                <tr class="group-buttons">
+                    <td class="avatar">
+                        <img class="avatar" src="/static/images/no_avatar.png">
+                    </td>
+                    <td>
+                        <h4>暂无成员</h4>
+                        <p>第一个会是你吗？</p>
+                    </td>
+                </tr>
                 {% endfor %}
-            </ul>
+            </table>
         </div>
         <div id="tab-disband" class="tab-pane fade in">
             <p class="align-center"><a href="#disband-modal" class="btn btn-danger btn-large" data-toggle="modal">解散 {{ form.name.value }}</a></p>

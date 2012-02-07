@@ -15,7 +15,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
-import Image, os, urllib
+import Image, os, urllib, md5
 
 def index(request):
     if request.user.is_authenticated():
@@ -160,7 +160,19 @@ def create_location(request,request_phrase):
     else:
         return ""
 
+def fwords(x):
+    if len(x)>50:
+        return x[0:50]+'...'
+    return x
 
+def get_member(request,request_phrase):
+    d = simplejson.loads(request_phrase)
+    memberships = MemberShip.objects.filter(Q(group__slug=d['group']),Q(user__username__contains=d['term']) | Q(user__last_name__contains=d['term']))
+    result = [{'name':membership.user.last_name,'avatar':membership.user.avatar,'slug':membership.user.username,'is_admin':membership.is_admin,'description':fwords(membership.user.bio)} for membership in memberships ]
+    digest = md5.new(simplejson.dumps(result)).hexdigest()
+    return [{'digest':digest,'data':result}]
+
+""" Callback swtich string | Callback list | Login requied """
 REQUEST_TYPES = (
     ('all',[get_users,get_groups],False),
     ('user',[get_users,],False,),
@@ -169,6 +181,7 @@ REQUEST_TYPES = (
     ('current_user',[get_current_user,],True),
     ('location',[get_child_location,],False),
     ('create_location',[create_location,],False),
+    ('member',[get_member,],True),
 )
 
 @csrf_exempt
