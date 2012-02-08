@@ -38,3 +38,4 @@ class MemberShip(models.Model):
     group = models.ForeignKey(Group)
     joined_date = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)

@@ -35,7 +35,19 @@ $(document).ajaxSend(function(event, xhr, settings) {
     }
 });
 
+String.prototype.trim=function(){
+  return this.replace(/^(\s*)|(\s*)$/g,'')
+}
+
 $(document).ready(function(){
+
+  /* Ajax setup */
+
+  $.ajaxSetup({
+    url : '/json/',
+    type : 'POST',
+    dataType : 'json',
+  })
 
   /* input holder*/
   var holding = $('form>.holding>input').filter('input[type=text],input[type=email],input[type=password]');
@@ -82,6 +94,14 @@ $(document).ready(function(){
 /* autocomplete */
 
   $(".inform-list").val("")
+
+  function getCurrentGroup(){
+    match = window.location.pathname.match(/groups\/(\w+)\\?/)
+    if(match){
+      return match[1]
+    }
+    return ""
+  }
 
   function removeLabel(label,category){
     labels = $(".inform-list."+category).val().split(',')
@@ -136,9 +156,6 @@ $(document).ready(function(){
   $("#inform-input").catcomplete({
     source: function(request,response){
       $.ajax({
-        url : '/json/',
-        type : 'POST',
-        dataType : 'json',
         data : {
           request_type : $("#inform-input").attr("request-type"),
           request_phrase : request.term,
@@ -187,9 +204,6 @@ $(document).ready(function(){
   $('#side-search .search-input').catcomplete({
     source: function(request,response){
       $.ajax({
-        url : '/json/',
-        type : 'POST',
-        dataType : 'json',
         data : {
           request_type : $('#side-search .search-input').attr("request-type"),
           request_phrase : request.term,
@@ -220,83 +234,10 @@ $(document).ready(function(){
     }
   })
 
-  $('#member-search').data('digest','').keyup(function(){
-    term = $(this).val()
-    if(!term){return}
-    $.ajax({
-      url:'/json/',
-      type:'POST',
-      dataType:'json',
-      data:{
-        request_type:'member',
-        request_phrase:'{"group":"'+window.location.pathname.match(/groups\/(\w+)\\?/)[1]+'","term":"'+term+'"}',
-      },
-      success:function(data){
-        data=data[0]
-        if($('#member-search').data('digest')==data.digest){
-          return
-        }else{
-          $('#member-search-result').html('')
-          $('#member-search').data('digest',data.digest)
-          $('#member-search-result').removeClass('in')
-          setTimeout(function(){
-            data=data.data
-            if(data.length){
-              $.map(data,function(item){
-                if(!item.avatar){
-                  item.avatar='/static/images/no_avatar.png'
-                }
-                buttons=$('<td></td>').addClass('member-actions').append("\n")
-                if(item.is_admin){
-                  buttons.append(
-                    $('<a></a>').addClass('btn btn-success disabled').append(
-                      $('<i></i>').addClass('icon-ok icon-white')
-                    ).append('\n已为管理员')
-                  )
-                }else{
-                  buttons.append(
-                    $('<a></a>').addClass('btn btn-warning').append(
-                      $('<i></i>').addClass('icon-user icon-white')
-                    ).append('\n设为管理员')
-                  )
-                }
-                buttons.append("\n").append(
-                  $('<a></a>').addClass('btn btn-danger').append(
-                    $('<i></i>').addClass('icon-remove icon-white')
-                  ).append('\n移除')
-                )
-                $('<tr></tr>').append(
-                  $('<td></td>').addClass('avatar').append(
-                    $('<a></a>').attr('href','/members/'+item.slug).append(
-                      $('<img>').addClass('avatar').attr('src',item.avatar)
-                    )
-                  )
-                ).append(
-                  $('<td></td>').append($('<h4></h4>').text(item.name).append(
-                    $('<small><small>').append(
-                      $('<a></a>').attr('href','/members/'+item.slug).text(item.slug)
-                      )
-                    )
-                  ).append($('<p></p>').text(item.description))
-                ).append(buttons).appendTo($('#member-search-result'))
-              })
-            }else{
-              $('#member-search-result').text('没有匹配的成员，请重试')
-            }
-            $('#member-search-result').addClass('in')
-          },150)
-        }
-      }
-    })
-  })
-
 
 /* dropdowns */
 
   $.ajax({
-    url : '/json/',
-    type : 'POST',
-    dataType : 'json',
     data : {
       request_type : 'current_user',
       request_phrase : 'current_user',
@@ -315,9 +256,6 @@ $(document).ready(function(){
   function getLocations(a){
     ul = a.parent().parent()
     $.ajax({
-      url : '/json/',
-      type : 'POST',
-      dataType : 'json',
       data : {
         request_type : 'location',
         request_phrase : a.attr('request-phrase')
@@ -389,9 +327,6 @@ $(document).ready(function(){
     }else{
       r = '{"name":"'+$('#location-selected').val()+'",'+'"parent":"'+$('#location-selected').data('location_id')+'"}'
       $.ajax({
-        url : '/json/',
-        type : 'POST',
-        dataType : 'json',
         data : {
           request_type : 'create_location',
           request_phrase : r
@@ -410,6 +345,7 @@ $(document).ready(function(){
   })
 
 /* buttons */
+
   function updateAvatarList(id,url_prefix){
     var selector = '#'+id+'>li'
     if($(selector).size()==8){
@@ -422,22 +358,261 @@ $(document).ready(function(){
     join_group_btn = $(this)
     join_group_btn.addClass('disabled').text('请稍等...')
     $.ajax({
-      url:'/json/',
-      type:'POST',
       data:{
         request_type:'join_group',
-        request_phrase:window.location.pathname.match(/groups\/(\w+)\\?/)[1],
+        request_phrase:getCurrentGroup(),
       },
-      success:function(){
-        var group_name = $('h1').text()
-        group_name = group_name.substr(0,group_name.indexOf('<')-1)
-        join_group_btn.text('已加入 '+$('h1').text().match(/(.+[^<\n])/)[0])
-        updateAvatarList('members','members')
+      success:function(data){
+        if(data[0].condition==1){
+          var group_name = $('h1').text()
+          group_name = group_name.substr(0,group_name.indexOf('<')-1)
+          join_group_btn.text('已加入 '+$('h1').text().match(/(.+[^<\n])/)[0])
+          updateAvatarList('members','members')
+        }else{
+          join_group_btn.text('等待审核...')
+        }
       }
     })
   })
 
 
+
 /* alert */
   $(".alert-message").alert()
+
+
+/* icons */
+
+  function icon(icon_class){
+    color = arguments[1] ? 'icon-'+arguments[1] : ""
+    return $('<i></i>').addClass('icon-'+icon_class).addClass(color)
+  }
+
+
+/* member search */
+
+  function groupAction(action,dropdown_option){
+    var user_id = dropdown_option.closest('.btn-group').attr('user-id')
+    console.log(user_id)
+    $.ajax({
+      data:{
+        request_type:action, // remove_member, grant_admin, revoke_admin
+        request_phrase:$.toJSON(
+          {
+            group:getCurrentGroup(),
+            user:user_id,
+          }
+        )
+      },
+      success:function(data){
+       if($('#member-search').val()){
+          $('#member-search').data('term_cache','').membersearch('search')
+        }else{
+          $.ajax({
+            data:{
+              request_type:'member',
+              request_phrase:$.toJSON(
+                {
+                  group:getCurrentGroup(),
+                  term:'*',
+                  filter:$('#filter-current').attr('filter')
+                }
+              )
+            },
+            success:function(data){
+              parseMemberSearchResult(data)
+            }
+          })
+        }
+      }
+    })
+  }
+
+  $('.approve-member').click(function(){
+    groupAction('approve_member',$(this))
+  })
+
+  $('.grant-admin').click(function(){
+    groupAction('grant_admin',$(this))
+  })
+
+  $('.revoke-admin').click(function(){
+    groupAction('revoke_admin',$(this))
+  })
+
+  $('.remove-member').click(function(){
+    groupAction('remove_member',$(this))
+  })
+
+  function renderMemberSearchResult(data,is_founder){
+    if(data.length){
+      $.map(data,function(item){
+        if(!item.avatar){
+          item.avatar='/static/images/no_avatar.png'
+        }
+        buttons=$('<td></td>').addClass('member-actions').append("\n").append(
+          $('<div></div>').addClass('btn-group').attr('user-id',item.id)
+        )
+        btn_group = buttons.find('div')
+        if(item.is_admin){
+          btn_group.append(
+            $('<a></a>').addClass('btn btn-primary dropdown-toggle').attr('data-toggle','dropdown').append(icon('user','white')).append('\n管理员').append("\n").append(
+              $('<span></span>').addClass('caret')
+            )
+          ).append(
+            $('<ul></ul>').addClass('dropdown-menu').append(
+              function(){
+                return is_founder ? $('<li></li>').append(
+                  $('<a></a>').addClass('revoke-admin').attr('href','#').text('\n撤销管理员').click(
+                    function(){
+                      groupAction('revoke_admin',$(this))
+                    })
+                ) : ""
+              }
+            )
+          )
+        }else{
+          if(item.is_approved){
+            btn_group.append(
+              $('<a></a>').addClass('btn btn-success dropdown-toggle').attr('data-toggle','dropdown').append(icon('user','white')).append('\n普通成员').append("\n").append(
+                $('<span></span>').addClass('caret')
+              )
+            )
+          }else{
+            btn_group.append(
+              $('<a></a>').addClass('btn dropdown-toggle').attr('data-toggle','dropdown').append(icon('user')).append('\n未审核').append("\n").append(
+                $('<span></span>').addClass('caret')
+              )
+            )
+          }
+          btn_group.append(
+            $('<ul></ul>').addClass('dropdown-menu').append(
+              function(){
+                return is_founder ? $('<li></li>').append(
+                  $('<a></a>').addClass('grant-admin').attr('href','#').text('\n设为管理员').click(
+                    function(){
+                      groupAction('grant_admin',$(this))
+                    })
+                ) : ""
+              }
+            )
+          )
+          if(!item.is_approved){
+            buttons.find('div>ul').prepend(
+              $('<li></li>').append(
+                $('<a></a>').addClass('approve-member').attr('href','#').text('\n批准加入').click(
+                  function(){
+                  groupAction('approve_member',$(this))
+                })
+              )
+            )
+          }
+        }
+        if(item.is_admin&&!is_founder){
+          buttons.find('div>ul').append(
+            $('<li></li>').append(
+              $('<a></a>').attr('href','#').text('\n你想做什么？')
+            )
+          )
+        }else{
+          buttons.find('div>ul').append(
+            $('<li></li>').append(
+              $('<a></a>').addClass('remove-member').attr('href','#').text('\n从组织中移除').click(
+                function(){
+                  groupAction('remove_member',$(this))
+                })
+            )
+          )
+        }
+        $('<tr></tr>').append(
+          $('<td></td>').addClass('avatar').append(
+            $('<a></a>').attr('href','/members/'+item.slug).append(
+              $('<img>').addClass('avatar').attr('src',item.avatar)
+            )
+          )
+        ).append(
+          $('<td></td>').append(
+            $('<h4></h4>').text(item.name).append(
+              $('<small></small>').append('(').append(
+                $('<a></a>').attr('href','/members/'+item.slug).text(item.slug)
+              ).append(')')
+            )
+          ).append(
+            $('<p></p>').text(item.description)
+          )
+        ).append(buttons).appendTo($('#member-search-result'))
+      })
+    }else{
+      $('#member-search-result').text('没有匹配的成员，请重试')
+    }
+    $('#member-search-result').addClass('in')
+  }
+
+  $.widget( "custom.membersearch", $.ui.autocomplete, {
+    _renderMenu: function( ul, data ) {
+      parseMemberSearchResult(data)
+    },
+  });
+
+  function parseMemberSearchResult(data){
+    data=data[0]
+    if($('#member-search').data('digest')==data.digest){
+      return
+    }else{
+      $('#member-search-result').html('')
+      $('#member-search').data('digest',data.digest)
+      $('#member-search-result').removeClass('in')
+      setTimeout(function(){
+        renderMemberSearchResult(data.data,data.is_founder)
+      },150)
+    }
+  }
+
+  $('#member-search').data('group',getCurrentGroup()).data('digest','').data('term_cache','').membersearch({
+    source:function(request,response){
+      $.ajax({
+        data:{
+          request_type:'member',
+          request_phrase:$.toJSON(
+            {
+              group:$('#member-search').data('group'),
+              term:request.term,
+              filter:$('#filter-current').attr('filter'),
+            }
+          )
+        },
+        success:function(data){
+          response(data)
+        }
+      })
+    },
+    search:function(event,ui){
+      var input=$('#member-search')
+      var real_term = input.val().trim()
+      if(real_term==input.data('term_cache')){return false}else{input.data('term_cache',real_term)}
+    }
+  })
+
+  $('.filter-option').click(function(){
+    $('#filter-current').text($(this).text()).attr('filter',$(this).attr('filter'))
+    if($('#member-search').val()){
+      $('#member-search').data('term_cache','').membersearch('search')
+    }else{
+      $.ajax({
+        data:{
+          request_type:'member',
+          request_phrase:$.toJSON(
+            {
+              group:getCurrentGroup(),
+              term:'*',
+              filter:$('#filter-current').attr('filter')
+            }
+          )
+        },
+        success:function(data){
+          parseMemberSearchResult(data)
+        }
+      })
+    }
+  })
 })

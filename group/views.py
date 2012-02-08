@@ -16,7 +16,7 @@ def frontpage(request):
     """docstring for group"""
     managed_groups = [ membership.group for membership in MemberShip.objects.filter(user=request.user,is_admin=True) ]
     managed_counter = len(managed_groups)
-    joined_groups = [ membership.group for membership in MemberShip.objects.filter(user=request.user,is_admin=False) ]
+    joined_groups = [ membership.group for membership in MemberShip.objects.filter(user=request.user,is_admin=False,is_approved=True) ]
     joined_counter = len(joined_groups)
     paginator = ExPaginator(Group.objects.all().order_by('-create_date'),10)
     try:
@@ -35,15 +35,16 @@ def frontpage(request):
 @login_required(login_url='/login/')
 def single(request,group_slug):
     group = get_object_or_404(Group,slug=group_slug)
-    members = [ membership.user for membership in MemberShip.objects.filter(group=group).order_by('?')[0:7] ]
-    member_counter = MemberShip.objects.filter(group=group).count()
+    members = [ membership.user for membership in MemberShip.objects.filter(group=group,is_approved=True).order_by('?')[0:7] ]
+    member_counter = len(members)
     try:
         membership = MemberShip.objects.get(user=request.user,group=group)
     except MemberShip.DoesNotExist:
-        is_admin, is_member = False,False
+        is_admin, is_member, is_approved = False,False,False
     else:
-        is_member = True,
+        is_member = True
         is_admin = membership.is_admin
+        is_approved = membership.is_approved
     return render_to_response('groups/single.html',locals())
 
 @login_required(login_url='/login/')
@@ -69,19 +70,20 @@ def new(request):
 def admin(request,group_slug):
     group = get_object_or_404(Group,slug=group_slug)
     admins = [ membership.user for membership in MemberShip.objects.filter(group=group,is_admin=1) ]
-    memberships = MemberShip.objects.filter(group=group)[0:4]
+    memberships = MemberShip.objects.filter(group=group).exclude(user=request.user).order_by('-joined_date')[0:4]
+    is_founder = group.founder.pk == request.user.pk
     if request.POST:
         form = AdminGroupForm(request.POST,instance=group)
         if form.is_valid():
             form.save()
     else:
         form = AdminGroupForm(instance=group)
-    return render_to_response('groups/admin.html',{'form':form,'memberships':memberships,'admins':admins},context_instance=RequestContext(request))
+    return render_to_response('groups/admin.html',{'form':form,'memberships':memberships,'admins':admins,'is_founder':is_founder},context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
 def members(request,group_slug):
     group = get_object_or_404(Group,slug=group_slug)
-    paginator = ExPaginator([ membership.user for membership in MemberShip.objects.filter(group=group,is_admin=0) ],10)
+    paginator = ExPaginator([ membership.user for membership in MemberShip.objects.filter(group=group,is_admin=0,is_approved=True) ],10)
     admins = [ membership.user for membership in MemberShip.objects.filter(group=group,is_admin=1) ]
     try:
         page = int(request.GET.get('page','1'))

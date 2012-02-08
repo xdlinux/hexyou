@@ -37,12 +37,38 @@
                 </div>
             </div>
             {{ form.description|label:"简介" }}
+            <div class="form-actions">
+                {% if form.errors %}
+                <ul class="errors">            
+                {% for error in form.errors %}
+                <li>
+                {{ error }}
+                </li>
+                {% endfor %}
+                </ul>
+                {% endif %}
+                <input class="btn btn-primary" type="submit" value="确认更改">
+                <button class="btn" type="reset">取消</button>
+            </div>
         </div>
         <div id="tab-membership" class="tab-pane fade in">
             <div class="control-group">
                 <label for="member-search" class="control-label">搜索成员</label>
                 <div class="controls">
                     <input id="member-search" class="input-medium search-query" type="text">
+                    <div class="btn-group float-right">
+                        <a href="#" id="filter-current" class="btn disabled" filter="all">全部成员</a>
+                        <a href="#" data-toggle="dropdown" class="btn dropdown-toggle">
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" class="filter-option" filter="unapproved">未审核</a></li>
+                            <li><a href="#" class="filter-option" filter="member">成员</a></li>
+                            <li><a href="#" class="filter-option" filter="admin">管理员</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#" class="filter-option" filter="all">全部成员</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <table id="member-search-result" class="table fade in">
@@ -58,22 +84,65 @@
                         </h4>
                         <p>{{ member.bio|default:"这个家伙很懒，什么都没有留下"|words:50 }}</p>
                     </td>
-                    <td>
-                        {% if membership.is_admin %}
-                            <a class="btn btn-success disabled">
-                            <i class="icon-ok icon-white"></i>
-                            已为管理员
-                        </a>
-                        {% else %}                            
-                        <a class="btn btn-warning" href="#">
-                            <i class="icon-user icon-white"></i>
-                            设为管理员
-                        </a>
-                        {% endif %}
-                        <a class="btn btn-danger" href="#">
-                            <i class="icon-remove icon-white"></i>
-                            移除
-                        </a>
+                    <td class="member-actions">
+                        <div class="btn-group" user-id="{{ member.id }}">
+                            {% ifequal membership.is_admin 1 %}
+                            <a data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
+                                <i class="icon-user icon-white"></i>
+                                管理员
+                            <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                {% if is_founder %} 
+                                <li>
+                                    <a href="#" class="revoke-admin">撤销管理员</a>
+                                </li>
+                                <li>
+                                    <a href="#" class="remove-member">从组织中移除</a>
+                                </li>
+                                {% else %}
+                                <li>
+                                    <a href="#">你想做什么？</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                            {% endifequal %}
+                            {% if not membership.is_admin and membership.is_approved %}
+                            <a data-toggle="dropdown" class="btn btn-success dropdown-toggle">
+                                <i class="icon-user icon-white"></i>
+                                成员
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% ifequal is_founder 1  %}                                     
+                                <li>
+                                    <a href="#" class="grant-admin">设为管理员</a>
+                                </li>
+                                {% endifequal %}
+                                <li>
+                                    <a href="#" class="remove-member">从组织中移除</a>
+                                </li>
+                            </ul>
+                            {% endif %}
+                            {% if not membership.is_approved %}
+                            <a data-toggle="dropdown" class="btn btn dropdown-toggle">
+                                <i class="icon-user"></i>
+                                未审核
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="#" class="approve-member">批准加入</a>
+                                </li>
+                                {% ifequal is_founder 1  %}                                     
+                                <li>
+                                    <a href="#" class="grant-admin">设为管理员</a>
+                                </li>
+                                {% endifequal %}
+                                <li>
+                                    <a href="#" class="remove-member">从组织中移除</a>
+                                </li>
+                            </ul>
+                           {% endif %}
                     </td>
                 </tr>
                 {% endwith %}
@@ -109,19 +178,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="form-actions">
-        {% if form.errors %}
-        <ul class="errors">            
-        {% for error in form.errors %}
-        <li>
-        {{ error }}
-        </li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-        <input class="btn btn-primary" type="submit" value="确认更改">
-        <button class="btn" type="reset">取消</button>
     </div>
 </form>
 {% endblock main %}

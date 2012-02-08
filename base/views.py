@@ -2,10 +2,12 @@
 from django.shortcuts import render_to_response,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
+from django.utils import simplejson
 from django.template import RequestContext
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseServerError
 from NearsideBindings.base.forms import LoginForm,SignupForm,ImageCrop,ImageUpload, AjaxStandard
-from NearsideBindings.base.utils import JsonResponse, upload_image, get_gravatar_url, simplejson
+from NearsideBindings.base.utils import JsonResponse, upload_image, get_gravatar_url, AjaxForbidden
+from NearsideBindings.base.decorators import json_request, group_admin_required
 from NearsideBindings.settings import MEDIA_ROOT, MEDIA_URL, IMAGE_SAVE_CHOICES
 from NearsideBindings.group.models import Group, MemberShip
 from NearsideBindings.activity.models import Location
@@ -132,13 +134,19 @@ def get_groups(request,request_phrase):
     return [{'avatar':group.avatar,'name':group.name,'slug':group.slug,'category':'group','id':group.id} for group in groups]
 
 def join_group(request,request_phrase):
-    new_membership = MemberShip(user=request.user,group=Group.objects.get(slug=request_phrase),is_admin=False)
+    group = Group.objects.get(slug=request_phrase)
+    if group.condition.pk == 1:
+        new_membership = MemberShip(user=request.user,group=group,is_admin=False,is_approved=True)
+    elif group.condition.pk == 2:
+        new_membership = MemberShip(user=request.user,group=group,is_admin=False,is_approved=False)
+    elif group.condition.pk == 3:
+        raise AjaxForbidden()
     try:
         new_membership.save()
     except IntegrityError:
         return [{'error':'You have joined this group',},]
     else:
-        return ""
+        return [{'condition':group.condition.pk}]
 
 def get_current_user(request,request_phrase):
     if request.user.is_authenticated():
@@ -150,9 +158,9 @@ def get_child_location(request,request_phrase):
     locations = Location.objects.filter(parent=int(request_phrase)) 
     return [{'name':location.name,'id':location.id} for location in locations ]
 
+@json_request
 def create_location(request,request_phrase):
-    d = simplejson.loads(request_phrase)
-    new_location = Location(name=d['name'],parent=Location.objects.get(id=int(d['parent'])))
+    new_location = Location(name=request_phrase['name'],parent=Location.objects.get(id=int(request_phrase['parent'])))
     try:
         new_location.save()
     except IntegrityError:
@@ -160,17 +168,63 @@ def create_location(request,request_phrase):
     else:
         return ""
 
-def fwords(x):
-    if len(x)>50:
-        return x[0:50]+'...'
-    return x
-
+@json_request
 def get_member(request,request_phrase):
-    d = simplejson.loads(request_phrase)
-    memberships = MemberShip.objects.filter(Q(group__slug=d['group']),Q(user__username__contains=d['term']) | Q(user__last_name__contains=d['term']))
-    result = [{'name':membership.user.last_name,'avatar':membership.user.avatar,'slug':membership.user.username,'is_admin':membership.is_admin,'description':fwords(membership.user.bio)} for membership in memberships ]
+    fwords = lambda s:s[0:50]+"..." if len(s)>50 else s
+    if request_phrase['term'] == '*':
+        memberships = MemberShip.objects.filter(group__slug=request_phrase['group']).exclude(user=request.user).order_by('-joined_date')
+    else:
+        memberships = MemberShip.objects.filter(Q(group__slug=request_phrase['group']),Q(user__username__contains=request_phrase['term']) | Q(user__last_name__contains=request_phrase['term'])).exclude(user=request.user).order_by('-joined_date')
+    filters = ['all','admin','member','unapproved']
+    is_founder =  Group.objects.get(slug=request_phrase['group']).founder.pk == request.user.pk
+    if request_phrase['filter'] not in filters:
+        raise AjaxForbidden()
+    elif request_phrase['filter'] == 'admin':
+        memberships= memberships.filter(is_admin=True)
+    elif request_phrase['filter'] == 'member':
+        memberships = memberships.filter(is_admin=False,is_approved=True)
+    elif request_phrase['filter'] == 'unapproved':
+        memberships = memberships.filter(is_approved=False)
+    memberships = memberships[0:4]
+    result = [{'name':membership.user.last_name,'avatar':membership.user.avatar,'slug':membership.user.username,'id':membership.user.id,'is_admin':membership.is_admin,'is_approved':membership.is_approved,'description':fwords(membership.user.bio)} for membership in memberships ]
     digest = md5.new(simplejson.dumps(result)).hexdigest()
-    return [{'digest':digest,'data':result}]
+    return [{'digest':digest,'data':result,'is_founder':is_founder}]
+
+@json_request
+@group_admin_required
+def approve_member(request,request_phrase):
+    membership = MemberShip.objects.get(group__slug=request_phrase['group'],user__id=int(request_phrase['user']))
+    membership.is_approved=True
+    membership.save()
+    return ""
+
+@json_request
+@group_admin_required
+def remove_member(request,request_phrase):
+    MemberShip.objects.get(group__slug=request_phrase['group'],user__id=int(request_phrase['user'])).delete()
+    return ""
+
+@json_request
+def grant_admin(request,request_phrase):
+    group = Group.objects.get(slug=request_phrase['group'])
+    if not request.user.pk == group.founder.pk:
+        raise AjaxForbidden
+    membership = MemberShip.objects.get(group=group,user__id=int(request_phrase['user']))
+    membership.is_approved=True
+    membership.is_admin=True
+    membership.save()
+    return ""
+
+@json_request
+def revoke_admin(request,request_phrase):
+    group = Group.objects.get(slug=request_phrase['group'])
+    if not request.user.pk == group.founder.pk:
+        raise AjaxForbidden
+    membership = MemberShip.objects.get(group__slug=request_phrase['group'],user__id=int(request_phrase['user']))
+    membership.is_admin=False
+    membership.save()
+    return ""
+
 
 """ Callback swtich string | Callback list | Login requied """
 REQUEST_TYPES = (
@@ -182,6 +236,10 @@ REQUEST_TYPES = (
     ('location',[get_child_location,],False),
     ('create_location',[create_location,],False),
     ('member',[get_member,],True),
+    ('remove_member',[remove_member,],True),
+    ('grant_admin',[grant_admin,],True),
+    ('revoke_admin',[revoke_admin,],True),
+    ('approve_member',[approve_member,],True),
 )
 
 @csrf_exempt
@@ -197,7 +255,12 @@ def json(request):
                     if not (request.user.is_authenticated() or val[2]):
                         return HttpResponseForbidden()
                     for func in val[1]:
-                        result += func(request,request_phrase)
+                        try:
+                            result += func(request,request_phrase)
+                        except AjaxForbidden:
+                            return HttpResponseForbidden()
+                        # except Exception:
+                        #     return HttpResponseBadRequest()
             return JsonResponse(result)
         else:
             return HttpResponseBadRequest()

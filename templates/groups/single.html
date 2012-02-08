@@ -29,10 +29,14 @@
     </div>
 </div>
 <p class="extra align-right">
-    {% if is_member %}
+    {% if is_member and is_approved %}
     <a href="#" class="btn btn-primary disabled">已加入 {{ group }}</a>
-    {% else %}
+    {% endif %}
+    {% if not is_member and not is_approved %}
     <a id="join-group" href="#" class="btn btn-primary">加入 {{ group }}</a>
+    {% endif %}
+    {% if is_member and not is_approved %}
+    <a href="#" class="btn btn-primary disabled">等待审核...</a>
     {% endif %}
     <a href="#" class="btn">咻！</a>
 </p>

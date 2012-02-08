@@ -17,6 +17,9 @@ class JsonResponse(HttpResponse):
         super(JsonResponse, self).__init__(
             content, content_type='application/json')
 
+class AjaxForbidden(Exception):
+    pass
+
 class ExPaginator(Paginator):
     def page(self,number):
         self._slice_start = (number/self.per_page)*self.per_page

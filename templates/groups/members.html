@@ -8,9 +8,9 @@
 
 {% block headeraction %}
 {% if is_admin %}
-<a href="/groups/{{ group.slug }}/admin" class="btn small danger">管理小组</a>
+<a href="/groups/{{ group.slug }}/admin" class="btn btn-small btn-danger">管理小组</a>
 {% endif %}
-<a href="/groups/{{ group.slug }}" class="btn small">返回小组</a>
+<a href="/groups/{{ group.slug }}" class="btn btn-small">返回小组</a>
 {% endblock headeraction %}
 
 {% block main %}

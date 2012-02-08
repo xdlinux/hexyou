@@ -134,7 +134,8 @@ ul.list .content p { margin-bottom:2px; }
 #side-activity-invition #label-list .label-close { cursor:pointer; font-size:14px; }
 .label.group { background:#558ca9; }
 .label.group:before { content:' [组织] '}
-.member-actions { width:185px; }
+.member-actions { width:115px; }
+.member-actions .btn-group { float:right; }
 
 
 /* location */
