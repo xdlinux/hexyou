@@ -13,6 +13,7 @@
 {% block main %}
 <div class="hero-unit">
     <div class="row">
+        {% if top_activity %}
         <div class="span large-avatar avatar">
             <img src="{{ top_activity.avatar }}" class="avatar" alt="" />
         </div>
@@ -26,6 +27,7 @@
                 <a href="/activities/{{ top_activity.id }}" class="btn btn-primary">详细信息</a>
             </p>
         </div>
+        {% endif %}
     </div>
 </div>
 <h3>最新活动</h3>

@@ -7,9 +7,12 @@ from NearsideBindings.base.utils import ExPaginator
 from django.core.paginator import InvalidPage, EmptyPage
 
 def get_top_group():
-    top_group = Group.objects.exclude(description="").exclude(avatar="/static/images/no_avatar.png").order_by('?')[0]
-    top_group_members = MemberShip.objects.filter(group=top_group).count()
-    return top_group, top_group_members, True
+    top_group = Group.objects.exclude(description="").exclude(avatar="/static/images/no_avatar.png").order_by('?')
+    if top_group:
+        top_group=top_group[0]
+        top_group_members = MemberShip.objects.filter(group=top_group).count()
+        return top_group, top_group_members, True
+    else: return None,None,False
 
 @login_required(login_url='/login/')
 def frontpage(request):

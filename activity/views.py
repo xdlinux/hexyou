@@ -13,8 +13,10 @@ def frontpage(request):
     """docstring for group"""
     types = ActivityType.objects.all()
     location_roots = Location.objects.filter(parent=0)
-    top_activity = Activity.objects.order_by('?')[0]
-    top_activity_groups = top_activity.host_groups.all()
+    top_activity = Activity.objects.order_by('?')
+    if top_activity:
+        top_activity=top_activity[0]
+        top_activity_groups = top_activity.host_groups.all()
     return render_to_response('activities/frontpage.html',locals())
 
 def single(request,activity_id):
