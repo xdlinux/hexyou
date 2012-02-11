@@ -10,6 +10,20 @@ class Location(models.Model):
     parent = models.ForeignKey('Location',default=0)
     def __unicode__(self):
         return self.name
+    def __getattr__(self,name):
+        if name == 'full_path':
+            self.full_path = self.name
+            self.get_path(self)
+            return self.full_path
+        super(Location, self).__getattr__(name)
+
+    def get_path(self,location):
+        try:
+            parent = location.parent
+        except Exception:
+            return ""
+        self.full_path = parent.name + u' - ' + self.full_path
+        self.get_path(parent)
 
 class ActivityType(models.Model):
     title = models.CharField(max_length=20)
@@ -28,6 +42,11 @@ class Activity(models.Model):
     participators = models.ManyToManyField(User, related_name='participators')
     hosts = models.ManyToManyField(User, related_name='hosts')
     host_groups = models.ManyToManyField(Group, through='HostShip')
+    def __getattr__( self, name ):
+        if name == 'host_string':
+            self.host_string = self.get_host_string()
+            return self.host_string
+        super(Activity, self).__getattr__(name)
     def ask_groups_to_host(self,user,*groups):
         user_groups= set(user.groups.all())
         request_groups= set(groups)

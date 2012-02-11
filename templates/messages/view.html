@@ -29,7 +29,11 @@
     </td>
     </tbody>
 </table>
-<p class="well">
-    {{ message.body|linebreaksbr|default:"(空)" }}
-</p>
+<div class="well">
+    {% if message.sender.pk == 0 %}
+    {{ message.body|safe }}
+    {% else %}
+    {{ message.body|linebreaks|default:"(空)" }}
+    {% endif %}
+</div>
 {% endblock %}

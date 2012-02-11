@@ -12,7 +12,6 @@ from messages.forms import ComposeForm
 from django.template import RequestContext
 from django.contrib.auth.forms import PasswordChangeForm
 
-
 def frontpage(request):
     """docstring for person"""
     return render_to_response('members/frontpage.html')
@@ -21,10 +20,17 @@ def frontpage(request):
 def single(request,username):
     """docstring for person"""
     view_user = User.objects.get(username=username)
-    groups = [ membership.group for membership in MemberShip.objects.filter(user=view_user) ]
-    attended_activities = Activity.objects.filter(participators=view_user)[:4].annotate(Count('participators'))
+    is_me = request.user.username==username
+    groups = [ membership.group for membership in MemberShip.objects.filter(user=view_user,is_approved=True) ]
+    group_counter = len(groups)
+    attended_activities = Activity.objects.filter(participators=view_user)
+    attended_activities_slice = attended_activities[:4].annotate(Count('participators'))
+    attended_activities_count = attended_activities.count()
+    host_activities = Activity.objects.filter(hosts=view_user)
+    host_activities_slice = host_activities[:4].annotate(Count('participators'))
+    host_activities_count = host_activities.count()
     form = ComposeForm()
-    return render_to_response('members/single.html',{'view_user':view_user,'groups':groups,'group_counter':len(groups),'is_me':request.user.username==username,'form':form,'attended_activities':attended_activities}, context_instance=RequestContext(request))
+    return render_to_response('members/single.html',locals(), context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
 def profile(request):
@@ -45,3 +51,7 @@ def edit_profile(request):
         form = EditProfileForm(instance=request.user)
         passform=PasswordChangeForm(request.user)
     return render_to_response('members/edit.html',{'user':request.user,'form':form,'is_me':True,'passform':passform},context_instance=RequestContext(request))
+
+@login_required()
+def my(request):
+    pass

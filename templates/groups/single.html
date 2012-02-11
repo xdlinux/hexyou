@@ -9,7 +9,10 @@
 {% if is_admin %}
 <a href="/groups/{{ group.slug }}/admin" class="btn btn-small btn-danger">管理小组</a>
 {% endif %}
-<a href="/groups/{{ group.slug }}/members" class="btn btn-small">查看成员</a>  
+{% if is_member and not is_admin %}
+<a href="/groups/{{ group.slug }}/exit" class="btn btn-small btn-warning">退出组织</a>
+{% endif %}
+<a href="/groups/{{ group.slug }}/members" class="btn btn-small">查看成员</a>
 {% endblock headeraction %}
 
 {% block main %}
@@ -45,23 +48,24 @@
 {{ group.description|linebreaksbr|default:"这个组织的人都很懒，什么都没写" }}
 </p>
 <h3>最近活动</h3>
-<div id="latest-activity" class="row">
-    <div class="span3">
-        <img src="http://placehold.it/150x100" alt="" />
-        <h4>活动名称</h4>
-        <p>功加聽已！成利法認外表合人人了口麼樂上樂善不？望的大電你們子車大因管這算口覺收經須好口上告至燈衣跑，大統為一這本小不我生器血？四物天的理器就些觀流。深先先車。點的指會的型更到！念可一阿態相地康有部為施。家不故不去成我傳電跑？媽兩不長血長消人至動。</p>
-    </div>
-    <div class="span3">
-        <img src="http://placehold.it/150x100" alt="" />
-        <h4>活动名称</h4>
-        <p>條統北，就林親想王百樣說時華陽落富試。物委朋專學都而學阿的再未性？顧走世。裡紅待體演爸將線接者名布素一此高的時進質童看總原？</p>
-    </div>
-    <div class="span3">
-        <img src="http://placehold.it/150x100" alt="" />
-        <h4>活动名称</h4>
-        <p>兒它金的怎失是們新的是十日書地快如政星；精方長爭今親蘭位還！對續每；不至正要人後沒我長；節滿行是的你識書……及檢天數記許，難區。</p>
-    </div>
-</div>
+<ul class="list">
+    {% for activity in last_activities %}
+    <li class="activity">
+        <div class="meta">
+            <img src="{{ activity.avatar }}" class="avatar" alt="" />
+            <p>{{ activity.participators__count }} 人参加</p>
+        </div>
+        <div class="content">
+            <h4>{{ activity.title }}<br />
+            <small>{{ activity.host_string|safe }}</small></h4>
+            <p>于 {{ activity.begin_time|date:"Y-m-d h:m"}} 在 {{ activity.location }}</p>
+            <p>{{ activity.activity_type }}</p>
+        </div>
+    </li>
+    {% empty %}
+    <p>{{ group.name }} 没有举办过任何活动</p>
+    {% endfor %}
+</ul>
 {% endblock main %}
 
 {% block side %}
@@ -84,6 +88,8 @@
 <ul id="members" class="avatar">
     {% for member in members %}
     <li><a href="/members/{{ member }}"><img src="{% avatar member %}" alt=""></a></li>
+    {% empty %}
+    <p>暂时没有成员</p>
     {% endfor %}
 </ul>
 <h3>友情组织
@@ -95,6 +101,4 @@
     <p>暂时没有友情组织</p>
     {% endfor %}
 </ul>
-<h3>日历</h3>
-<img src="http://placehold.it/320x200" />
 {% endblock side %}

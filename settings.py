@@ -178,6 +178,7 @@ RESERVED_GROUP_SLUGS = (
     'admin',
     'disband',
     'random',
+    'my',
 )
 
 LOGIN_URL = '/login'

@@ -27,7 +27,6 @@ def index(request):
 
 def home(request):
     """timeline"""
-    host = request.get_host()
     return render_to_response("home.html",locals(), context_instance=RequestContext(request))
 
 def signup(request):

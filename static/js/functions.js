@@ -78,6 +78,11 @@ $(document).ready(function(){
 
 /* datepicker */
 
+  function getOneWeekAgo(){
+    var d = new Date(new Date()-3600*1000*24*7)
+    return new Date(d.getFullYear(),d.getMonth(),d.getDate())
+  }
+
   $(".datetime input").datetimepicker({
     showButtonPanel:false,
     showAnim:'slideDown',
@@ -85,23 +90,19 @@ $(document).ready(function(){
     closeText:"确认",
     monthNames:['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
     dayNamesMin:['日','一','二','三','四','五','六'],
-    minDate:new Date(),
+    minDate:new Date(new Date(new Date()-3600*1000*24*7).toDateString()),
     yearSuffix:'年',
     dateFormat:'yy-mm-dd',
     timeFormat: 'hh:mm',
+    stepMinute:5,
     separator: ' ', // fixed the space ends the datetime string
   });
 
-  $('form').has('.datetime').submit(function(){
-    inputs = $('.datetime input')
-    if(new Date(inputs[0].value)>=new Date(inputs[1].value)){
-      return false
-    }
-  })
-
 /* autocomplete */
 
-  $(".inform-list").val("")
+  if(!$('#label-list .label').size()){  
+    $(".inform-list").val("")
+  }
 
   function getCurrentGroup(){
     match = window.location.pathname.match(/groups\/(\w+)\\?/)
@@ -140,6 +141,10 @@ $(document).ready(function(){
     }
   }
 
+  $(".label .label-close").click(function(){
+      removeLabel($(this).parent('.label'),'group')
+  })
+
   $.widget( "custom.catcomplete", $.ui.autocomplete, {
     _renderMenu: function( ul, items ) {
       var self = this,
@@ -159,8 +164,7 @@ $(document).ready(function(){
           .appendTo( ul )
       },
     _move:function(){
-      console.log(self)
-      return
+
     }
   });
 
@@ -347,7 +351,7 @@ $(document).ready(function(){
     if($(selector).size()==8){
       $(selector+':first').hide(200,function(){$(this).remove()})
     }
-    $(selector+':first').clone().find('a').attr('href','/'+url_prefix+'/'+$('#session').data('current_user').slug).end().find('img').attr('src',$('#session').data('current_user').avatar).end().prependTo($('#'+id)).hide().show('slide',{direction:'left'})
+    $(selector+':first').clone().hide().find('a').attr('href','/'+url_prefix+'/'+$('#session').attr('user')).end().find('img').attr('src',$('#session-avatar>img').attr('src').replace(/_small/,'')).end().prependTo($('#'+id)).show('slide',{direction:'left'})
   }
 
   $('#join-group').one('click',function(){
@@ -362,7 +366,7 @@ $(document).ready(function(){
         if(data[0].condition==1){
           var group_name = $('h1').text()
           group_name = group_name.substr(0,group_name.indexOf('<')-1)
-          join_group_btn.text('已加入 '+$('h1').text().match(/(.+[^<\n])/)[0])
+          join_group_btn.text('已加入 '+$('h1').text().match(/^(.+)\s/)[0])
           updateAvatarList('members','members')
         }else{
           join_group_btn.text('等待审核...')

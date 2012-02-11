@@ -8,6 +8,7 @@ from django.template import RequestContext
 from NearsideBindings.base.utils import ExPaginator
 from django.core.paginator import InvalidPage, EmptyPage
 from django.db.models import Count
+from django.core.exceptions import ObjectDoesNotExist
 
 def get_top_group():
     top_group = Group.objects.exclude(description="").exclude(avatar="/static/images/no_avatar.png").order_by('?')
@@ -44,6 +45,7 @@ def single(request,group_slug):
     friend_groups = group.friend_groups.all().order_by('?')[:8]
     members = [ membership.user for membership in MemberShip.objects.filter(group=group,is_approved=True).order_by('?')[0:7] ]
     member_counter = len(members)
+    last_activities = Activity.objects.filter(host_groups=group,hostship__accepted=True)[:4]
     try:
         membership = MemberShip.objects.get(user=request.user,group=group)
     except MemberShip.DoesNotExist:
@@ -96,6 +98,8 @@ def admin(request,group_slug):
     else:
         hostships = HostShip.objects.filter(group=group)
     friend_groups = group.friend_groups.all()
+    friend_groups_pk =  [ friend_group.pk for friend_group in friend_groups ]
+    friend_groups_pk_str = ','.join([ str(pk) for pk in friend_groups_pk])+','
     admins = [ membership.user for membership in MemberShip.objects.filter(group=group,is_admin=1) ]
     memberships = MemberShip.objects.filter(group=group).exclude(user=request.user).order_by('-joined_date')[0:4]
     is_founder = group.founder.pk == request.user.pk
@@ -112,6 +116,11 @@ def admin(request,group_slug):
         form = AdminGroupForm(request.POST,instance=group)
         if form.is_valid():
             form.save()
+            new_friends = set(form.cleaned_data['friend_groups'])
+            for to_remove in set(friend_groups_pk) - new_friends:
+                group.friend_groups.remove(Group.objects.get(id=to_remove))
+            for to_add in new_friends - set(friend_groups_pk):
+                group.friend_groups.add(Group.objects.get(id=to_add))
     else:
         form = AdminGroupForm(instance=group)
     return render_to_response('groups/admin.html',locals(),context_instance=RequestContext(request))
@@ -132,3 +141,19 @@ def members(request,group_slug):
         members = paginator.page(paginator.num_pages)
     is_admin = request.user in admins
     return render_to_response('groups/members.html',locals(), context_instance=RequestContext(request))
+
+@login_required
+def my():
+    pass
+
+@login_required
+def exit(request,group_slug):
+    group = get_object_or_404(Group,slug=group_slug)
+    if request.user.pk == group.founder.pk:
+        return redirect('/groups/%s' % group.slug )
+    else:
+        try:
+            MemberShip.objects.get(user=request.user,group=group).delete()
+        except ObjectDoesNotExist:
+            pass
+        return redirect('/groups/')

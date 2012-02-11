@@ -13,15 +13,17 @@
                     {% endblock extranav %}
                 </ul>
                 <ul class="nav pull-right">
-                    <li id="session" class="dropdown">
+                    <li id="session" class="dropdown" user="{{ user }}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <span id="session-avatar"><img src="{% small_avatar user %}" /></span>
                             {{ user.last_name }}
                             <b class="caret"></b>
                         </a>
                         <ul id="session-actions" class="dropdown-menu">
-                            <li><a href="/profile/edit" title="">设置</a></li>
                             <li><a href="/messages" title="">站内信 ({{ messages_inbox_count }})</a></li>
+                            <li><a href="/activities/my" title="">我的活动</a></li>
+                            <li><a href="/groups/my" title="">我的组织</a></li>
+                            <li><a href="/profile/edit" title="">设置</a></li>
                             <li><a href="/help" title="">帮助</a></li>
                             <li><a href="/logout" title="">注销</a></li>
                         </ul>

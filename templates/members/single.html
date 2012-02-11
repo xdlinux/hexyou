@@ -66,11 +66,11 @@
     </div>
 </div>
 </form>
-<h3>参加的活动</h3>
+<h3>发起的活动</h3>
 <ul class="list">
-    {% for activity in attended_activities %}
+    {% for activity in host_activities_slice %}
     <li class="activity">
-        <div class="meta">
+        <div class="meta avatar">
             <img src="{{ activity.avatar }}" class="avatar" alt="" />
             <p>{{ activity.participators__count }} 人参加</p>
         </div>
@@ -81,6 +81,27 @@
             <p>{{ activity.activity_type }}</p>
         </div>
     </li>
+    {% empty %}
+    <p>{{ view_user.last_name }} 没有发起过任何活动</p>
+    {% endfor %}
+</ul>
+<h3>参加的活动</h3>
+<ul class="list">
+    {% for activity in attended_activities_slice %}
+    <li class="activity">
+        <div class="meta avatar">
+            <img src="{{ activity.avatar }}" class="avatar" alt="" />
+            <p>{{ activity.participators__count }} 人参加</p>
+        </div>
+        <div class="content">
+            <h4>{{ activity.title }}<br />
+            <small>{{ activity.host_string|safe }}</small></h4>
+            <p>于 {{ activity.begin_time|date:"Y-m-d h:m"}} 在 {{ activity.location }}</p>
+            <p>{{ activity.activity_type }}</p>
+        </div>
+    </li>
+    {% empty %}
+    <p>{{ view_user.last_name }} 没有参加过任何活动</p>
     {% endfor %}
 </ul>
 {% endblock main %}
@@ -89,11 +110,11 @@
 <div id="side-counter">
     <div class="side-counter-block">
         <span class="description">发起活动</span>
-        <a href="#" class="count">1234</a>
+        <a href="#" class="count">{{ host_activities_count }}</a>
     </div>
     <div class="side-counter-block">
-        <span class="description">合作活动</span>
-        <a href="#" class="count">56</a>
+        <span class="description">参加活动</span>
+        <a href="#" class="count">{{ attended_activities_count }}</a>
     </div>
     <div class="side-counter-block">
         <span class="description">咻！</span>
@@ -107,6 +128,4 @@
     <li><a href="/groups/{{ group.slug }}"><img src="{{ group.avatar }}" alt=""></a></li>
     {% endfor %}
 </ul>
-<h3>日历</h3>
-<img src="http://placehold.it/280x175" />
 {% endblock side %}

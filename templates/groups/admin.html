@@ -16,13 +16,18 @@
     <li class="active"><a href="#tab-activity" data-toggle="tab" title="">活动</a></li>
     <li><a href="#tab-customization" data-toggle="tab" title="">定制</a></li>
     <li><a href="#tab-membership" data-toggle="tab" title="">成员</a></li>
+    {% if is_founder %}
     <li><a href="#tab-disband" data-toggle="tab" title="">解散组织</a></li>
+    {% endif %}
 </ul>
 <form id="admin-group" class="form-horizontal inner-post" enctype="multipart/form-data" action="" method="post" accept-charset="utf-8">
 {% csrf_token %}
     <div class="tab-content">
         <div class="tab-pane fade in active" id="tab-activity">
             <div class="control-group">
+                <div class="alert alert-info float-left" data-alert="info" style="margin:0">
+                    <strong>注意</strong> 活动审核通过后不可撤销或删除
+                </div>
                 <div class="btn-group float-right">
                     <a href="#" class="btn disabled">{{ current_filter_name }} ({{ paginator.count }})</a>
                     <a href="#" data-toggle="dropdown" class="btn dropdown-toggle">
@@ -50,7 +55,7 @@
                     </td>
                     <td class="activity-actions">
                         <div class="btn-group" activity-id="{{ activity.pk }}">
-                            {% if hostship.accepted and hostship.activity__host_groups__count == 1 %} 
+                            {% ifequal hostship.accepted 1 %}
                             <a href="#" class="btn btn-success" data-toggle="dropdown">
                                 <i class="icon-star icon-white"></i>
                                 组织活动
@@ -62,7 +67,7 @@
                                 </li>
                             </ul>
                             {% else %}
-                            {% ifequal hostship.accepted 1 %}
+                            {% if hostship.activity__host_groups__count == 1 %} 
                             <a href="#" class="btn btn-primary" data-toggle="dropdown">
                                 <i class="icon-star icon-white"></i>
                                 合作活动
@@ -84,11 +89,11 @@
                                     <a href="#" class="accept-activity">审核通过</a>
                                 </li>
                                 <li>
-                                    <a href="#" class="remove-activity">撤销活动</a>
+                                    <a href="#" class="remove-activity">删除活动</a>
                                 </li>
                             </ul>
-                            {% endifequal %}
                             {% endif %}
+                            {% endifequal %}
                         </div>
                     </td>
                 </tr>
@@ -157,7 +162,7 @@
                     <div class="input-prepend">
                         <span class="add-on">@</span>
                         <input id="inform-input" type="text" request-type="group">
-                        <textarea class="inform-list group" name="friend_groups" style="display:none;"></textarea>
+                        <input type="hidden" class="inform-list group" name="friend_groups" value="{{ friend_groups_pk_str }}"/>
                         <div id="label-list">
                             {% for friend_group in friend_groups %}
                             <span class="label group" value="{{ friend_group.pk }}" slug="{{ friend_group.slug }}">
@@ -300,6 +305,7 @@
                 {% endfor %}
             </table>
         </div>
+        {% if is_founder %}
         <div id="tab-disband" class="tab-pane fade in">
             <p class="align-center"><a href="#disband-modal" class="btn btn-danger btn-large" data-toggle="modal">解散 {{ form.name.value }}</a></p>
             <p class="align-center">权力越大，责任越大 :)</p>
@@ -319,6 +325,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
 </form>
 {% endblock main %}
