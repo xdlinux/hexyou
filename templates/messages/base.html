@@ -1,0 +1,10 @@
+{% extends "innerbase.html" %}
+{% load topbar %}
+
+{% block header %}
+{% topbar messages messages/topbar.html %}
+{% endblock %}
+
+{% block side %}
+{% topbar inbox subnav.html %}
+{% endblock side %}

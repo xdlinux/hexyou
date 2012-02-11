@@ -4,6 +4,7 @@ from django.utils.safestring import mark_safe
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.validators import MinLengthValidator,MaxLengthValidator, EMPTY_VALUES
 from django.utils.translation import ugettext_lazy as _
 
 def validate_iurl(iurl):
@@ -15,6 +16,17 @@ class iURLField(forms.CharField):
         'invalid': _(u"Invalid internal url"),
     }
     default_validators = []
+
+class IdListField(forms.CharField):
+    def to_python(self,value):
+        if value in EMPTY_VALUES:
+            return []
+        value = value.split(',')
+        try:
+            value = [ int(single) for single in value if single ]
+        except (ValueError,TypeError):
+            raise ValidationError(u'Invalid id list')
+        return value
 
 def popover(self,title,content):
     self.widget.attrs['rel']="popover"

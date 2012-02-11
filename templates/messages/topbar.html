@@ -1,0 +1,6 @@
+{% extends "topbar.html" %}
+{% load topbar %}
+
+{% block extranav %}
+<li class="{{ topbar|active:"messages" }}"><a href="#">站内信</a></li>
+{% endblock extranav %}

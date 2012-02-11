@@ -1,0 +1,35 @@
+{% extends "messages/base.html" %} 
+{% load i18n %}
+{% load gravatar %}
+
+{% block title %}站内信{% endblock title %}
+
+{% block main %}
+<table class="table messages">
+    <thead>
+        <tr>
+            <th width="120px">发件人</th>
+            <th width="220px">主题</th>
+            <th width="">时间</th>
+            <th></th>
+    </thead>
+    <tbody>
+    <td>
+        <a href="/members/{{ message.sender }}"><img src="{% small_avatar message.sender %}" class="avatar avatar-small" />{{ message.sender.last_name }}</a>
+    </td>
+    <td>{{ message.subject }}</td>
+    <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
+    <td>
+        {% ifequal message.recipient.pk user.pk %}
+        {% ifnotequal message.sender.pk 0 %}          
+        <a href="{% url messages_reply message.id %}">回复</a>
+        {% endifnotequal %}
+        {% endifequal %}
+        <a href="{% url messages_delete message.id %}">删除</a>
+    </td>
+    </tbody>
+</table>
+<p class="well">
+    {{ message.body|linebreaksbr|default:"(空)" }}
+</p>
+{% endblock %}

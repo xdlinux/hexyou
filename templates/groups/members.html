@@ -95,5 +95,15 @@
 {% endblock main %}
 
 {% block side %}
-    
+<h3>友情组织
+    <small>({{ friend_groups|length }})</small></h3>
+<ul id="friend-groups" class="avatar">
+    {% for friend_group in friend_groups %}
+    <li><a href="/groups/{{ friend_group.slug }}"><img src="{{ friend_group.avatar }}"></a></li>
+    {% empty %}
+    <p>暂时没有友情组织</p>
+    {% endfor %}
+</ul>
+<h3>日历</h3>
+<img src="http://placehold.it/320x200" />
 {% endblock side %}

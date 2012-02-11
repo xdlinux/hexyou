@@ -15,16 +15,15 @@
     <div class="row">
         {% if top_activity %}
         <div class="span large-avatar avatar">
-            <img src="{{ top_activity.avatar }}" class="avatar" alt="" />
+            <a href="/activities/{{ top_activity.pk }}"><img src="{{ top_activity.avatar }}" class="avatar" alt="" /></a>
         </div>
         <div class="span5">
-            <h2>{{ top_activity.title }}
-                <small>{% for group in top_activity_groups %}<a href="/groups/{{ groups.slug }}">{{ group }}</a>{% endfor %}</small>
+            <h2><a href="/activities/{{ top_activity.pk }}">{{ top_activity.title }}</a> <small>{{ host_string|safe }}</small>
             </h2>
             <p style="margin-left:12px;">开始于 {{ top_activity.begin_time|date:"Y年m月d日 H:m" }}，在 {{ top_activity.location.name }} </p>
             <p>{{ top_activity.description|linebreaks|first_p }}</p>
             <p class="align-right">
-                <a href="/activities/{{ top_activity.id }}" class="btn btn-primary">详细信息</a>
+                <a href="/activities/{{ top_activity.id }}" class="btn btn-primary btn-large">详细信息 »</a>
             </p>
         </div>
         {% endif %}
@@ -32,102 +31,20 @@
 </div>
 <h3>最新活动</h3>
 <ul class="list">
+    {% for activity in activities %}
     <li class="activity">
         <div class="meta">
-            <img src="http://placehold.it/64x64" class="avatar" alt="" />
-            <p>1234 人参加</p>
+            <img src="{{ activity.avatar }}" class="avatar" alt="" />
+            <p>{{ activity.participators__count }} 人参加</p>
         </div>
         <div class="content">
-            <h4>活动名称
-            <small><a href="#">发起组织</a></small></h4>
-            <p>于 yyyy-mm-dd 在 somewhere</p>
-            <p>广大人民群众喜闻乐见的</p>
+            <h4>{{ activity.title }}<br />
+            <small>{{ activity.host_string|safe }}</small></h4>
+            <p>于 {{ activity.begin_time|date:"Y-m-d h:m"}} 在 {{ activity.location }}</p>
+            <p>{{ activity.activity_type }}</p>
         </div>
     </li>
-    <li class="activity">
-        <div class="meta">
-            <img src="http://placehold.it/64x64" class="avatar" alt="" />
-            <p>1234 人参加</p>
-        </div>
-        <div class="content">
-            <h4>活动名称
-            <small><a href="#">发起组织</a></small></h4>
-            <p>于 yyyy-mm-dd 在 somewhere</p>
-            <p>广大人民群众喜闻乐见的</p>
-        </div>
-    </li>
-    <li class="activity">
-        <div class="meta">
-            <img src="http://placehold.it/64x64" class="avatar" alt="" />
-            <p>1234 人参加</p>
-        </div>
-        <div class="content">
-            <h4>活动名称
-            <small><a href="#">发起组织</a></small></h4>
-            <p>于 yyyy-mm-dd 在 somewhere</p>
-            <p>广大人民群众喜闻乐见的</p>
-        </div>
-    </li>
-    <li class="activity">
-        <div class="meta">
-            <img src="http://placehold.it/64x64" class="avatar" alt="" />
-            <p>1234 人参加</p>
-        </div>
-        <div class="content">
-            <h4>活动名称
-            <small><a href="#">发起组织</a></small></h4>
-            <p>于 yyyy-mm-dd 在 somewhere</p>
-            <p>广大人民群众喜闻乐见的</p>
-        </div>
-    </li>
-    <li class="activity">
-        <div class="meta">
-            <img src="http://placehold.it/64x64" class="avatar" alt="" />
-            <p>1234 人参加</p>
-        </div>
-        <div class="content">
-            <h4>活动名称
-            <small><a href="#">发起组织</a></small></h4>
-            <p>于 yyyy-mm-dd 在 somewhere</p>
-            <p>广大人民群众喜闻乐见的</p>
-        </div>
-    </li>
-    <li class="activity">
-        <div class="meta">
-            <img src="http://placehold.it/64x64" class="avatar" alt="" />
-            <p>1234 人参加</p>
-        </div>
-        <div class="content">
-            <h4>活动名称
-            <small><a href="#">发起组织</a></small></h4>
-            <p>于 yyyy-mm-dd 在 somewhere</p>
-            <p>广大人民群众喜闻乐见的</p>
-        </div>
-    </li>
-    <li class="activity">
-        <div class="meta">
-            <img src="http://placehold.it/64x64" class="avatar" alt="" />
-            <p>1234 人参加</p>
-        </div>
-        <div class="content">
-            <h4>活动名称
-            <small><a href="#">发起组织</a></small></h4>
-            <p>于 yyyy-mm-dd 在 somewhere</p>
-            <p>广大人民群众喜闻乐见的</p>
-        </div>
-    </li>
-    <li class="activity">
-        <div class="meta">
-            <img src="http://placehold.it/64x64" class="avatar" alt="" />
-            <p>1234 人参加</p>
-        </div>
-        <div class="content">
-            <h4>活动名称
-            <small><a href="#">发起组织</a></small></h4>
-            <p>于 yyyy-mm-dd 在 somewhere</p>
-            <p>广大人民群众喜闻乐见的</p>
-        </div>
-    </li>
+    {% endfor %}
 </ul>
 {% endblock main %}
 
@@ -152,53 +69,19 @@
 </dl>
 <h3>热门活动</h3>
 <ul class="list">
+    {% for activity in hot_activities %}
     <li class="activity">
         <div class="meta">
-            <img src="http://placehold.it/64x64" class="avatar" alt="" />
-            <p>1234 人参加</p>
+            <img src="{{ activity.avatar }}" class="avatar" alt="" />
+            <p>{{ activity.participators__count }} 人参加</p>
         </div>
         <div class="content">
-            <h4>活动名称
-            <small><a href="#">发起组织</a></small></h4>
-            <p>于 yyyy-mm-dd 在 somewhere</p>
-            <p>广大人民群众喜闻乐见的</p>
+            <h4>{{ activity.title }}<br />
+            <small>{{ activity.host_string|safe }}</small></h4>
+            <p>于 {{ activity.begin_time|date:"Y-m-d h:m"}} 在 {{ activity.location }}</p>
+            <p>{{ activity.activity_type }}</p>
         </div>
     </li>
-    <li class="activity">
-        <div class="meta">
-            <img src="http://placehold.it/64x64" class="avatar" alt="" />
-            <p>1234 人参加</p>
-        </div>
-        <div class="content">
-            <h4>活动名称
-            <small><a href="#">发起组织</a></small></h4>
-            <p>于 yyyy-mm-dd 在 somewhere</p>
-            <p>广大人民群众喜闻乐见的</p>
-        </div>
-    </li>
-    <li class="activity">
-        <div class="meta">
-            <img src="http://placehold.it/64x64" class="avatar" alt="" />
-            <p>1234 人参加</p>
-        </div>
-        <div class="content">
-            <h4>活动名称
-            <small><a href="#">发起组织</a></small></h4>
-            <p>于 yyyy-mm-dd 在 somewhere</p>
-            <p>广大人民群众喜闻乐见的</p>
-        </div>
-    </li>
-    <li class="activity">
-        <div class="meta">
-            <img src="http://placehold.it/64x64" class="avatar" alt="" />
-            <p>1234 人参加</p>
-        </div>
-        <div class="content">
-            <h4>活动名称
-            <small><a href="#">发起组织</a></small></h4>
-            <p>于 yyyy-mm-dd 在 somewhere</p>
-            <p>广大人民群众喜闻乐见的</p>
-        </div>
-    </li>
+    {% endfor %}
 </ul>
 {% endblock side %}

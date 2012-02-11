@@ -103,6 +103,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
         'django.core.context_processors.static',
         'django.contrib.auth.context_processors.auth',
         'django.contrib.messages.context_processors.messages',
+        'messages.context_processors.inbox',
         )
 
 MIDDLEWARE_CLASSES = (
@@ -111,6 +112,7 @@ MIDDLEWARE_CLASSES = (
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
         )
 
 ROOT_URLCONF = 'NearsideBindings.urls'
@@ -138,6 +140,8 @@ INSTALLED_APPS = (
         'NearsideBindings.activity',
         'NearsideBindings.group',
         'NearsideBindings.base',
+        'messages',
+        'debug_toolbar',
         )
 
 # A sample logging configuration. The only tangible logging
@@ -175,3 +179,7 @@ RESERVED_GROUP_SLUGS = (
     'disband',
     'random',
 )
+
+LOGIN_URL = '/login'
+
+INTERNAL_IPS = ('127.0.0.1',)

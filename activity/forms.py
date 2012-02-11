@@ -2,20 +2,8 @@
 from django import forms
 from django.utils.safestring import mark_safe
 from django.core.exceptions import ValidationError
-from django.core.validators import MinLengthValidator,MaxLengthValidator, EMPTY_VALUES
+from NearsideBindings.base.forms import IdListField
 from NearsideBindings.activity.models import Activity, Location
-
-class IdListField(forms.CharField):
-    def to_python(self,value):
-        if value in EMPTY_VALUES:
-            return []
-        value = value.split(',')
-        try:
-            value = [ int(single) for single in value if single ]
-        except (ValueError,TypeError):
-            raise ValidationError(u'Invalid id list')
-        return value
-
 
 class ActivityForm(forms.ModelForm):
     host_groups = IdListField(required=False)

@@ -3,6 +3,7 @@ from django import forms
 from django.forms import ModelForm, RadioSelect, HiddenInput
 from django.utils.safestring import mark_safe
 from NearsideBindings.group.models import Group,MemberShip
+from NearsideBindings.base.forms import IdListField
 from NearsideBindings.base.utils import timebaseslug
 from django.core.validators import validate_slug
 from django.core.exceptions import ValidationError
@@ -40,6 +41,7 @@ class NewGroupForm(ModelForm):
 
 
 class AdminGroupForm(ModelForm):
+    friend_groups = IdListField(required=False)
     class Meta:
         model = Group
         exclude = ('founder','group_type','members')

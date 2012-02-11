@@ -1,26 +1,140 @@
 {% extends "groups/base.html" %}
 {% load bootstrap %}
 {% load gravatar %}
+{% load topbar %}
 
-{% block title %}管理小组{% endblock title %}
+{% block title %}管理组织{% endblock title %}
 
 {% block subtitle %}室雅何须大，花香不在多{% endblock subtitle %}
 
 {% block headeraction %}
-<a href="/groups/{{ group.slug }}" class="btn btn-small">返回小组</a>
+<a href="/groups/{{ group.slug }}" class="btn btn-small">返回组织</a>
 {% endblock headeraction %}
 
 {% block main %}
 <ul class="tabs nav nav-tabs">
-    <li class="active"><a href="#tab-customization" data-toggle="tab" title="">定制</a></li>
+    <li class="active"><a href="#tab-activity" data-toggle="tab" title="">活动</a></li>
+    <li><a href="#tab-customization" data-toggle="tab" title="">定制</a></li>
     <li><a href="#tab-membership" data-toggle="tab" title="">成员</a></li>
-    <li><a href="#tab-activity" data-toggle="tab" title="">活动</a></li>
     <li><a href="#tab-disband" data-toggle="tab" title="">解散组织</a></li>
 </ul>
 <form id="admin-group" class="form-horizontal inner-post" enctype="multipart/form-data" action="" method="post" accept-charset="utf-8">
 {% csrf_token %}
     <div class="tab-content">
-        <div class="tab-pane fade in active" id="tab-customization">
+        <div class="tab-pane fade in active" id="tab-activity">
+            <div class="control-group">
+                <div class="btn-group float-right">
+                    <a href="#" class="btn disabled">{{ current_filter_name }} ({{ paginator.count }})</a>
+                    <a href="#" data-toggle="dropdown" class="btn dropdown-toggle">
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="?filter=unapproved">未审核</a></li>
+                        <li><a href="?filter=single">组织活动</a></li>
+                        <li><a href="?filter=multiple">合作活动</a></li>
+                        <li class="divider"></li>
+                        <li><a href="?filter=all">全部活动</a></li>
+                    </ul>
+                </div>
+            </div>
+            <table class="table">
+                {% for hostship in hostships.object_list %}
+                {% with hostship.activity as activity %}
+                <tr>
+                    <td class="avatar">
+                        <a href="/activities/{{ activity.pk }}"><img class="avatar" src="{{ activity.avatar }}" /></a>
+                    </td>
+                    <td>
+                        <h4><a href="/activities/{{ activity.pk }}">{{ activity.title }}</a></h4>
+                        <p>{{ activity.description|words:50 }}</p>
+                    </td>
+                    <td class="activity-actions">
+                        <div class="btn-group" activity-id="{{ activity.pk }}">
+                            {% if hostship.accepted and hostship.activity__host_groups__count == 1 %} 
+                            <a href="#" class="btn btn-success" data-toggle="dropdown">
+                                <i class="icon-star icon-white"></i>
+                                组织活动
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="#">你想做什么？</a>
+                                </li>
+                            </ul>
+                            {% else %}
+                            {% ifequal hostship.accepted 1 %}
+                            <a href="#" class="btn btn-primary" data-toggle="dropdown">
+                                <i class="icon-star icon-white"></i>
+                                合作活动
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="#" class="cancle-cooperation">撤销合作</a>
+                                </li>
+                            </ul>
+                            {% else %}
+                            <a href="#" class="btn" data-toggle="dropdown">
+                                <i class="icon-star"></i>
+                                未审核
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="#" class="accept-activity">审核通过</a>
+                                </li>
+                                <li>
+                                    <a href="#" class="remove-activity">撤销活动</a>
+                                </li>
+                            </ul>
+                            {% endifequal %}
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endwith %}
+                {% empty %}
+                <p>暂无活动，<a href="/activities/host">发起</a>一个？</p>
+                {% endfor %}
+            </table>
+            <div class="pagination pagination-centered">
+                <ul>
+                    {% if activities.has_previous %}
+                    <li>
+                        <a href="?page={{ activities.previous_page_number }}{{ current_filter_query }}">«</a>
+                    </li>
+                    {% else %}
+                    <li class="disabled">
+                        <a href="#">«</a>
+                    </li>
+                    {% endif %}
+                    {{ activities.page_range }}
+                    {% for val in paginator.page_range_slice %}
+                    <li {% ifequal page val %}class="active"{% endifequal %}>
+                        <a href="?page={{ val }}{{ current_filter_query }}">{{ val }}</a>
+                    </li>
+                    {% endfor %}
+                    {% if paginator.page_range_slice|last < paginator.num_pages %}
+                    <li class="disabled">
+                        <a href="#">...</a>
+                    </li>
+                    <li>
+                        <a href="?page={{ paginator.num_pages }}{{ current_filter_query }}" {% ifequal page val %}class="active"{% endifequal %}>{{ paginator.num_pages }}</a>
+                    </li>
+                    {% endif %}
+                    {% if activities.has_next %}
+                    <li>
+                        <a href="?page={{ activities.next_page_number }}{{ current_filter_query }}" class="disabled">»</a>
+                    </li>
+                    {% else %}
+                    <li class="disabled">
+                        <a href="#">»</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="tab-pane fade in" id="tab-customization">
             <div class="row">
                 <div class="span summary">
                     <div class="control-group">
@@ -37,7 +151,26 @@
                 </div>
             </div>
             {{ form.description|label:"简介" }}
+            <div class="control-group">
+                <label class="control-label">友情组织</label>
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on">@</span>
+                        <input id="inform-input" type="text" request-type="group">
+                        <textarea class="inform-list group" name="friend_groups" style="display:none;"></textarea>
+                        <div id="label-list">
+                            {% for friend_group in friend_groups %}
+                            <span class="label group" value="{{ friend_group.pk }}" slug="{{ friend_group.slug }}">
+                                {{ friend_group.name }}
+                                <span class="label-close">×</span>
+                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="form-actions">
+                {{ form.errors.}}
                 {% if form.errors %}
                 <ul class="errors">            
                 {% for error in form.errors %}
@@ -49,6 +182,14 @@
                 {% endif %}
                 <input class="btn btn-primary" type="submit" value="确认更改">
                 <button class="btn" type="reset">取消</button>
+            </div>
+        </div>
+        <div id="tab-friendgroups" class="tab-pane fade in">
+            <div class="control-group">
+                <label for="group-search" class="control-label"></label>
+                <div class="controls">
+                    <input id="group-search" class="input-medium search-query" type="text" />
+                </div>
             </div>
         </div>
         <div id="tab-membership" class="tab-pane fade in">
@@ -153,7 +294,7 @@
                     </td>
                     <td>
                         <h4>暂无成员</h4>
-                        <p>第一个会是你吗？</p>
+                        <p><a href="/messages/compose/">发站内信</a>邀请好友？</p>
                     </td>
                 </tr>
                 {% endfor %}
@@ -181,3 +322,7 @@
     </div>
 </form>
 {% endblock main %}
+
+{% block side %}
+{% topbar my_groups subnav.html %}
+{% endblock side %}

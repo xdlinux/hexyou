@@ -34,7 +34,12 @@ def gravatar_url(parser, token):
 
 @register.simple_tag
 def avatar(user):
+    return user.avatar or get_gravatar_url(user.email,150)
+
+@register.simple_tag
+def small_avatar(user):
     if user.avatar:
-        return user.avatar
+        split = user.avatar.split('.')
+        return '.'.join(split[:-1])+'_small.'+split[-1]
     else:
-        return get_gravatar_url(user.email)
+        return get_gravatar_url(user.email,20)

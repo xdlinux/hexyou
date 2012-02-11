@@ -1,0 +1,44 @@
+{% extends "messages/base.html" %} 
+{% load i18n %} 
+{% load gravatar %}
+{% load topbar %}
+
+{% block title %}废件箱{% endblock title %}
+
+{% block main %} 
+{% if message_list %} 
+<table class="table table-striped messages">
+    <thead>
+        <tr>
+            <th width="120px">发件人</th>
+            <th width="220px">主题</th>
+            <th width="125px">时间</th>
+            <th>动作</th></tr>
+    </thead>
+    <tbody>
+{% for message in message_list %} 
+    <tr>
+        <td>
+            <a href="/members/{{ message.sender }}"><img src="{% small_avatar message.sender %}" class="avatar avatar-small" />{{ message.sender }}</a>
+        </td>
+        <td> 
+        {{ message.subject }}
+        </td>
+        <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
+        <td><a href="{% url messages_undelete message.id %}">还原</a></td>
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="well">没有站内信</p>
+{% endif %}   
+<br />
+<div class="alert alert-info" data-alert="alert">
+    <strong>注意</strong> 废件箱中的邮件会被系统不定期清理，请不要把废件箱作为站内信的长期存储方式
+</div>
+{% endblock %}
+
+{% block side %}
+{% topbar trash subnav.html %}
+{% endblock side %}

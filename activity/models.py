@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-  
 from django.db import models
+from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from NearsideBindings.group.models import Group
+from NearsideBindings.activity.signals import activity_inform
 
 class Location(models.Model):
     name = models.CharField(max_length=30,unique=True)
@@ -38,9 +41,33 @@ class Activity(models.Model):
                 HostShip.objects.create(group=group,activity=self)
     def accepted_host_groups(self):
         return [hostship.group for hostship in self.hostship_set.filter(accepted=True).all()]
+    def get_host_string(self,with_link=True):
+        accepted_groups = [ hostship.group for hostship in HostShip.objects.filter(activity=self) if hostship.accepted ]
+        fullhostship = []
+        for host in self.hosts.all():
+            real_groups = Group.objects.filter(members=host)
+            fullhostship.append({'host':host,'groups':set(accepted_groups) & set(real_groups)})
+        host_string = u'by '
+        for hostship in fullhostship:
+            if with_link:
+                host_string += u"<a href='/members/%s'>%s</a>" % (hostship['host'],hostship['host'].last_name)
+            else:
+                host_string += hostship['host'].last_name
+            host_string += u'@'
+            for group in hostship['groups']:
+                if with_link:
+                    host_string +=  u"<a href='/groups/%s'>%s</a>," % (group.slug,group.name)
+                else:
+                    host_string += group.name + ','
+            host_string = host_string[:-1]
+            host_string += " "
+        return host_string
+
 
 class HostShip(models.Model):
    """hostship between group and Activity"""
    group = models.ForeignKey(Group)
    activity = models.ForeignKey(Activity)
    accepted = models.BooleanField(default=False)
+
+post_save.connect(activity_inform,sender=HostShip)

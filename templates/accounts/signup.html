@@ -40,16 +40,12 @@
         <div class="span9">
             <form action="" id="account" method="POST">
                 {% csrf_token %}
-                <h3>账户</h3>
                 {{ form.username|holding:"用户名" }}
-                {{ form.password1|holding:"密码" }}
-                {{ form.password2|holding:"重复密码" }}
-                <div class="holding">&nbsp;</div>
-                <h3>个人信息</h3>
                 {{ form.last_name|holding:"全名" }}
                 {{ form.email|holding:"电子邮件" }}
+                {{ form.password1|holding:"密码" }}
+                {{ form.password2|holding:"重复密码" }}
                 {{ form.student_num|holding:"学号" }}
-                <div class="holding">&nbsp;</div>
                 <h3>联系方式
                 <small>(选填)</small>
                 </h3>

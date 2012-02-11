@@ -24,7 +24,7 @@
             <dt>始于</dt>
             <dd>{{ group.create_date|date:"Y-m-d" }}</dd>
             <dt>链接</dt>
-            <dd><a href="http://www.cpcnews.cn/">http://www.cpcnews.cn/</a></dd>
+            <dd>{% if group.site %}{{ group.site|urlize }}{% else %}<a href="/groups/{{ group.slug }}">{{ group.name }}@嘿咻</a>{% endif %}</dd>
         </dl>
     </div>
 </div>
@@ -65,6 +65,20 @@
 {% endblock main %}
 
 {% block side %}
+<div id="side-counter">
+    <div class="side-counter-block">
+        <span class="description">发起活动</span>
+        <a href="#" class="count">1234</a>
+    </div>
+    <div class="side-counter-block">
+        <span class="description">合作活动</span>
+        <a href="#" class="count">56</a>
+    </div>
+    <div class="side-counter-block">
+        <span class="description">咻！</span>
+        <a href="#" class="count">789</a>
+    </div>
+</div>
 <h3>成员
     <small>({{ member_counter }})</small></h3>
 <ul id="members" class="avatar">
@@ -72,17 +86,14 @@
     <li><a href="/members/{{ member }}"><img src="{% avatar member %}" alt=""></a></li>
     {% endfor %}
 </ul>
-<h3>友情小组
-    <small>(42)</small></h3>
+<h3>友情组织
+    <small>({{ friend_groups|length }})</small></h3>
 <ul id="friend-groups" class="avatar">
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    {% for friend_group in friend_groups %}
+    <li><a href="/groups/{{ friend_group.slug }}"><img src="{{ friend_group.avatar }}"></a></li>
+    {% empty %}
+    <p>暂时没有友情组织</p>
+    {% endfor %}
 </ul>
 <h3>日历</h3>
 <img src="http://placehold.it/320x200" />

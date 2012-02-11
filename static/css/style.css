@@ -5,7 +5,7 @@ textarea { resize:vertical; }
 .container>.row { padding-top:20px; }
 .container>.content {background-color:#fff; padding:20px; margin:0 -20px; border-radius:0 0 6px 6px; box-shadow:0 1px 2px rgba(0,0,0,.15); }
 .page-header{ background-color:#f5f5f5; padding:20px 20px 10px; margin:-20px -20px 20px; }
-#side { padding-left:19px; border-left:1px solid #eee; min-height:500px; width:280px; }
+#side { padding-left:19px; border-left:1px solid #eee; min-height:320px; width:280px; }
 .holding { position:relative; padding:0; margin:0; }
 .holding .holder { position:absolute; z-index:1; top:0; color:#999; }
 .extra { text-align:center; margin-top:8px; padding:8px; border-top:1px solid #eee; }
@@ -13,11 +13,13 @@ ul.avatar { margin-left:0; list-style:none; width:100%; }
 ul.avatar:after { content:''; clear:both; display:table; }
 ul.avatar>li { float:left; margin:3px; width:64px; height:64px; }
 ul.avatar a { padding:1px; }
-ul.avatar img { width:64px; box-shadow:0 0 6px #ccc; }
-ul.avatar img:hover { box-shadow:0 0 6px #0088cc; }
-div.avatar img { padding:0px; border:1px solid #ccc; border-radius:6px; box-shadow:0 0 8px #ccc; }
+ul.avatar img { width:64px; box-shadow:0 0 3px #666; }
+div.avatar img { border-radius:6px; box-shadow:0 0 8px #ccc; }
+div.avatar img:hover { box-shadow:0 0 8px #0088cc; }
 td.avatar { width:64px; }
 td img.avatar { border:1px solid #ccc; border-radius:6px; box-shadow:0 0 8px #ccc; width:64px; }
+td img.avatar:hover, ul.avatar img:hover { box-shadow:0 0 6px #0088cc; }
+td img.avatar-small { width:20px; vertical-align:middle; margin-right:4px; }
 .align-right { text-align:right; }
 .align-left { text-align:left; }
 .align-center { text-align:center; }
@@ -106,9 +108,12 @@ ul.list .content p { margin-bottom:2px; }
 #side-search .holding .holder { left:54px; top:10px; }
 #side-search .search-input { padding:9px; width:215px; }
 #side-search .add-on { padding:9px; }
-#side-counter { width:290; text-align:right; font-size:15px; padding:18px 12px; }
+.counter-block { float:left; border-right:1px solid #ccc; }
+.counter-block:last-child { margin:0; padding:0; border:0 }
+#side-counter { text-align:right; font-size:15px; padding:12px 8px; margin:12px 0; border-top:1px solid #eee; border-bottom:1px solid #eee; }
 #side-counter:after { clear:both; content:'.'; visibility:hidden; display:block; line-height:0; }
-.side-counter-block { width:60px; padding-right:18px; margin-right:18px; float:left; border-right:1px solid #ccc; }
+.side-counter-block { width:60px; padding-right:16px; margin-right:16px; float:left; border-right:1px solid #eee; }
+.side-counter-block:first-child { margin-left:12px; }
 .side-counter-block:last-child { margin:0; padding:0; border:0; text-align:left; }
 .side-counter-block .description { display:block; }
 .inner-post .large-avatar { margin-left:-12px; }
@@ -129,13 +134,14 @@ ul.list .content p { margin-bottom:2px; }
 #side-activity-invition input { padding:9px; width:225px; }
 #side-activity-invition .add-on { padding:9px; }
 #side-activity-invition .holding .holder { left:44px; top:10px; }
-#side-activity-invition #label-list { margin-top:8px; }
-#side-activity-invition #label-list .label { text-transform:none; margin-right:4px; font-size:13px; font-weight:normal; }
-#side-activity-invition #label-list .label-close { cursor:pointer; font-size:14px; }
+#label-list { margin-top:8px; }
+#label-list .label { text-transform:none; margin-right:4px; font-size:13px; font-weight:normal; }
+#label-list .label-close { cursor:pointer; font-size:14px; }
 .label.group { background:#558ca9; }
 .label.group:before { content:' [组织] '}
-.member-actions { width:115px; }
-.member-actions .btn-group { float:right; }
+.member-actions, .activity-actions { width:115px; }
+.member-actions .btn-group, .activity-actions .btn-group { float:right; }
+.modal textarea { width:400px; height:180px; resize:none; }
 
 
 /* location */
@@ -157,8 +163,6 @@ ul.list .content p { margin-bottom:2px; }
 #account .holding p { margin:0; position:absolute; top:9px; width:130px; text-align:right; left:280px; }
 #policy { width:340px; height:300px; background:#f0f0a0; padding:0; }
 #policy iframe { width:340px;height:100% }
-
-#member-counter { margin-left:30px; }
 
 #account .input-prepend .holder{left:50px}
 #account .input-prepend>input{width:280px}

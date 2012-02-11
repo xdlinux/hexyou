@@ -1,0 +1,32 @@
+{% extends "messages/base.html" %} 
+{% load i18n %}
+{% load topbar %}
+{% load bootstrap %}
+
+{% block title %}写站内信{% endblock title %}
+
+{% block main %}
+<form action="" method="post" class="form-horizontal inner-post">
+{% csrf_token %}
+{{ form.recipient|label:"收信人" }}
+{{ form.subject|label:"主题" }}
+{{ form.body|label:"内容" }}
+    <div class="form-actions">
+        {% if form.errors %}
+        <ul class="errors">            
+        {% for error in form.errors %}
+        <li>
+        {{ error }}
+        </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        <button class="btn btn-primary" type="submit">发送站内信</button>
+        <button class="btn" type="reset">取消</button>
+    </div>
+</form>
+{% endblock %}
+
+{% block side %}
+{% topbar compose subnav.html %}
+{% endblock side %}

@@ -20,10 +20,10 @@
         <div class="span5">
             <h2><a href="{% url NearsideBindings.group.views.single top_group.slug %}">{{ top_group }}</a>
                 <small><a href="{% url NearsideBindings.group.views.members top_group.slug %}">({{ top_group_members }})</a></small></h2>
-            <p style="margin-left:12px;">始于{{ top_group.create_date|date:"Y年m月d日" }}</p>
+            <p style="margin-left:12px;">始于 {{ top_group.create_date|date:"Y年m月d日" }}</p>
             {{ top_group.description|linebreaks|first_p }}
             <p class="align-right">
-                <a href="/groups/{{ top_group.slug }}" class="btn btn-primary">详细信息</a>
+                <a href="/groups/{{ top_group.slug }}" class="btn btn-primary btn-large">详细信息 »</a>
             </p>
         </div>
     </div>
@@ -39,7 +39,8 @@
             </td>
             <td>
                 <h4><a href="{% url NearsideBindings.group.views.single group.slug %}">{{ group }}</a>
-                    <small><a href="{% url NearsideBindings.group.views.members group.slug %}">({{ group.members_count }})</a></small></h4>
+                    <small><a href="{% url NearsideBindings.group.views.members group.slug %}">({{ group.members_count }})</a></small>
+                    <small>始于 {{ top_group.create_date|date:"Y年m月d日" }}</small></h4>
                 <p>{{ group.description|words:50 }}</p>
             </td>
         </tr>

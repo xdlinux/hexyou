@@ -44,12 +44,15 @@ def upload_image(request_file):
     img.save(os.path.join(path,filename))
     return os.path.join(MEDIA_URL,'tmp',filename)
 
-def get_gravatar_url(email):
+def get_gravatar_url(email,size=150):
     default = "http://localhost/static/images/no_avatar.png"
-    size = 150
     gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
     gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
     return gravatar_url
+
+def small_avatar(entity):
+    split = entity.avatar.split('.')
+    return '.'.join(split[:-1])+'_small.'+split[-1]
 
 def timebaseslug():
     return md5.new(str(time.time())).hexdigest()

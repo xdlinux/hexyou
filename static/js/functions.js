@@ -49,6 +49,14 @@ $(document).ready(function(){
     dataType : 'json',
   })
 
+  $.fn.serializeJSON = function() {
+    var json = {};
+      $.map($(this).serializeArray(), function(n, i){
+      json[n['name']] = n['value'];
+      });
+    return json;
+  };
+
   /* input holder*/
   var holding = $('form>.holding>input').filter('input[type=text],input[type=email],input[type=password]');
   holding.each(function(){
@@ -149,7 +157,11 @@ $(document).ready(function(){
           .data( "item.autocomplete", item )
           .append( "<a>" + "<img src=\"" + item.avatar + "\" style=\"width:24px;height:24px;\" />" + item.name + '(' + words(item.slug,16) + ')' + "</a>" )
           .appendTo( ul )
-      }
+      },
+    _move:function(){
+      console.log(self)
+      return
+    }
   });
 
 
@@ -231,23 +243,7 @@ $(document).ready(function(){
     },
     select:function(event,ui){
       window.location.href='/'+$('#side-search .search-input').attr("redirect-type")+'/'+ui.item.slug
-    }
-  })
-
-
-/* dropdowns */
-
-  $.ajax({
-    data : {
-      request_type : 'current_user',
-      request_phrase : 'current_user',
     },
-    success:function(data){
-      data=data[0]
-      $('#session').data('current_user',data)
-      $('#session-avatar>img').attr({'src':data.avatar})
-      $('#session>a>b').before(data.name)
-    }
   })
 
 
@@ -375,6 +371,24 @@ $(document).ready(function(){
     })
   })
 
+  $('#send-message-form').submit(function(){
+    $.ajax({
+      data:{
+        request_type:'send_message',
+        request_phrase:$.toJSON($('#send-message-form').serializeJSON())
+      },
+      success:function(){
+        $(this)[0].reset()
+        $('#send-message-modal').modal('hide')
+      },
+      error:function(){
+        $('#send-message-error').slideDown('normal',function(){
+          setTimeout(function(){$('#send-message-error').slideUp()},5000)
+        })
+      }
+    })
+    return false;
+  })
 
 
 /* alert */
@@ -615,4 +629,24 @@ $(document).ready(function(){
       })
     }
   })
+
+  /* activity manager */
+
+  function activityManage(){
+    $.ajax({
+      data:{
+        request_type:$(this).attr('class').replace(/-/g,'_'),
+        request_phrase:$.toJSON({
+          activity:$(this).closest('.btn-group').attr('activity-id'),
+          group:getCurrentGroup(),
+        })
+      },
+      success:function(){
+        location.reload()
+      }
+    })
+  }
+
+  $('.accept-activity, .remove-activity, .cancle-cooperation').click(activityManage)
+
 })

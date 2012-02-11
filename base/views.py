@@ -6,17 +6,18 @@ from django.utils import simplejson
 from django.template import RequestContext
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseServerError
 from NearsideBindings.base.forms import LoginForm,SignupForm,ImageCrop,ImageUpload, AjaxStandard
-from NearsideBindings.base.utils import JsonResponse, upload_image, get_gravatar_url, AjaxForbidden
+from NearsideBindings.base.utils import JsonResponse, upload_image, get_gravatar_url, small_avatar, AjaxForbidden
 from NearsideBindings.base.decorators import json_request, group_admin_required
 from NearsideBindings.settings import MEDIA_ROOT, MEDIA_URL, IMAGE_SAVE_CHOICES
 from NearsideBindings.group.models import Group, MemberShip
-from NearsideBindings.activity.models import Location
+from NearsideBindings.activity.models import *
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
+from messages.forms import ComposeForm
 import Image, os, urllib, md5
 
 def index(request):
@@ -26,7 +27,8 @@ def index(request):
 
 def home(request):
     """timeline"""
-    return render_to_response("home.html")
+    host = request.get_host()
+    return render_to_response("home.html",locals(), context_instance=RequestContext(request))
 
 def signup(request):
     if request.method=="POST" and (not request.POST.has_key('from_mainpage')):
@@ -108,7 +110,7 @@ def crop(request,save_to):
             box = (x1,y1,x2,y2)
             crop = img.crop(box)
             size = 150,150
-            crop.thumbnail(size,Image.ANTIALIAS)
+            crop = crop.resize(size,Image.ANTIALIAS)
             base_path=os.path.join(MEDIA_ROOT,save_to)
             if not os.path.isdir(base_path):
                 os.mkdir(base_path)
@@ -117,21 +119,26 @@ def crop(request,save_to):
             if not os.path.isdir(date_path):
                 os.mkdir(date_path)
             full_path = os.path.join(date_path,filename)
+            small = crop.copy()
             crop.save(full_path)
+            small_size = 20,20
+            small.thumbnail(small_size,Image.ANTIALIAS)
+            split = full_path.split('.')
+            small_fname = '.'.join(split[:-1]) + '_small.' + split[-1]
+            small.save(small_fname)
             return JsonResponse({'path':os.path.join(MEDIA_URL,save_to,date,filename)})
         else:
             return HttpResponseBadRequest()
     else:
         return HttpResponseForbidden()
 
-
 def get_users(request,request_phrase):
-    users = User.objects.filter(username__contains=request_phrase).order_by('username')[0:5]
-    return [{'avatar':user.avatar or get_gravatar_url(user.email),'name':user.last_name,'slug':user.username,'category':'user','id':user.id} for user in users]
+    users = User.objects.filter(username__contains=request_phrase).exclude(pk=0).order_by('username')[0:5]
+    return [{'avatar':small_avatar(user) or get_gravatar_url(user.email,20),'name':user.last_name,'slug':user.username,'category':'user','id':user.id} for user in users]
 
 def get_groups(request,request_phrase):
     groups=Group.objects.filter(Q(slug__contains=request_phrase) | Q(name__contains=request_phrase))[0:5]
-    return [{'avatar':group.avatar,'name':group.name,'slug':group.slug,'category':'group','id':group.id} for group in groups]
+    return [{'avatar':small_avatar(group),'name':group.name,'slug':group.slug,'category':'group','id':group.id} for group in groups]
 
 def join_group(request,request_phrase):
     group = Group.objects.get(slug=request_phrase)
@@ -147,12 +154,6 @@ def join_group(request,request_phrase):
         return [{'error':'You have joined this group',},]
     else:
         return [{'condition':group.condition.pk}]
-
-def get_current_user(request,request_phrase):
-    if request.user.is_authenticated():
-        return get_users(request,request.user.username)
-    else:
-        return [{'avatar':"/static/images/no_avatar.png",'name':"游客",'slug':'guest','category':'user'}]
 
 def get_child_location(request,request_phrase):
     locations = Location.objects.filter(parent=int(request_phrase)) 
@@ -225,6 +226,23 @@ def revoke_admin(request,request_phrase):
     membership.save()
     return ""
 
+@json_request
+def send_message(request,request_phrase):
+    form = ComposeForm(request_phrase)
+    if form.is_valid():
+        form.save(sender=request.user)
+        return ""
+    else:
+        raise AjaxForbidden
+
+@json_request
+@group_admin_required
+def accept_activity(request,request_phrase):
+    hostship = HostShip.objects.get(group__slug=request_phrase['group'],activity__id=request_phrase['activity'])
+    hostship.accepted = True
+    hostship.save()
+    return ""
+
 
 """ Callback swtich string | Callback list | Login requied """
 REQUEST_TYPES = (
@@ -232,7 +250,6 @@ REQUEST_TYPES = (
     ('user',[get_users,],False,),
     ('group',[get_groups,],False,),
     ('join_group',[join_group,],True),
-    ('current_user',[get_current_user,],True),
     ('location',[get_child_location,],False),
     ('create_location',[create_location,],False),
     ('member',[get_member,],True),
@@ -240,6 +257,8 @@ REQUEST_TYPES = (
     ('grant_admin',[grant_admin,],True),
     ('revoke_admin',[revoke_admin,],True),
     ('approve_member',[approve_member,],True),
+    ('send_message',[send_message,],True),
+    ('accept_activity',[accept_activity,],True)
 )
 
 @csrf_exempt
@@ -268,4 +287,4 @@ def json(request):
         return HttpResponseForbidden()
 
 def help(request):
-    return render_to_response('help.html')
+    return render_to_response('help.html', context_instance=RequestContext(request))

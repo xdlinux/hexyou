@@ -1,68 +1,105 @@
 {% extends "members/base.html" %}
 {% load gravatar %}
+{% load bootstrap %}
 
 {% block title %}
-{{ user.last_name }}
+{{ view_user.last_name }}
 {% endblock title %}
 
 {% block subtitle %}
-<a href="/members/{{ user }}">({{ user }})</a>
+<a href="/members/{{ view_user }}">({{ view_user }})</a>
 {% endblock subtitle %}
+
+{% block headeraction %}
+{% if is_me %}
+<a href="/profile/edit" class="btn btn-danger btn-small">编辑资料</a>
+{% endif %} 
+{% endblock headeraction %}
 
 {% block main %}
 <div class="row">
     <div class="span large-avatar">
-        <div class="avatar"><img src="{% avatar user %}" /></div>
-        <p id="member-counter">发起活动 <span class="label success">31</span>
-        <br />参加活动 <span class="label warning">4159</span></p>
+        <div class="avatar"><img src="{% avatar view_user %}" /></div>
     </div>
     <div class="span summary">
         <dl id="profile">
             <dt>主页</dt>
-            {% if user.site %}
-            <dd><a href="{{ user.site }}/">{{ user.site }}</a></dd>
+            {% if view_user.site %}
+            <dd><a href="{{ view_user.site }}/">{{ view_user.site }}</a></dd>
             {% else %}
-            <dd><a href="/members/{{ user.username }}">{{ user.last_name }}@嘿咻</a></dd>
+            <dd><a href="/members/{{ view_user.username }}">{{ view_user.last_name }}@嘿咻</a></dd>
             {% endif %}
             <dt>注册日期</dt>
-            <dd>{{ user.date_joined|date:"Y-m-d H:i"}}</dd>
+            <dd>{{ view_user.date_joined|date:"Y-m-d H:i"}}</dd>
         </dl>
-        <p class="well">{{ user.bio|default:"这个家伙很懒，什么都没有留下" }}</p>
+        <p class="well">{{ view_user.bio|default:"这个家伙很懒，什么都没有留下" }}</p>
     </div>
 </div>
 <p class="extra align-right">
-<a href="#" class="btn btn-primary">联系 {{ user.last_name }}</a>
+<a href="#send-message-modal" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope icon-white"></i> 联系 {{ user.last_name }}</a>
     <a href="#" class="btn">咻！</a>
 </p>
+<form id="send-message-form" action="/messages/compose/" method="post" class="form-horizontal inner-post">
+<div id="send-message-modal" class="modal fade hide">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>发送站内信</h3>
+    </div>
+    <div class="modal-body">
+        {% csrf_token %}
+        <div id="send-message-error" class="alert alert-error hide" data-alert="alert">
+            请填写主题和内容
+        </div>
+        <div class="control-group">
+            <label class="control-label">收件人</label>
+            <div class="controls">
+                <input class="disabled" type="text" disabled="" placeholder="{{ view_user }}" />
+                <input type="hidden" name="recipient" value="{{ view_user }}" />
+            </div>
+        </div>
+        {{ form.subject|label:"主题" }}
+        {{ form.body|label:"内容" }}
+    </div>
+    <div class="modal-footer">
+        <button class="btn" type="reset" data-dismiss="modal">取消</button>
+        <button id="send-message" class="btn btn-primary" type="submit"><i class="icon-envelope icon-white"></i> 发送</button>
+    </div>
+</div>
+</form>
 <h3>参加的活动</h3>
 <ul class="list">
+    {% for activity in attended_activities %}
     <li class="activity">
-            <div class="meta">
-                <img src="http://placehold.it/64x64" class="avatar" alt="" />
-                <p>1234 人参加</p>
-            </div>
-            <div class="content">
-                <h4>活动名称
-                <small><a href="#">发起组织</a></small></h4>
-                <p>于 yyyy-mm-dd 在 somewhere</p>
-                <p>广大人民群众喜闻乐见的</p>
-            </div>
+        <div class="meta">
+            <img src="{{ activity.avatar }}" class="avatar" alt="" />
+            <p>{{ activity.participators__count }} 人参加</p>
+        </div>
+        <div class="content">
+            <h4>{{ activity.title }}<br />
+            <small>{{ activity.host_string|safe }}</small></h4>
+            <p>于 {{ activity.begin_time|date:"Y-m-d h:m"}} 在 {{ activity.location }}</p>
+            <p>{{ activity.activity_type }}</p>
+        </div>
     </li>
-   <li class="activity">
-            <div class="meta">
-                <img src="http://placehold.it/64x64" class="avatar" alt="" />
-                <p>1234 人参加</p>
-            </div>
-            <div class="content">
-                <h4>活动名称
-                <small><a href="#">发起组织</a></small></h4>
-                <p>于 yyyy-mm-dd 在 somewhere</p>
-                <p>广大人民群众喜闻乐见的</p>
-            </div>
-    </li>
+    {% endfor %}
+</ul>
 {% endblock main %}
 
 {% block side %}
+<div id="side-counter">
+    <div class="side-counter-block">
+        <span class="description">发起活动</span>
+        <a href="#" class="count">1234</a>
+    </div>
+    <div class="side-counter-block">
+        <span class="description">合作活动</span>
+        <a href="#" class="count">56</a>
+    </div>
+    <div class="side-counter-block">
+        <span class="description">咻！</span>
+        <a href="#" class="count">789</a>
+    </div>
+</div>
 <h3>所在组织
     <small>({{ group_counter }})</small></h3>
 <ul class="avatar">

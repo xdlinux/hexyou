@@ -1,0 +1,18 @@
+{% load topbar %}
+<div class="well" style="padding: 8px 0;">
+    <ul class="nav nav-list">
+        <li class="nav-header">站内信</li>
+        <li class="{{ topbar|active:"inbox" }}"><a href="{% url messages_inbox %} " ><i class="icon-inbox {{ topbar|white:"inbox" }}"></i> 收件箱 ({{ messages_inbox_count }})</a></li>
+        <li class="{{ topbar|active:"outbox" }}"><a href="{% url messages_outbox %} " ><i class="icon-share-alt  {{ topbar|white:"outbox" }}"></i> 已发送</a></li>
+        <li class="{{ topbar|active:"compose" }}"><a href="{% url messages_compose %} " ><i class="icon-pencil  {{ topbar|white:"compose" }}"></i> 写站内信</a></li>
+        <li class="{{ topbar|active:"trash" }}"><a href="{% url messages_trash %} " ><i class="icon-trash  {{ topbar|white:"trash" }}"></i> 废件箱</a></li>
+        <li class="nav-header">活动与组织</li>
+        <li class="{{ topbar|active:"my_activities" }}"><a href="/activities/my" title=""><i class="icon-star  {{ topbar|white:"my_activities" }}"></i> 我的活动</a></li>
+        <li class="{{ topbar|active:"attended_activities" }}"><a href="/activities/joined" title=""><i class="icon-star-empty  {{ topbar|white:"my_activities" }}"></i> 我参加的活动</a></li>
+        <li class="{{ topbar|active:"my_groups" }}"><a href="/groups/my" title=""><i class="icon-th  {{ topbar|white:"my_groups" }}"></i> 我的组织</a></li>
+        <li class="nav-header">管理</li>
+        <li><a href="/profile" title=""><i class="icon-user"></i> 我的主页</a></li>
+        <li class="{{ topbar|active:"settings" }}"><a href="/profile/edit" title=""><i class="icon-cog {{ topbar|white:"settings"}}"></i> 设置</a></li>
+        <li class="{{ topbar|active:"help" }}"><a href="/help" title=""><i class="icon-flag {{ topbar|white:"help" }}"></i> 帮助</a></li>
+    </ul>
+</div>

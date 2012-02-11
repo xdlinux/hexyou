@@ -2,7 +2,7 @@
 
 {% block title %}{{ activity.title }}{% endblock title %}
 
-{% block subtitle %}by {% for hostship in fullhostship %}<a href="/members/{{ hostship.host }}">{{ hostship.host.last_name }}</a>@{% for group in hostship.groups %}<a href="/groups/{{ group.slug }}">{{ group }}{% if not forloop.last %},{% endif %}</a>{% endfor %}{% endfor %}{% endblock subtitle %}
+{% block subtitle %}{{ host_string|safe }}{% endblock subtitle %}
 
 {% block headeraction %}
 <a href="#" class="btn small danger">编辑活动</a>

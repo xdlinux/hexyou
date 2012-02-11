@@ -1,0 +1,48 @@
+{% extends "messages/base.html" %} 
+{% load topbar %}
+{% load gravatar %}
+{% load bootstrap %}
+
+{% block title %}收件箱{% endblock title %}
+
+{% block main %}
+{% if message_list %} 
+<table class="table table-striped messages">
+    <thead>
+        <tr>
+            <th width="120px">发件人</th>
+            <th width="220px">主题</th>
+            <th width="125px">时间</th>
+            <th>动作</th></tr>
+    </thead>
+    <tbody>
+{% for message in message_list %} 
+    <tr>
+        <td>
+            <a href="/members/{{ message.sender }}"><img src="{% small_avatar message.sender %}" class="avatar avatar-small" />{{ message.sender.last_name }}</a>
+        </td>
+        <td>
+            {% if message.new %}<strong>{% endif %}
+            {% if message.replied %}<em>{% endif %}
+            <a href="{{message.get_absolute_url }}">{{ message.subject }}</a>
+            {% if message.replied %}</em>{% endif %}
+            {% if message.new %}</strong>{% endif %}</td>
+        <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
+        <td>
+            {% ifnotequal message.sender.pk 0 %}
+            <a href="{% url messages.views.reply message.id %}">回复</a>                
+            {% endifnotequal %}
+            <a href="{% url messages.views.delete message.id %}">删除</a>
+        </td>
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="well">没有站内信</p>
+{% endif %}  
+{% endblock %}
+
+{% block side %}
+{% topbar inbox subnav.html %}
+{% endblock side %}

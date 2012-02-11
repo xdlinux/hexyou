@@ -13,6 +13,13 @@ def active(value,arg):
     else:
         return ""
 
+@register.filter
+def white(value,arg):
+  if value==arg:
+    return "icon-white"
+  else:
+    return ""
+
 
 class TopbarNode(template.Node):
     def __init__(self,ls):
@@ -28,6 +35,7 @@ class TopbarNode(template.Node):
             t=get_template(str(self.path))
         else:
             t=get_template("topbar.html" )
+            t.render(context)
         return t.render(context)
 
 @register.tag
