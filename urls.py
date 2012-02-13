@@ -16,7 +16,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^/?$',index),
-    url(r'^home/?$','NearsideBindings.base.views.home'),
+    url(r'^timeline/?$','NearsideBindings.base.views.timeline'),
     url(r'^signup/?$',signup),
     url(r'^login/?$',login),
     url(r'^logout/?$',logout),

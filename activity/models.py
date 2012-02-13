@@ -6,24 +6,15 @@ from NearsideBindings.group.models import Group
 from NearsideBindings.activity.signals import activity_inform
 
 class Location(models.Model):
-    name = models.CharField(max_length=30,unique=True)
-    parent = models.ForeignKey('Location',default=0)
+    name = models.CharField(max_length=30)
+    parent = models.ForeignKey('Location',null=True,blank=True)
     def __unicode__(self):
-        return self.name
-    def __getattr__(self,name):
-        if name == 'full_path':
-            self.full_path = self.name
-            self.get_path(self)
-            return self.full_path
-        super(Location, self).__getattr__(name)
+        return self.full_path()
 
-    def get_path(self,location):
-        try:
-            parent = location.parent
-        except Exception:
-            return ""
-        self.full_path = parent.name + u' - ' + self.full_path
-        self.get_path(parent)
+    def full_path(self):
+        if self.parent:
+            return "%s-%s" % (self.parent.full_path(),self.name)
+        else: return self.name
 
 class ActivityType(models.Model):
     title = models.CharField(max_length=20)
@@ -89,4 +80,4 @@ class HostShip(models.Model):
    activity = models.ForeignKey(Activity)
    accepted = models.BooleanField(default=False)
 
-post_save.connect(activity_inform,sender=HostShip)
+#post_save.connect(activity_inform,sender=HostShip)

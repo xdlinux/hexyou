@@ -31,7 +31,7 @@ def single(request,activity_id):
 
 @login_required(login_url="/login/")
 def create(request):
-    location_roots = Location.objects.filter(parent=0)
+    location_roots = Location.objects.filter(parent=None)
     if request.POST:
         form=ActivityForm(request.POST)
         if form.is_valid():

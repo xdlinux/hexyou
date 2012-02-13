@@ -20,8 +20,8 @@
         <div class="span5">
             <h2><a href="/activities/{{ top_activity.pk }}">{{ top_activity.title }}</a> <small>{{ top_activity.host_string|safe }}</small>
             </h2>
-            <p style="margin-left:12px;">开始于 {{ top_activity.begin_time|date:"Y年m月d日 H:m" }}，在 {{ top_activity.location.full_path }} </p>
-            <p>{{ top_activity.description|linebreaks|first_p }}</p>
+            <p style="margin-left:12px;">开始于 {{ top_activity.begin_time|date:"Y年m月d日 H:m" }}，在 {{ top_activity.location.name }} </p>
+            <p>{{ top_activity.description|linebreaks }}</p>
             <p class="align-right">
                 <a href="/activities/{{ top_activity.id }}" class="btn btn-primary btn-large">详细信息 »</a>
             </p>

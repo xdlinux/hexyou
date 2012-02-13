@@ -22,12 +22,23 @@ import Image, os, urllib, md5
 
 def index(request):
     if request.user.is_authenticated():
-        return redirect('/home/')
+        return redirect('/timeline/')
     return render_to_response("index.html",locals(),context_instance=RequestContext(request))
 
-def home(request):
-    """timeline"""
-    return render_to_response("home.html",locals(), context_instance=RequestContext(request))
+@login_required(login_url='/login/')
+def timeline(request):
+    try:
+        if request.GET and request.GET.has_key('offset'):
+            offset=int(request.GET['offset'])
+        else: offset=0
+    except Exception, e:
+        offset=0
+    prew_offset=offset-1
+    next_offset=offset+1
+    activities=Activity.objects.filter(hostship__accepted=True).filter(hostship__group__membership__user=request.user).order_by('-begin_time')[9*offset:9*offset+10]
+    if activities.count()<10:
+        next_offset=False
+    return render_to_response("timeline/timeline.html",locals(), context_instance=RequestContext(request))
 
 def signup(request):
     if request.method=="POST" and (not request.POST.has_key('from_mainpage')):
@@ -160,10 +171,8 @@ def get_child_location(request,request_phrase):
 
 @json_request
 def create_location(request,request_phrase):
-    new_location = Location(name=request_phrase['name'],parent=Location.objects.get(id=int(request_phrase['parent'])))
-    try:
-        new_location.save()
-    except IntegrityError:
+    new_location,create = Location.objects.get_or_create(name=request_phrase['name'],parent=Location.objects.get(id=int(request_phrase['parent'])))
+    if not create:
         return [{'error':'Duplicate name',},]
     else:
         return ""
