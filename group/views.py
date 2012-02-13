@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-  
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import InvalidPage, EmptyPage
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count
+from django.http import HttpResponseForbidden
+from django.template import Context,RequestContext
+from django.template.loader import get_template
 from django.shortcuts import render_to_response,redirect,get_object_or_404
 from NearsideBindings.activity.models import Activity, HostShip
+from NearsideBindings.base.utils import ExPaginator, inform
 from NearsideBindings.group.forms import NewGroupForm, AdminGroupForm
 from NearsideBindings.group.models import Group,MemberShip
-from django.contrib.auth.decorators import login_required
-from django.template import RequestContext
-from NearsideBindings.base.utils import ExPaginator
-from django.core.paginator import InvalidPage, EmptyPage
-from django.db.models import Count
-from django.core.exceptions import ObjectDoesNotExist
 
 def get_top_group():
     top_group = Group.objects.exclude(description="").exclude(avatar="/static/images/no_avatar.png").order_by('?')
@@ -61,13 +64,21 @@ def random(request):
     group = Group.objects.order_by('?')[0]
     return redirect('/groups/%s' % group.slug)
 
+def group_inform(group,user):
+    subject = u"[组织]"+ group.name + u" 邀请您加入"
+    t = get_template('groups/inform.html')
+    body = t.render(Context({'group':group}))
+    inform(subject,body,user)
+
 @login_required(login_url='/login/')
 def new(request):
     if request.POST:
         form = NewGroupForm(request.POST)
         success,group,membership=form.create_group(request.user)
         if success:
-            return redirect('/groups/%s' % group.slug)
+            for user_id in form.cleaned_data['inform_users']:         
+                group_inform(group,User.objects.get(pk=user_id))
+        return redirect('/groups/%s' % group.slug)
     else:
         form=NewGroupForm()
     return render_to_response('groups/new.html', {
@@ -156,4 +167,14 @@ def exit(request,group_slug):
             MemberShip.objects.get(user=request.user,group=group).delete()
         except ObjectDoesNotExist:
             pass
+        return redirect('/groups/')
+
+@login_required
+def disband(request,group_slug):
+    group = Group.objects.get(slug=group_slug)
+    if not request.user.pk == group.founder.pk:
+        return HttpResponseForbidden()
+    else:
+        MemberShip.objects.filter(group=group).delete()
+        group.delete()
         return redirect('/groups/')

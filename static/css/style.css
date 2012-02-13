@@ -19,7 +19,8 @@ div.avatar img:hover { box-shadow:0 0 8px #0088cc; }
 td.avatar { width:64px; }
 td img.avatar { border:1px solid #ccc; border-radius:6px; box-shadow:0 0 8px #ccc; width:64px; }
 td img.avatar:hover, ul.avatar img:hover { box-shadow:0 0 6px #0088cc; }
-td img.avatar-small { width:20px; vertical-align:middle; margin-right:4px; }
+.avatar-small { vertical-align:middle; }
+td img.avatar-small { width:20px; margin-right:4px; }
 .align-right { text-align:right; }
 .align-left { text-align:left; }
 .align-center { text-align:center; }
@@ -144,8 +145,8 @@ ul.list .content p { margin-bottom:2px; }
 
 
 /* location */
-.location-parent { list-style:none; border:1px solid #ccc; width:506px; margin:0 auto 12px; padding:12px; border-radius:4px; box-shadow:0 0 8px #ccc; }
-.location-parent>li { display:inline; }
+.location-parent { list-style:none; border:1px solid #ccc; width:506px; margin:0 auto 12px; padding:8px; border-radius:4px; box-shadow:0 0 8px #ccc; }
+.location-parent>li { display:inline; line-height:28px; }
 .location-parent>li>a { padding:7px 10px; font-size:14px; }
 .location-parent>li>a:hover, .location-parent>li>a.active { color:#fff; background:#0069D6; border-radius:15px; text-decoration:none; text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25); }
 

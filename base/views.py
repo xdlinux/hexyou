@@ -125,6 +125,7 @@ def crop(request,save_to):
             split = full_path.split('.')
             small_fname = '.'.join(split[:-1]) + '_small.' + split[-1]
             small.save(small_fname)
+            os.remove(abs_path)
             return JsonResponse({'path':os.path.join(MEDIA_URL,save_to,date,filename)})
         else:
             return HttpResponseBadRequest()
@@ -164,7 +165,7 @@ def create_location(request,request_phrase):
     try:
         new_location.save()
     except IntegrityError:
-        return [{'error':'Duplicate name',},]
+        raise AjaxForbidden()
     else:
         return ""
 

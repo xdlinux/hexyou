@@ -8,6 +8,7 @@ from NearsideBindings.base.utils import timebaseslug
 from django.core.validators import validate_slug
 from django.core.exceptions import ValidationError
 from NearsideBindings.settings import RESERVED_GROUP_SLUGS
+from NearsideBindings.base.forms import IdListField
 
 def validate_slug_access(slug):
     if len(slug)<4 or slug in RESERVED_GROUP_SLUGS:
@@ -16,6 +17,8 @@ def validate_slug_access(slug):
 class NewGroupForm(ModelForm):
 
     slug = forms.SlugField(required=True,validators=[validate_slug,validate_slug_access,],initial=timebaseslug,help_text="用于url，例如http://example.com/groups/slug")
+    inform_users = IdListField(required=False)
+
     class Meta:
         model = Group
         exclude = ('founder','members','friend_groups')
@@ -29,7 +32,7 @@ class NewGroupForm(ModelForm):
             group=self.save(commit=False)
             group.founder=user
             group.save()
-            membership=MemberShip.objects.create(user=user,group=group,is_admin=True)
+            membership=MemberShip.objects.create(user=user,group=group,is_admin=True,is_approved=True)
             return (True,group,membership)
         else: return (False,None,None)
     def __getitem__(self,name):
