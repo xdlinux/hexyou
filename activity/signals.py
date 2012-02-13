@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.template.loader import get_template
 from messages.models import Message
 from NearsideBindings.group.models import Group
-from NearsideBindings.activity.settings import *
 from django.template import Context
 
 def inform(subject,body,recipient):
