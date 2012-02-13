@@ -655,4 +655,9 @@ $(document).ready(function(){
 
   $('.accept-activity, .remove-activity, .cancle-cooperation').click(activityManage)
 
+  /* float fix */
+  $('#main>ul.list>li.activity:odd').each(function(index,element){
+    $(element).height($(element).prev().height())
+  })
+
 })

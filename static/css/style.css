@@ -96,7 +96,7 @@ ul.list .meta { float:left; margin-right:14px; text-align:center; }
 ul.list .content { float:left; }
 ul.list .content h4 { line-height:18px; }
 ul.list .content p { margin-bottom:2px; }
-#main ul.list>li { float:left; margin-right:10px; width:300px; }
+#main ul.list>li { float:left; margin:0 10px 10px 0; width:300px; }
 #main ul.list .meta { width:72px;  }
 #main ul.list .content { width:194px; }
 #side ul.list>li { float:left; width:280px; }
