@@ -1,0 +1,23 @@
+{% load gravatar %}
+<div class="row">
+    <div class="span" style="width:410px;">
+        <h3>{{ group.title }}</h3>
+        <dl>
+            <dt>创始人</dt>
+            <dd><a href="/members/{{ group.founder.username }}">{{ group.founder.last_name }}</a></dd>
+            <dt>始于</dt>
+            <dd>{{ group.create_date|date:"Y-m-d" }}</dd>
+            <dt>链接<dt>
+            <dd>{% if group.site %}{{ group.site|urlize }}{% else %}<a href="/groups/{{ group.slug }}">{{ group.name }}@嘿咻</a>{% endif %}</dd>
+        </dl>
+    </div>
+    <div class="span large-avatar avatar">
+        <a href="/groups/{{ group.slug }}">
+            <img src="{{ group.avatar }}" />
+        </a>
+    </div>
+</div>
+{{ group.description|linebreaks }}
+<p>
+    <a href="/groups/{{ group.slug }}" class="btn btn-primary btn-large">详细信息...</a>
+</p>

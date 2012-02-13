@@ -136,6 +136,7 @@ def crop(request,save_to):
             split = full_path.split('.')
             small_fname = '.'.join(split[:-1]) + '_small.' + split[-1]
             small.save(small_fname)
+            os.remove(abs_path)
             return JsonResponse({'path':os.path.join(MEDIA_URL,save_to,date,filename)})
         else:
             return HttpResponseBadRequest()
@@ -171,9 +172,11 @@ def get_child_location(request,request_phrase):
 
 @json_request
 def create_location(request,request_phrase):
-    new_location,create = Location.objects.get_or_create(name=request_phrase['name'],parent=Location.objects.get(id=int(request_phrase['parent'])))
-    if not create:
-        return [{'error':'Duplicate name',},]
+    new_location = Location(name=request_phrase['name'],parent=Location.objects.get(id=int(request_phrase['parent'])))
+    try:
+        new_location.save()
+    except IntegrityError:
+        raise AjaxForbidden()
     else:
         return ""
 

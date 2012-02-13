@@ -1,10 +1,12 @@
+import os, ImageFile, md5, time, urllib, hashlib
 from django.core.serializers import json, serialize
 from django.core.paginator import Paginator
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.utils import simplejson
+from messages.models import Message
 from NearsideBindings.settings import MEDIA_ROOT, MEDIA_URL
-import os, ImageFile, md5, time, urllib, hashlib
+from django.contrib.auth.models import User
 
 class JsonResponse(HttpResponse):
     def __init__(self, object):
@@ -56,3 +58,7 @@ def small_avatar(entity):
 
 def timebaseslug():
     return md5.new(str(time.time())).hexdigest()
+
+def inform(subject,body,recipient):
+    new_msg = Message(subject=subject,body=body,sender=User.objects.get(pk=0),recipient=recipient)
+    new_msg.save()

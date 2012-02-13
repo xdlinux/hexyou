@@ -25,6 +25,18 @@
         </div>
     </div>
     {{ form.description|label:"介绍" }}
+    <div class="control-group">
+        <label for="inform-input" class="control-label">邀请</label>
+        <div class="controls">
+            <div class="input-prepend">
+                <span class="add-on">@</span>
+                <input id="inform-input" type="text" name="" value="" request-type="user">
+                <input type="hidden" class="inform-list user" name="inform_users" />
+            </div>
+            <div id="label-list">
+            </div>
+        </div>
+    </div>
     <div class="form-actions">
         {% if form.errors %}
         <ul class="errors">            
@@ -43,18 +55,8 @@
 
 {% block side %}
 <h3>中国特色小组创建精神</h3>
+<p>组织创建可以通过站内信 <a href="#inform-input">邀请</a> 好友</p>
 <p><strong>实体组织</strong> 的创建需要通过审核，请确保创始人的联系方式正确。审核结果会以邮件告知，请耐心等待。</p>
 <p><strong>虚拟组织</strong> 名称请不要与 <strong>实体组织</strong> 相同。</p>
 </ul>
-<h3>三人行，必有我师</h3>
-<form id="side-activity-invition" action="" method="post" accept-charset="utf-8">
-    <div class="input-prepend holding">
-        <span class="add-on">@</span>
-        <input id="inform-input" type="text" name="" value="" request-type="user">
-        <textarea id="inform-list" name="inform" class="hide"></textarea>
-        <span class="holder">邀请好友</span>
-    </div>
-    <div id="label-list">
-    </div>
-</form>
 {% endblock side %}

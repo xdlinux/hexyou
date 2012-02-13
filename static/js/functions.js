@@ -254,14 +254,15 @@ $(document).ready(function(){
 /* location */
 
   function getLocations(a){
-    ul = a.parent().parent()
+    var ul = a.parent().parent()
     $.ajax({
       data : {
         request_type : 'location',
         request_phrase : a.attr('request-phrase')
       },
       success:function(data){
-        if(data.length){
+        console.log(data)
+        if(data!=""){
           $("#location-no-child").slideUp()
           ul.nextAll().slideUp('normal',function(){
             $(this).not("#location-no-child").remove()
@@ -279,7 +280,7 @@ $(document).ready(function(){
           })
           $("#location-no-child").slideDown()
         }
-      }
+      },
     })
   }
 
@@ -322,23 +323,24 @@ $(document).ready(function(){
   $('#location-select-create').click(function(){
     if(!$('#location-selected').data('location_id')){
       $('#location-no-selected').slideDown('normal',function(){
-        setTimeout(function(){$('#image-crop-error').slideUp()},5000)
+        setTimeout(function(){$('#location-no-selected').slideUp()},5000)
       })
     }else{
-      r = '{"name":"'+$('#location-selected').val()+'",'+'"parent":"'+$('#location-selected').data('location_id')+'"}'
       $.ajax({
         data : {
           request_type : 'create_location',
-          request_phrase : r
+          request_phrase : $.toJSON({
+            name:$('#location-selected').val(),
+            parent:$('#location-selected').data('location_id')
+          })
         },
         success:function(data){
-          if(data){
-            $('#location-duplicate').slideDown('normal',function(){
-              setTimeout(function(){$('#location-duplicate').slideUp()},5000)
-            })
-          }else{
-            
-          }
+          clickLocation($('ul.location-parent').has('a.active').last().find('a.active'))
+        },
+        error:function(){
+          $('#location-duplicate').slideDown('normal',function(){
+            setTimeout(function(){$('#location-duplicate').slideUp()},5000)
+          })
         }
       })
     }
@@ -407,7 +409,7 @@ $(document).ready(function(){
   }
 
 
-/* member search */
+/* group manager */
 
   function groupAction(action,dropdown_option){
     var user_id = dropdown_option.closest('.btn-group').attr('user-id')
@@ -652,5 +654,10 @@ $(document).ready(function(){
   }
 
   $('.accept-activity, .remove-activity, .cancle-cooperation').click(activityManage)
+
+  /* float fix */
+  $('#main>ul.list>li.activity:odd').each(function(index,element){
+    $(element).height($(element).prev().height())
+  })
 
 })

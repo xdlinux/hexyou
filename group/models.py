@@ -1,10 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import date
-
-# Create your models here.
-
-
 
 class Condition(models.Model):
     title = models.CharField(max_length=20, blank=True)
@@ -31,7 +26,6 @@ class Group(models.Model):
     friend_groups = models.ManyToManyField('Group')
     def __unicode__(self):
         return self.name
-    
 
 class MemberShip(models.Model):
     user = models.ForeignKey(User)
