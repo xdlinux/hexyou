@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-  
-from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.template.loader import get_template
 from messages.models import Message
