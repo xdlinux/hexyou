@@ -9,7 +9,7 @@ class Location(models.Model):
     name = models.CharField(max_length=30,unique=True)
     parent = models.ForeignKey('Location',null=True,blank=True)
     def __unicode__(self):
-        return self.full_path()
+        return self.name
 
     def full_path(self):
         if self.parent:
@@ -34,6 +34,10 @@ class Activity(models.Model):
     # participators = models.ManyToManyField(User, related_name='participators')
     # hosts = models.ManyToManyField(User, related_name='hosts')
     host_groups = models.ManyToManyField(Group, through='HostShip')
+    def __unicode__(self):
+        return self.title
+
+
     def __getattr__( self, name ):
         if name == 'host_string':
             self.host_string = self.get_host_string()
@@ -73,7 +77,6 @@ class Activity(models.Model):
             host_string = host_string[:-1]
             host_string += " "
         return host_string
-
 
 class HostShip(models.Model):
     """hostship between group and Activity"""

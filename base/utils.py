@@ -65,3 +65,4 @@ def timebaseslug():
 def inform(subject,body,recipient):
     new_msg = Message(subject=subject,body=body,sender=User.objects.get(pk=0),recipient=recipient)
     new_msg.save()
+
