@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% load topbar %}
+
+{% block header %}
+{% topbar home %}
+{% endblock %}
+
+{% block title %}时间线{% endblock title %}
+
+{% block container %}
+<div class="content">
+    <div class="row">
+        <div id="main" class="span8">
+            <div id="timeline-header" class="page-header">
+                <form id="header-post" action="" method="get" accept-charset="utf-8">
+                    <h2>独乐乐不如众乐乐</h2>
+                    <textarea name="" class="span8"></textarea>
+                    <div id="header-post-action">
+                        <div class="float-left">
+                            <a href="#">地点</a>
+                            <a href="#">日期</a>
+                            <a href="#">图片</a>
+                        </div>
+                        <div class="float-right">
+                            <input type="submit" name="" class="btn" value="发布" />
+                        </div>
+                    </div>
+                </form>
+             </div>
+             <div id="timeline-container">
+                 {% if activities %}
+                 {% for activity in activities %}
+                    {% include "timeline/timeline-node.html" %}
+                 {% endfor %}
+                 {% else %}
+                 <p>时间线上没有任何活动！加入更多组织以浏览即将举办的活动！</p>
+                 {% endif %}
+                 <div class="pagination pagination-centered">
+                     <ul>
+                         <li>
+                         <a href="?">最新</a>
+                         </li>
+                         {% if offset %}
+                         <li>
+                         <a href="?offset={{prew_offset}}">前一页</a>
+                         </li>
+                         {% endif %}
+                         {% if next_offset %}
+                         <li>
+                         <a href="?offset={{ next_offset }}">后一页</a>
+                         </li>
+                         {% endif %}
+                     </ul>
+                 </div>
+             </div>
+         </div>
+         <div id="side" class="span4">
+             <h2>欢迎，<a href="#">Kim Jong II</a></h2>
+            <div id="side-counter" style="">
+                <div class="side-counter-block">
+                    <span class="description">参加活动</span>
+                    <a href="#" class="count">1234</a>
+                </div>
+                <div class="side-counter-block">
+                    <span class="description">发起活动</span>
+                    <a href="#" class="count">56</a>
+                </div>
+                <div class="side-counter-block">
+                    <span class="description">咻！</span>
+                    <a href="#" class="count">789</a>
+                </div>
+            </div>
+            <form id="side-search" action="" method="post" accept-charset="utf-8">
+                <div class="input-prepend holding">
+                    <span class="add-on">搜索</span>
+                    <input class="search-input" type="text" name="" value="">
+                    <span class="holder">活动，组织，发现其它</span>
+                </div>
+            </form>
+            <h3>日历</h3>
+            <img src="http://placehold.it/280x175" />
+            <h3>我的组织
+                <small>(233)</small></h3>
+            <ul class="media-grid avatar">
+                <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+                <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+                <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+                <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+                <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+                <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+                <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+                <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+            </ul>
+            <h3>推荐活动</h3>
+            <ul class="list">
+                <li class="activity">
+                    <div class="meta">
+                        <img src="http://placehold.it/64x64" class="avatar" alt="" />
+                        <p>1234 人参加</p>
+                    </div>
+                    <div class="content">
+                        <h4>活动名称
+                        <small><a href="#">发起组织</a></small></h4>
+                        <p>于 yyyy-mm-dd 在 somewhere</p>
+                        <p>广大人民群众喜闻乐见的</p>
+                    </div>
+                </li>
+                <li class="activity">
+                    <div class="meta">
+                        <img src="http://placehold.it/64x64" class="avatar" alt="" />
+                        <p>1234 人参加</p>
+                    </div>
+                    <div class="content">
+                        <h4>活动名称
+                        <small><a href="#"></a></small></h4>
+                        <p>于 yyyy-mm-dd 在 somewhere</p>
+                        <p>广大人民群众喜闻乐见的</p>
+                    </div>
+                </li>
+                <li class="activity">
+                    <div class="meta">
+                        <img src="http://placehold.it/64x64" class="avatar" alt="" />
+                        <p>1234 人参加</p>
+                    </div>
+                    <div class="content">
+                        <h4>活动名称
+                        <small><a href="#">发起组织</a></small></h4>
+                        <p>于 yyyy-mm-dd 在 somewhere</p>
+                        <p>广大人民群众喜闻乐见的</p>
+                    </div>
+                </li>
+                <li class="activity">
+                    <div class="meta">
+                        <img src="http://placehold.it/64x64" class="avatar" alt="" />
+                        <p>1234 人参加</p>
+                    </div>
+                    <div class="content">
+                        <h4>活动名称
+                        <small><a href="#">发起组织</a></small></h4>
+                        <p>于 yyyy-mm-dd 在 somewhere</p>
+                        <p>广大人民群众喜闻乐见的</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<footer id="footer">
+    <div class="container">
+        <p id="copyright">&copy; HexYou 2011</p>
+    </div>
+</footer>
+{% endblock container %}

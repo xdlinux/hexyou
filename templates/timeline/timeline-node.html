@@ -1,0 +1,15 @@
+<div class="timeline-node">
+    <div class="meta">
+        <img src="http://placehold.it/64x64" class="avatar" alt="" />
+        <p>{{ activity.participators.count }} 人参加</p>
+        <p class="action"><a href="#" class="small btn ">参加</a>
+        <p class="action"><a href="#" class="small btn btn-primary">咻！</a></p>
+    </div>
+    <div class="content">
+        <h4>{{ activity.title}}
+        </h4>
+        <p>{{ activity.activity_type }}</p>
+        <p>于 {{ activity.begin_time|date:'Y年m月d日' }} 在 {{ activity.location.name }}</p>
+        <p class="intro">{{ activity.description }}</p>
+    </div>
+</div>
