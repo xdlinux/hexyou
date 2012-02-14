@@ -60,7 +60,7 @@
             <div id="side-counter" style="">
                 <div class="side-counter-block">
                     <span class="description">参加活动</span>
-                    <a href="#" class="count">1234</a>
+                    <a href="#" class="count">{{ activities_count }}</a>
                 </div>
                 <div class="side-counter-block">
                     <span class="description">发起活动</span>
@@ -78,8 +78,8 @@
                     <span class="holder">活动，组织，发现其它</span>
                 </div>
             </form>
-            <h3>日历</h3>
-            <img src="http://placehold.it/280x175" />
+            <h3>活动日历</h3>
+                {% include "activities/lately.html" %}
             <h3>我的组织
                 <small>(233)</small></h3>
             <ul class="media-grid avatar">

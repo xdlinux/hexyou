@@ -16,9 +16,27 @@ from django.db import IntegrityError
 from django.db.models import Q
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from datetime import datetime
+from datetime import datetime,timedelta
 from messages.forms import ComposeForm
 import Image, os, urllib, md5
+
+def filter_activities_of_user(user):
+    """docstring for filter_activities_of_user"""
+    acts=user.participate_activities.filter(hostship__accepted=True).order_by('begin_time').filter(begin_time__gte=datetime.now(),begin_time__lte=(datetime.now()+timedelta(7))).all()
+    if len(acts)>0:
+        grouped=[]
+        ct=acts[0].begin_time
+        cg=[]
+        for a in acts:
+            if a.begin_time.year==ct.year and a.begin_time.month==ct.month and a.begin_time.day==ct.day:
+                cg.append(a)
+            else:
+                grouped.append(cg)
+                cg=[]
+                cg.append(a)
+                ct=a.begin_time
+        grouped.append(cg)
+    return user.participate_activities.count(),grouped
 
 def index(request):
     if request.user.is_authenticated():
@@ -27,6 +45,7 @@ def index(request):
 
 @login_required(login_url='/login/')
 def timeline(request):
+    activities_count,lately_activities=filter_activities_of_user(request.user)
     try:
         if request.GET and request.GET.has_key('offset'):
             offset=int(request.GET['offset'])
@@ -35,7 +54,7 @@ def timeline(request):
         offset=0
     prew_offset=offset-1
     next_offset=offset+1
-    activities=Activity.objects.filter(hostship__accepted=True).filter(hostship__group__membership__user=request.user).order_by('-begin_time')[9*offset:9*offset+10]
+    activities=Activity.objects.filter(hostship__accepted=True).filter(hostship__group__membership__user=request.user).order_by('-begin_time').distinct()[9*offset:9*offset+10]
     if activities.count()<10:
         next_offset=False
     return render_to_response("timeline/timeline.html",locals(), context_instance=RequestContext(request))

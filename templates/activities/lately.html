@@ -1,0 +1,39 @@
+{% if lately_activities %}
+<table class="table table-condensed table-bordered">
+    {% for group in lately_activities %}
+    {% for activity in group %}
+    {% if forloop.first %}
+    <tr>
+        <th colspan="3">
+            {{ activity.begin_time|date:'Y-m-d' }}
+        </th>
+        <th>
+            <i class="icon-map-marker"></i>
+        </th>
+    </tr>
+    {% endif %}
+    <tr>
+        <td>&nbsp;</td>
+        <td>{{ activity.begin_time|date:'H:i' }}</td> 
+        <td>
+            <a href="{% url NearsideBindings.activity.views.single activity.id %}" >
+                {{ activity }}
+            </a>
+        </td>
+        <td>
+            {{ activity.location }}
+        </td>
+    </tr>
+    {% endfor %}
+    {% endfor %}
+</table>
+{% else %}
+<div class="well">
+    <p>
+    七日内没有参加任何活动
+    </p>
+    <p>
+    <a href="/activities">去看看有什么好玩的活动</a>!
+    </p>
+</div>
+{% endif %}
