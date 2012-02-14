@@ -30,7 +30,7 @@ class Activity(models.Model):
     end_time = models.DateTimeField()
     description = models.TextField(blank=True,null=True)
     location = models.ForeignKey(Location)
-    members = models.ManyToManyField(User,through='MemberHostShip')
+    members = models.ManyToManyField(User,through='MemberHostShip',related_name='participated_activities')
     # participators = models.ManyToManyField(User, related_name='participators')
     # hosts = models.ManyToManyField(User, related_name='hosts')
     host_groups = models.ManyToManyField(Group, through='HostShip')

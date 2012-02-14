@@ -22,9 +22,9 @@ import Image, os, urllib, md5
 
 def filter_activities_of_user(user):
     """docstring for filter_activities_of_user"""
-    acts=user.participate_activities.filter(hostship__accepted=True).order_by('begin_time').filter(begin_time__gte=datetime.now(),begin_time__lte=(datetime.now()+timedelta(7))).all()
+    acts=user.participated_activities.filter(hostship__accepted=True).order_by('begin_time').filter(begin_time__gte=datetime.now(),begin_time__lte=(datetime.now()+timedelta(7))).all()
+    grouped=[]
     if len(acts)>0:
-        grouped=[]
         ct=acts[0].begin_time
         cg=[]
         for a in acts:
@@ -36,7 +36,7 @@ def filter_activities_of_user(user):
                 cg.append(a)
                 ct=a.begin_time
         grouped.append(cg)
-    return user.participate_activities.count(),grouped
+    return user.participated_activities.count(),grouped
 
 def index(request):
     if request.user.is_authenticated():
