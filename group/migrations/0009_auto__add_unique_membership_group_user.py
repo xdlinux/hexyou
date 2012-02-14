@@ -8,49 +8,17 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Removing unique constraint on 'Location', fields ['name']
-        db.delete_unique('activity_location', ['name'])
+        # Adding unique constraint on 'MemberShip', fields ['group', 'user']
+        db.create_unique('group_membership', ['group_id', 'user_id'])
 
 
     def backwards(self, orm):
         
-        # Adding unique constraint on 'Location', fields ['name']
-        db.create_unique('activity_location', ['name'])
+        # Removing unique constraint on 'MemberShip', fields ['group', 'user']
+        db.delete_unique('group_membership', ['group_id', 'user_id'])
 
 
     models = {
-        'activity.activity': {
-            'Meta': {'object_name': 'Activity'},
-            'activity_type': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': "orm['activity.ActivityType']"}),
-            'avatar': ('django.db.models.fields.CharField', [], {'default': "'/static/images/no_avatar.png'", 'max_length': '100'}),
-            'begin_time': ('django.db.models.fields.DateTimeField', [], {}),
-            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'end_time': ('django.db.models.fields.DateTimeField', [], {}),
-            'host_groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['group.Group']", 'through': "orm['activity.HostShip']", 'symmetrical': 'False'}),
-            'hosts': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'hosts'", 'symmetrical': 'False', 'to': "orm['auth.User']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['activity.Location']"}),
-            'participators': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'participators'", 'symmetrical': 'False', 'to': "orm['auth.User']"}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '30'})
-        },
-        'activity.activitytype': {
-            'Meta': {'object_name': 'ActivityType'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '20'})
-        },
-        'activity.hostship': {
-            'Meta': {'object_name': 'HostShip'},
-            'accepted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'activity': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['activity.Activity']"}),
-            'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['group.Group']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        'activity.location': {
-            'Meta': {'object_name': 'Location'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['activity.Location']", 'null': 'True', 'blank': 'True'})
-        },
         'auth.group': {
             'Meta': {'object_name': 'Group'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -121,7 +89,7 @@ class Migration(SchemaMigration):
             'title': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         },
         'group.membership': {
-            'Meta': {'object_name': 'MemberShip'},
+            'Meta': {'unique_together': "(('group', 'user'),)", 'object_name': 'MemberShip'},
             'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['group.Group']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_admin': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -131,4 +99,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['activity']
+    complete_apps = ['group']

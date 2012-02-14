@@ -23,11 +23,11 @@ def single(request,username):
     is_me = request.user.username==username
     groups = [ membership.group for membership in MemberShip.objects.filter(user=view_user,is_approved=True) ]
     group_counter = len(groups)
-    attended_activities = Activity.objects.filter(participators=view_user)
-    attended_activities_slice = attended_activities[:4].annotate(Count('participators'))
+    attended_activities = Activity.objects.filter(members=view_user)
+    attended_activities_slice = attended_activities[:4].annotate(Count('members'))
     attended_activities_count = attended_activities.count()
-    host_activities = Activity.objects.filter(hosts=view_user)
-    host_activities_slice = host_activities[:4].annotate(Count('participators'))
+    host_activities = Activity.objects.filter(members=view_user)
+    host_activities_slice = host_activities[:4].annotate(Count('members'))
     host_activities_count = host_activities.count()
     form = ComposeForm()
     return render_to_response('members/single.html',locals(), context_instance=RequestContext(request))

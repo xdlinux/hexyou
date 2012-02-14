@@ -8,12 +8,58 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
+        # Adding model 'MemberHostShip'
+        db.create_table('activity_memberhostship', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('activity', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['activity.Activity'])),
+            ('is_host', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('activity', ['MemberHostShip'])
+
+        # Adding unique constraint on 'MemberHostShip', fields ['user', 'activity']
+        db.create_unique('activity_memberhostship', ['user_id', 'activity_id'])
+
+        # Removing M2M table for field participators on 'Activity'
+        db.delete_table('activity_activity_participators')
+
+        # Removing M2M table for field hosts on 'Activity'
+        db.delete_table('activity_activity_hosts')
+
+        # Adding unique constraint on 'HostShip', fields ['group', 'activity']
+        db.create_unique('activity_hostship', ['group_id', 'activity_id'])
+
         # Changing field 'Location.parent'
         db.alter_column('activity_location', 'parent_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['activity.Location'], null=True))
 
 
     def backwards(self, orm):
         
+        # Removing unique constraint on 'HostShip', fields ['group', 'activity']
+        db.delete_unique('activity_hostship', ['group_id', 'activity_id'])
+
+        # Removing unique constraint on 'MemberHostShip', fields ['user', 'activity']
+        db.delete_unique('activity_memberhostship', ['user_id', 'activity_id'])
+
+        # Deleting model 'MemberHostShip'
+        db.delete_table('activity_memberhostship')
+
+        # Adding M2M table for field participators on 'Activity'
+        db.create_table('activity_activity_participators', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('activity', models.ForeignKey(orm['activity.activity'], null=False)),
+            ('user', models.ForeignKey(orm['auth.user'], null=False))
+        ))
+        db.create_unique('activity_activity_participators', ['activity_id', 'user_id'])
+
+        # Adding M2M table for field hosts on 'Activity'
+        db.create_table('activity_activity_hosts', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('activity', models.ForeignKey(orm['activity.activity'], null=False)),
+            ('user', models.ForeignKey(orm['auth.user'], null=False))
+        ))
+        db.create_unique('activity_activity_hosts', ['activity_id', 'user_id'])
+
         # Changing field 'Location.parent'
         db.alter_column('activity_location', 'parent_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['activity.Location']))
 
@@ -27,10 +73,9 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'end_time': ('django.db.models.fields.DateTimeField', [], {}),
             'host_groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['group.Group']", 'through': "orm['activity.HostShip']", 'symmetrical': 'False'}),
-            'hosts': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'hosts'", 'symmetrical': 'False', 'to': "orm['auth.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['activity.Location']"}),
-            'participators': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'participators'", 'symmetrical': 'False', 'to': "orm['auth.User']"}),
+            'members': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.User']", 'through': "orm['activity.MemberHostShip']", 'symmetrical': 'False'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '30'})
         },
         'activity.activitytype': {
@@ -39,7 +84,7 @@ class Migration(SchemaMigration):
             'title': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         },
         'activity.hostship': {
-            'Meta': {'object_name': 'HostShip'},
+            'Meta': {'unique_together': "(('group', 'activity'),)", 'object_name': 'HostShip'},
             'accepted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'activity': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['activity.Activity']"}),
             'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['group.Group']"}),
@@ -49,7 +94,14 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Location'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['activity.Location']", 'null': 'True'})
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['activity.Location']", 'null': 'True', 'blank': 'True'})
+        },
+        'activity.memberhostship': {
+            'Meta': {'unique_together': "(('user', 'activity'),)", 'object_name': 'MemberHostShip'},
+            'activity': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['activity.Activity']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_host': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -121,7 +173,7 @@ class Migration(SchemaMigration):
             'title': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         },
         'group.membership': {
-            'Meta': {'object_name': 'MemberShip'},
+            'Meta': {'unique_together': "(('group', 'user'),)", 'object_name': 'MemberShip'},
             'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['group.Group']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_admin': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),

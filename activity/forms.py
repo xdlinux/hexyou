@@ -10,7 +10,7 @@ class ActivityForm(forms.ModelForm):
     inform_users = IdListField(required=False)
     class Meta:
         model = Activity
-        exclude = ('hosts','participators',)
+        exclude = ('members',)
         widgets = {
             'avatar':forms.HiddenInput(),
             'location':forms.HiddenInput(),

@@ -53,8 +53,11 @@ def get_gravatar_url(email,size=150):
     return gravatar_url
 
 def small_avatar(entity):
-    split = entity.avatar.split('.')
-    return '.'.join(split[:-1])+'_small.'+split[-1]
+    if entity.avatar:
+        split = entity.avatar.split('.')
+        return '.'.join(split[:-1])+'_small.'+split[-1]
+    else:
+        return False
 
 def timebaseslug():
     return md5.new(str(time.time())).hexdigest()

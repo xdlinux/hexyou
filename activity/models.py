@@ -6,7 +6,7 @@ from NearsideBindings.group.models import Group
 from NearsideBindings.activity.signals import activity_inform
 
 class Location(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30,unique=True)
     parent = models.ForeignKey('Location',null=True,blank=True)
     def __unicode__(self):
         return self.full_path()
@@ -30,8 +30,9 @@ class Activity(models.Model):
     end_time = models.DateTimeField()
     description = models.TextField(blank=True,null=True)
     location = models.ForeignKey(Location)
-    participators = models.ManyToManyField(User, related_name='participators')
-    hosts = models.ManyToManyField(User, related_name='hosts')
+    members = models.ManyToManyField(User,through='MemberHostShip')
+    # participators = models.ManyToManyField(User, related_name='participators')
+    # hosts = models.ManyToManyField(User, related_name='hosts')
     host_groups = models.ManyToManyField(Group, through='HostShip')
     def __getattr__( self, name ):
         if name == 'host_string':
@@ -54,7 +55,7 @@ class Activity(models.Model):
     def get_host_string(self,with_link=True):
         accepted_groups = [ hostship.group for hostship in HostShip.objects.filter(activity=self) if hostship.accepted ]
         fullhostship = []
-        for host in self.hosts.all():
+        for host in self.members.filter(memberhostship__is_host=True):
             real_groups = Group.objects.filter(members=host)
             fullhostship.append({'host':host,'groups':set(accepted_groups) & set(real_groups)})
         host_string = u'by '
@@ -75,9 +76,20 @@ class Activity(models.Model):
 
 
 class HostShip(models.Model):
-   """hostship between group and Activity"""
-   group = models.ForeignKey(Group)
-   activity = models.ForeignKey(Activity)
-   accepted = models.BooleanField(default=False)
+    """hostship between group and Activity"""
+    group = models.ForeignKey(Group)
+    activity = models.ForeignKey(Activity)
+    accepted = models.BooleanField(default=False)
+    class Meta:
+        unique_together = ('group','activity')
 
-#post_save.connect(activity_inform,sender=HostShip)
+
+class MemberHostShip(models.Model):
+    """hostship between member and activity"""
+    user = models.ForeignKey(User)
+    activity = models.ForeignKey(Activity)
+    is_host = models.BooleanField(default=False)
+    class Meta:
+        unique_together = ('user','activity')
+
+post_save.connect(activity_inform,sender=HostShip)

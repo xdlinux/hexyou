@@ -16,10 +16,10 @@ from django.template import Context
 def frontpage(request):
     """docstring for group"""
     types = ActivityType.objects.all()
-    location_roots = Location.objects.filter(parent=0)
+    location_roots = Location.objects.filter(parent=None)
     top_activity = Activity.objects.order_by('?')
-    activities = Activity.objects.order_by('-id')[:8].annotate(Count('participators'))
-    hot_activities = Activity.objects.annotate(Count('participators')).order_by('-participators__count')[:4]
+    activities = Activity.objects.order_by('-id')[:8].annotate(Count('members'))
+    hot_activities = Activity.objects.annotate(Count('members')).order_by('-members__count')[:4]
     if top_activity:
         top_activity=top_activity[0]
     return render_to_response('activities/frontpage.html',locals(), context_instance=RequestContext(request))
@@ -37,10 +37,13 @@ def create(request):
         if form.is_valid():
             activity = form.save(commit=False)
             activity.save()
-            activity.hosts.add(request.user)
+            memberhost = MemberHostShip(is_host=True,activity=activity,user=request.user)
+            memberhost.save()
             for host_group in form.cleaned_data['host_groups']:
                 group = Group.objects.get(pk=host_group)
                 hostship = HostShip(activity=activity,group=group)
+                if MemberShip.objects.get(group=group,user=request.user).is_admin:
+                    hostship.accepted = True
                 hostship.save()
             subject = u"[活动]"+ activity.title + u" " + activity.get_host_string(False)
             t = get_template('activities/create_inform.html')

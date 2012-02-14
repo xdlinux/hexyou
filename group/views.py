@@ -47,8 +47,11 @@ def single(request,group_slug):
     group = get_object_or_404(Group,slug=group_slug)
     friend_groups = group.friend_groups.all().order_by('?')[:8]
     members = [ membership.user for membership in MemberShip.objects.filter(group=group,is_approved=True).order_by('?')[0:7] ]
-    member_counter = len(members)
-    last_activities = Activity.objects.filter(host_groups=group,hostship__accepted=True)[:4]
+    member_counter = MemberShip.objects.filter(group=group,is_approved=True).count()
+    activities = Activity.objects.filter(host_groups=group)
+    activities_count = activities.count()
+    co_activities_count = HostShip.objects.filter(group=group,accepted=True).annotate(host_groups_count=Count('activity__host_groups')).filter(host_groups_count__gt=1).count()
+    last_activities = activities[:4]
     try:
         membership = MemberShip.objects.get(user=request.user,group=group)
     except MemberShip.DoesNotExist:

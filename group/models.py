@@ -33,3 +33,5 @@ class MemberShip(models.Model):
     joined_date = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
+    class Meta:
+        unique_together = ('group','user')
