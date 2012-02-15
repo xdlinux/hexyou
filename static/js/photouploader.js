@@ -1,5 +1,13 @@
   /* photo uploader */
 $(document).ready(function(){
+
+  function getCurrentActivity(){
+    match = window.location.pathname.match(/activities\/(\d+)\\?/)
+    if(match){
+      return match[1]
+    }
+    return ""
+  }
     
   $('#upload-activity-photo-input').uploadify({
     'uploader'  : '/static/uploadify.swf',
