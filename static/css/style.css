@@ -18,7 +18,7 @@ div.avatar img { border-radius:6px; box-shadow:0 0 8px #ccc; }
 div.avatar img:hover { box-shadow:0 0 8px #0088cc; }
 td.avatar { width:64px; }
 td img.avatar { border:1px solid #ccc; border-radius:6px; box-shadow:0 0 8px #ccc; width:64px; }
-td img.avatar:hover, ul.avatar img:hover { box-shadow:0 0 6px #0088cc; }
+td img.avatar:hover, ul.avatar img:hover { box-shadow:0 0 8px #0088cc; }
 .avatar-small { vertical-align:middle; }
 td img.avatar-small { width:20px; margin-right:4px; }
 .align-right { text-align:right; }
@@ -286,3 +286,49 @@ THE SOFTWARE.
   -webkit-border-radius: 3px;
 }
 #image-crop img { max-width:none; }
+
+/**** Isotope Filtering ****/
+
+.isotope-item {
+  z-index: 2;
+}
+
+.isotope-hidden.isotope-item {
+  pointer-events: none;
+  z-index: 1;
+}
+
+/**** Isotope CSS3 transitions ****/
+
+.isotope,
+.isotope .isotope-item {
+  -webkit-transition-duration: 0.8s;
+     -moz-transition-duration: 0.8s;
+       -o-transition-duration: 0.8s;
+          transition-duration: 0.8s;
+}
+
+.isotope {
+  -webkit-transition-property: height, width;
+     -moz-transition-property: height, width;
+       -o-transition-property: height, width;
+          transition-property: height, width;
+}
+
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+     -moz-transition-property:    -moz-transform, opacity;
+       -o-transition-property:         top, left, opacity;
+          transition-property:         transform, opacity;
+}
+
+/**** disabling Isotope CSS3 transitions ****/
+
+.isotope.no-transition,
+.isotope.no-transition .isotope-item,
+.isotope .isotope-item.no-transition {
+  -webkit-transition-duration: 0s;
+     -moz-transition-duration: 0s;
+       -o-transition-duration: 0s;
+          transition-duration: 0s;
+}

@@ -1,4 +1,5 @@
 import os, ImageFile, md5, time, urllib, hashlib
+from datetime import datetime
 from django.core.serializers import json, serialize
 from django.core.paginator import Paginator
 from django.db.models.query import QuerySet
@@ -29,7 +30,7 @@ class ExPaginator(Paginator):
         self.page_range_slice = self.page_range[self._slice_start:self._slice_end]
         return super(ExPaginator,self).page(number)
 
-def upload_image(request_file):
+def upload_image(request_file,save_to='tmp'):
     parser = ImageFile.Parser()
     for chunk in request_file:
         parser.feed(chunk)
@@ -40,11 +41,19 @@ def upload_image(request_file):
     else:
         ext = '.' + img.format.lower()
     filename = filename + ext
-    path = os.path.join(MEDIA_ROOT,'tmp')
+    path = os.path.join(MEDIA_ROOT,save_to)
     if not os.path.isdir(path):
         os.mkdir(path)
+    if not save_to == 'tmp':
+        now = datetime.now()
+        date = now.strftime('%Y%m')
+        path=os.path.join(path,date)
+        if not os.path.isdir(path):
+            os.mkdir(path)
+    else:
+        date = ""
     img.save(os.path.join(path,filename))
-    return os.path.join(MEDIA_URL,'tmp',filename)
+    return os.path.join(MEDIA_URL,save_to,date,filename), img.size
 
 def get_gravatar_url(email,size=150):
     default = "http://localhost/static/images/no_avatar.png"

@@ -20,4 +20,12 @@ class ActivityForm(forms.ModelForm):
 class LocationForm(forms.ModelForm):
     class Meta:
         model = Location
+
+class EditActivityForm(forms.ModelForm):
+    class Meta:
+        model = Activity
+        fields = ('begin_time','end_time','location')
+        widgets = {
+            'location':forms.HiddenInput(),
+        }
     

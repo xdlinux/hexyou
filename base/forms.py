@@ -93,6 +93,7 @@ class SignupForm(UserCreationForm):
 
 class ImageUpload(forms.Form):
     Filedata = forms.ImageField(required=True)
+    save_to = forms.CharField(required=False)
 
 class ImageCrop(forms.Form):
     path = forms.CharField(required=True)

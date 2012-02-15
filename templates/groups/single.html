@@ -1,7 +1,7 @@
 {% extends "groups/base.html" %}
 {% load gravatar %}
 
-{% block title %}{{ group }}{% endblock title %}
+{% block title %}{{ group.name }}{% endblock title %}
 
 {% block subtitle %}{% ifequal group.group_type.id 1 %}<span class="label label-important">实体组织</span>{% else %}<span class="label label-info">虚拟组织</span>{% endifequal %}{% endblock subtitle %}
 
@@ -52,14 +52,14 @@
     {% for activity in last_activities %}
     <li class="activity">
         <div class="meta">
-            <img src="{{ activity.avatar }}" class="avatar" alt="" />
+            <a href="/activities/{{ activity.pk }}"><img src="{{ activity.avatar }}" class="avatar" alt="" /></a>
             <p>{{ activity.participators__count }} 人参加</p>
         </div>
         <div class="content">
-            <h4>{{ activity.title }}<br />
+            <h4><a href="/activities/{{ activity.pk }}">{{ activity.title }}</a><br />
             <small>{{ activity.host_string|safe }}</small></h4>
-            <p>于 {{ activity.begin_time|date:"Y-m-d h:m"}} 在 {{ activity.location }}</p>
-            <p>{{ activity.activity_type }}</p>
+            <p>于 {{ activity.begin_time|date:"Y-m-d h:i"}}</p>
+            <p>在 {{ activity.location.full_path|safe }}</p>
         </div>
     </li>
     {% empty %}

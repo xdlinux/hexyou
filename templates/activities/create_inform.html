@@ -7,7 +7,7 @@
             <dt>活动时间</dt>
             <dd>{{ activity.begin_time }} 至 {{ activity.end_time }}</dd>
             <dt>活动地点<dt>
-            <dd>{{ activity.location.full_path }}</dd>
+            <dd>{{ activity.location.full_path|safe }}</dd>
         </dl>
     </div>
     <div class="span large-avatar avatar">

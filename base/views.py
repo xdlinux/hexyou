@@ -103,9 +103,9 @@ def upload(request):
     if request.method == "POST":
         form = ImageUpload(request.POST, request.FILES)
         if form.is_valid():
-            rlpath = upload_image(request.FILES['Filedata'])
+            rlpath,size = upload_image(request.FILES['Filedata'],form.cleaned_data['save_to'])
             if rlpath:
-                return JsonResponse({'path':rlpath})
+                return JsonResponse({'path':rlpath,'width':size[0],'height':size[1]})
             else:
                 return HttpResponseServerError('Uploading error')
         else:
@@ -163,11 +163,11 @@ def crop(request,save_to):
         return HttpResponseForbidden()
 
 def get_users(request,request_phrase):
-    users = User.objects.filter(username__contains=request_phrase).exclude(pk=0).order_by('username')[0:5]
+    users = User.objects.filter(username__contains=request_phrase).exclude(pk=0).order_by('username')[:5]
     return [{'avatar':small_avatar(user) or get_gravatar_url(user.email,20),'name':user.last_name,'slug':user.username,'category':'user','id':user.id} for user in users]
 
 def get_groups(request,request_phrase):
-    groups=Group.objects.filter(Q(slug__contains=request_phrase) | Q(name__contains=request_phrase))[0:5]
+    groups=Group.objects.filter(Q(slug__contains=request_phrase) | Q(name__contains=request_phrase))[:5]
     return [{'avatar':small_avatar(group),'name':group.name,'slug':group.slug,'category':'group','id':group.id} for group in groups]
 
 def join_group(request,request_phrase):
@@ -184,6 +184,10 @@ def join_group(request,request_phrase):
         return [{'error':'You have joined this group',},]
     else:
         return [{'condition':group.condition.pk}]
+
+def get_activities(request,request_phrase):
+    activities = Activity.objects.filter(title__contains=request_phrase)[:5].values()
+    return [{'avatar':activity['avatar'],'name':activity['title'],'slug':"",'category':'activity','id':activity['id']} for activity in activities ]
 
 def get_child_location(request,request_phrase):
     locations = Location.objects.filter(parent=int(request_phrase)) 
@@ -273,12 +277,28 @@ def accept_activity(request,request_phrase):
     hostship.save()
     return ""
 
+def participate_activity(request,request_phrase):
+    memberhostship = MemberHostShip(user=request.user,activity=Activity.objects.get(pk=int(request_phrase)),is_host=False)
+    memberhostship.save()
+    return ""
+
+@json_request
+def save_activity_photos(request,request_phrase):
+    activity = Activity.objects.get(id=int(request_phrase['activity']))
+    try:
+        MemberHostShip.objects.get(user=request.user,activity=activity)
+    except MemberHostShip.DoesNotExist:
+        raise AjaxForbidden
+    for photo in request_phrase['photos']:
+        activity.photos.create(source=photo['src'],description=photo['description'])
+    return ""
 
 """ Callback swtich string | Callback list | Login requied """
 REQUEST_TYPES = (
     ('all',[get_users,get_groups],False),
     ('user',[get_users,],False,),
     ('group',[get_groups,],False,),
+    ('activity',[get_activities,],False,),
     ('join_group',[join_group,],True),
     ('location',[get_child_location,],False),
     ('create_location',[create_location,],False),
@@ -288,7 +308,9 @@ REQUEST_TYPES = (
     ('revoke_admin',[revoke_admin,],True),
     ('approve_member',[approve_member,],True),
     ('send_message',[send_message,],True),
-    ('accept_activity',[accept_activity,],True)
+    ('accept_activity',[accept_activity,],True),
+    ('participate_activity',[participate_activity,],True),
+    ('save_activity_photos',[save_activity_photos],True)
 )
 
 @csrf_exempt

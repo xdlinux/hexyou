@@ -1,11 +1,17 @@
 {% extends "activities/base.html" %}
+{% load gravatar %}
 
 {% block title %}{{ activity.title }}{% endblock title %}
 
 {% block subtitle %}{{ activity.host_string|safe }}{% endblock subtitle %}
 
 {% block headeraction %}
-<a href="#" class="btn small danger">编辑活动</a>
+{% if is_participator %}
+<a href="#upload-activity-photo-modal" class="btn btn-small btn-info" data-toggle="modal">上传照片</a>
+{% endif %}
+{% if is_host %}
+<a href="/activities/{{ activity.pk }}/edit" class="btn btn-small btn-danger">编辑活动</a>
+{% endif %}
 {% endblock headeraction %}
 
 {% block main %}
@@ -25,57 +31,83 @@
     </div>
 </div>
 <p class="extra align-right">
-    <a href="#" class="btn btn-primary">参加 {{ activity.title }}</a>
+    {% if is_participator %}
+    <a href="#" class="btn btn-primary disabled">已参加 {{ activity.title }}</a>
+    {% else %}
+    <a id="participate-activity" href="#" class="btn btn-primary">参加 {{ activity.title }}</a>
+    {% endif %}
     <a href="#" class="btn">咻！</a>
 </p>
 <h3>简介</h3>
-<p class="well">{{ activity.description|linebreaksbr|default:"发起这个活动的人很懒，什么都没写" }}</p>
-<h3>相关活动</h3>
-<div id="latest-activity" class="row">
-    <div class="span3">
-        <img src="http://placehold.it/150x100" alt="" />
-        <h4>期末考试</h4>
-        <p>一学期即将结束时，学校通过试卷的形式对各门学科该学期应掌握的知识的检测。</p>
-    </div>
-    <div class="span3">
-        <img src="http://placehold.it/150x100" alt="" />
-        <h4>大学英语等级考试</h4>
-        <p>全国大学英语等级考试是教育部主管的一项全国性的教学考试，其目的是对大学生的实际英语能力进行客观、准确的测量，为大学英语教学提供服务。 大学英语考试也是一项大规模标准化考试，在设计上必须满足教育测量理论对大规模标准化考试的质量要求，是一个“标准关联的常模参照测验”。
+<p class="well">
+    {{ activity.description|linebreaksbr|default:"发起这个活动的人很懒，什么都没写" }}
 </p>
+<h3>活动相册</h3>
+<div id="activity-album" class="carousel slide">
+    <div class="carousel-inner">
+        {% for photo in photos %}            
+        <div class="item {% if forloop.first %}active{% endif %}">
+            <img src="{{ photo.source }}" width="620px" />
+            <div class="carousel-caption">
+                <p>{{ photo.description }}</p>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    <div class="span3">
-        <img src="http://placehold.it/150x100" alt="" />
-        <h4>期中考试</h4>
-        <p>为了检验学生半学期所学的知识所进行的一次考试,有利于学生比较正式地检验一次自己即时学习的水平，根据这个成绩，学生可及时调整学习心态和方法，更有效率的进行下一阶段的学习。 </p>
+    <a class="left carousel-control" data-slide="prev" href="#activity-album">‹</a>
+    <a class="right carousel-control" data-slide="next" href="#activity-album">›</a>
+</div>
+<form id="upload-activity-photo-form" action="" method="post" class="form-horizontal inner-post">
+<script type="text/javascript" src="/static/js/swfobject.js"></script>
+<script type="text/javascript" src="/static/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript" src="/static/js/photouploader.js"></script>
+<div id="upload-activity-photo-modal" class="modal fade hide">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>上传照片</h3>
+    </div>
+    <div class="modal-body">
+        {% csrf_token %}
+        <div id="save-photo-error" class="alert alert-error hide" data-alert="alert">
+            保存时发生错误，请重试或联系管理员
+        </div>
+        <input id="upload-activity-photo-input" type="file" />
+        <ul id="upload-activity-photo-preview" class="thumbnails">
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">取消</button>
+        <a href="#" id="save-activity-photo" class="btn btn-primary">保存照片</a>
     </div>
 </div>
+</form>
 {% endblock main %}
 
 {% block side %}
 <h3>参与者
-    <small>(31415926)</small></h3>
-<ul class="media-grid avatar">
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+    <small>({{ activity_members_count }})</small></h3>
+<ul id="participators" class="avatar">
+    {% for member in activity_members %}
+    <li><a href="/members/{{ member }}"><img src="{% avatar member %}" alt=""></a></li>
+    {% empty %}
+    <p>暂时没有成员</p>
+    {% endfor %}
 </ul>
-<h3>友情小组
-    <small>(42)</small></h3>
-<ul class="media-grid avatar">
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
-    <li><a href=""><img src="http://placehold.it/64x64" alt=""></a></li>
+<h3>附近的活动</h3>
+<ul class="list">
+    {% for activity in related_activities %}
+    <li class="activity">
+        <div class="meta avatar">
+            <a href="/activities/{{ activity.pk }}"><img src="{{ activity.avatar }}" class="avatar" alt="" /></a>
+            <p>{{ activity.members__count }} 人参加</p>
+        </div>
+        <div class="content">
+            <h4><a href="/activities/{{ activity.pk }}">{{ activity.title }}</a><br />
+            <small>{{ activity.host_string|safe }}</small></h4>
+            <p>于 {{ activity.begin_time|date:"Y-m-d"}}</p>
+            <p>在 {{ activity.location.full_path|safe }}</p>
+        </div>
+    </li>
+    {% endfor %}
 </ul>
-<h3>日历</h3>
-<img src="http://placehold.it/280x175" />
 {% endblock side %}

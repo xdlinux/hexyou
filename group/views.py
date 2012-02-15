@@ -14,10 +14,10 @@ from NearsideBindings.group.forms import NewGroupForm, AdminGroupForm
 from NearsideBindings.group.models import Group,MemberShip
 
 def get_top_group():
-    top_group = Group.objects.exclude(description="").exclude(avatar="/static/images/no_avatar.png").order_by('?')
+    top_group = Group.objects.exclude(description="").exclude(avatar="/static/images/no_avatar.png").order_by('?').values()
     if top_group:
         top_group=top_group[0]
-        top_group_members = MemberShip.objects.filter(group=top_group).count()
+        top_group_members = MemberShip.objects.filter(group__id=top_group['id']).count()
         return top_group, top_group_members, True
     else: return None,None,False
 

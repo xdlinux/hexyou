@@ -1,0 +1,74 @@
+{% extends "activities/base.html" %}
+{% load bootstrap %}
+{% load topbar %}
+
+{% block title %}{% if is_host %}我发起的活动{% else %}我参加的活动{% endif %}{% endblock title %}
+
+{% block main %}
+<ul class="list" style="border:0;padding:0;margin:0;">
+    {% for activity in activities.object_list %}
+    <li class="activity">
+        <div class="meta avatar">
+            <a href="/activities/{{ activity.id }}"><img src="{{ activity.avatar }}" class="avatar" alt="" /></a>
+            <p>{{ activity.members__count }} 人参加</p>
+        </div>
+        <div class="content">
+            <h4><a href="/activities/{{ activity.id }}">{{ activity.title }}</a><br />
+            <small>{{ activity.host_string|safe }}</small></h4>
+            <p>于 {{ activity.begin_time|date:"Y-m-d"}}</p>
+            <p>在 {{ activity.location.full_path|safe }}</p>
+        </div>
+    </li>
+    {% empty %}
+    {% if is_host %}
+    <p>没有参加过任何活动</p>
+    {% else %}
+    <p>没有发起过任何活动</p>
+    {% endif %}
+    {% endfor %}
+</ul>
+<div class="pagination pagination-centered">
+    <ul>
+        {% if activitiess.has_previous %}
+        <li>
+            <a href="?page={{ activitiess.previous_page_number }}">«</a>
+        </li>
+        {% else %}
+        <li class="disabled">
+            <a href="#">«</a>
+        </li>
+        {% endif %}
+        {{ activitiess.page_range }}
+        {% for val in paginator.page_range_slice %}
+        <li {% ifequal page val %}class="active"{% endifequal %}>
+            <a href="?page={{ val }}">{{ val }}</a>
+        </li>
+        {% endfor %}
+        {% if paginator.page_range_slice|last < paginator.num_pages %}
+        <li class="disabled">
+            <a href="#">...</a>
+        </li>
+        <li>
+            <a href="?page={{ paginator.num_pages }}" {% ifequal page val %}class="active"{% endifequal %}>{{ paginator.num_pages }}</a>
+        </li>
+        {% endif %}
+        {% if activitiess.has_next %}
+        <li>
+            <a href="?page={{ activitiess.next_page_number }}" class="disabled">»</a>
+        </li>
+        {% else %}
+        <li class="disabled">
+            <a href="#">»</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock main %}
+
+{% block side %}
+{% if is_host %}
+{% topbar hosted_activities subnav.html %}
+{% else %}
+{% topbar participated_activities subnav.html %}
+{% endif %}
+{% endblock side %}

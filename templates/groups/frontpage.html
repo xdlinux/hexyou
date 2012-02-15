@@ -18,7 +18,7 @@
             <a href="{% url NearsideBindings.group.views.single top_group.slug %}"><img src="{{ top_group.avatar }}" class="avatar" alt="" /></a>
         </div>
         <div class="span5">
-            <h2><a href="{% url NearsideBindings.group.views.single top_group.slug %}">{{ top_group }}</a>
+            <h2><a href="{% url NearsideBindings.group.views.single top_group.slug %}">{{ top_group.name }}</a>
                 <small><a href="{% url NearsideBindings.group.views.members top_group.slug %}">({{ top_group_members }})</a></small></h2>
             <p style="margin-left:12px;">始于 {{ top_group.create_date|date:"Y年m月d日" }}</p>
             {{ top_group.description|linebreaks|first_p }}

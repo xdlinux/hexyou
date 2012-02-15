@@ -158,9 +158,12 @@ $(document).ready(function(){
       });
     },
     _renderItem: function(ul, item){
+      if(item.slug){
+        item.slug = '(' + words(item.slug,16) + ')'
+      }
       return $( "<li></li>" )
           .data( "item.autocomplete", item )
-          .append( "<a>" + "<img src=\"" + item.avatar + "\" style=\"width:24px;height:24px;\" />" + item.name + '(' + words(item.slug,16) + ')' + "</a>" )
+          .append( "<a>" + "<img src=\"" + item.avatar + "\" style=\"width:24px;height:24px;\" />" + item.name + item.slug + "</a>" )
           .appendTo( ul )
       },
     _move:function(){
@@ -246,7 +249,11 @@ $(document).ready(function(){
       })
     },
     select:function(event,ui){
-      window.location.href='/'+$('#side-search .search-input').attr("redirect-type")+'/'+ui.item.slug
+      if($('#side-search .search-input').attr("request-type")=='group'){
+        window.location.href='/'+$('#side-search .search-input').attr("redirect-type")+'/'+ui.item.slug
+      }else{
+        window.location.href='/'+$('#side-search .search-input').attr("redirect-type")+'/'+ui.item.value
+      }
     },
   })
 
@@ -354,10 +361,14 @@ $(document).ready(function(){
       $(selector+':first').hide(200,function(){$(this).remove()})
     }
     $(selector+':first').clone().hide().find('a').attr('href','/'+url_prefix+'/'+$('#session').attr('user')).end().find('img').attr('src',$('#session-avatar>img').attr('src').replace(/_small/,'')).end().prependTo($('#'+id)).show('slide',{direction:'left'})
+    var count = $('#'+id).prev().find('small')
+    var n = parseInt(count.text().match(/\((\d+)\)/)[1])
+    n++
+    count.text('(' + n + ')')
   }
 
   $('#join-group').one('click',function(){
-    join_group_btn = $(this)
+    var join_group_btn = $(this)
     join_group_btn.addClass('disabled').text('请稍等...')
     $.ajax({
       data:{
@@ -373,6 +384,30 @@ $(document).ready(function(){
         }else{
           join_group_btn.text('等待审核...')
         }
+      }
+    })
+  })
+
+  function getCurrentActivity(){
+    match = window.location.pathname.match(/activities\/(\d+)\\?/)
+    if(match){
+      return match[1]
+    }
+    return ""
+  }
+
+  $('#participate-activity').one('click',function(){
+    var btn = $(this)
+    var origin = btn.text()
+    btn.addClass('disabled').text('请稍等...')
+    $.ajax({
+      data:{
+        request_type:'participate_activity',
+        request_phrase:getCurrentActivity(),
+      },
+      success:function(){
+        btn.text('已参加 '+origin.substr(3))
+        updateAvatarList('participators','members')
       }
     })
   })
@@ -659,5 +694,4 @@ $(document).ready(function(){
   $('#main>ul.list>li.activity:odd').each(function(index,element){
     $(element).height($(element).prev().height())
   })
-
 })

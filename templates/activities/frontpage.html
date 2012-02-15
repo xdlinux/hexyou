@@ -34,14 +34,14 @@
     {% for activity in activities %}
     <li class="activity">
         <div class="meta avatar">
-            <img src="{{ activity.avatar }}" class="avatar" alt="" />
+            <a href="/activities/{{ activity.id }}"><img src="{{ activity.avatar }}" class="avatar" alt="" /></a>
             <p>{{ activity.members__count }} 人参加</p>
         </div>
         <div class="content">
-            <h4>{{ activity.title }}<br />
+            <h4><a href="/activities/{{ activity.id }}">{{ activity.title }}</a><br />
             <small>{{ activity.host_string|safe }}</small></h4>
             <p>于 {{ activity.begin_time|date:"Y-m-d"}}</p>
-            <p>在 {{ activity.location.full_path }}</p>
+            <p>在 {{ activity.location.full_path|safe }}</p>
         </div>
     </li>
     {% endfor %}
@@ -52,19 +52,19 @@
 <form id="side-search" action="" method="post" accept-charset="utf-8">
     <div class="input-prepend holding">
         <span class="add-on">搜索</span>
-        <input class="search-input" type="text" name="" value="">
-        <span class="holder">活动名称、地点、组织</span>
+        <input class="search-input" type="text" name="" value="" request-type="activity" redirect-type="activities">
+        <span class="holder">活动名称</span>
     </div>
 </form>
 <h3>活动分类</h3>
 <dl id="activity-type">
     <dt>类型</dt>
     {% for val in types %}
-    <dd>{{ val }}</dd>
+    <dd><a href="/activities/sort/type/{{ val.id }}">{{ val.title }}</a></dd>
     {% endfor %}
     <dt>地点</dt>
     {% for location in location_roots %}
-    <dd>{{ location }}</dd>
+    <dd><a href="/activities/sort/location/{{ location.id }}">{{ location.name }}</a></dd>
     {% endfor %}
 </dl>
 <h3>热门活动</h3>
@@ -72,14 +72,14 @@
     {% for activity in hot_activities %}
     <li class="activity">
         <div class="meta avatar">
-            <img src="{{ activity.avatar }}" class="avatar" alt="" />
-            <p>{{ activity.members__count }} 人参加</p>
+            <a href="/activities/{{ activity.id }}"><img src="{{ activity.avatar }}" class="avatar" alt="" /></a>
+            <p>{{ activity.members_count }} 人参加</p>
         </div>
         <div class="content">
-            <h4>{{ activity.title }}<br />
+            <h4><a href="/activities/{{ activity.id }}">{{ activity.title }}</a><br />
             <small>{{ activity.host_string|safe }}</small></h4>
             <p>于 {{ activity.begin_time|date:"Y-m-d"}}</p>
-            <p>在 {{ activity.location.full_path }}</p>
+            <p>在 {{ activity.location.full_path|safe }}</p>
         </div>
     </li>
     {% endfor %}

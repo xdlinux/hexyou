@@ -1,0 +1,93 @@
+{% extends "activities/base.html" %}
+{% load bootstrap %}
+{% load gravatar %}
+{% load topbar %}
+
+{% block title %}编辑活动{% endblock title %}
+
+{% block subtitle %}自己的命运应由自己创造{% endblock subtitle %}
+
+{% block headeraction %}
+<a href="/activities/{{ activity.id }}" class="btn btn-small">返回活动</a>
+{% endblock headeraction %}
+
+{% block main %}
+<ul class="tabs nav nav-tabs">
+    <li class="active"><a href="#tab-customization" data-toggle="tab" title="">定制</a></li>
+    <li><a href="#tab-photos" data-toggle="tab" title="">活动照片</a></li>
+    {% if not group_accepted %}
+    <li><a href="#tab-cancle" data-toggle="tab" title="">撤销活动</a></li>
+    {% endif %}
+</ul>
+<form id="edit-activity" class="form-horizontal inner-post" enctype="multipart/form-data" action="" method="post" accept-charset="utf-8">
+{% csrf_token %}
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="tab-customization">
+            <div class="control-group datetime">
+                <label class="control-label" for="">时间</label>
+                <div class="controls">
+                {{ form.begin_time }} 至
+                {{ form.end_time }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">地点</label>
+                <div class="controls">
+                    <input id="location-select-input" name="" type="text" />
+                    {{ form.location }}
+                </div>
+            </div>
+            <div class="form-actions">
+                {% if form.errors %}
+                <ul class="errors">            
+                {% for error in form.errors %}
+                <li>
+                {{ error }}
+                </li>
+                {% endfor %}
+                </ul>
+                {% endif %}
+                <input class="btn btn-primary" type="submit" value="确认修改">
+                <button class="btn" type="reset">取消</button>
+            </div>
+        </div>
+        <div class="tab-pane fade in" id="tab-photos">
+        </div>
+        <div class="tab-pane fade in" id="tab-cancle">
+        </div>
+    </div>
+</form>
+<div id="location-select-modal" class="modal fade">
+    <div class="modal-header">
+        <a class="close" href="#" data-dismiss="modal">×</a>
+        <h3>地点</h3>
+    </div>
+    <div class="modal-body">
+        <div id="location-no-selected" class="alert alert-error hide" data-alert="alert">
+            请选择一个地点
+        </div>
+        <div id="location-duplicate" class="alert alert-error hide" data-alert="alert">
+            该地点已存在或无效的地点名称
+        </div>
+        <div id="location-select">
+            <ul id="location-root" class="location-parent">
+                {% for location in location_roots %}
+                <li><a href="#" request-phrase="{{ location.id }}">{{ location.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="location-no-child" class="hide">
+            <ul class="location-parent">没有下级地点，点击“创建地点”即可创建下级地点</ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+            <input id="location-selected" type="text" name="" value="" placeholder="">
+            <a id="location-select-create" class="btn" href="#">创建地点</a>
+        <a id="location-select-confirm" class="btn btn-primary" href="#">选择地点</a>
+    </div>
+</div>
+{% endblock main %}
+
+{% block side %}
+{% topbar hosted_activities subnav.html %}
+{% endblock side %}

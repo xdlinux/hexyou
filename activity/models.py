@@ -3,24 +3,34 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from NearsideBindings.group.models import Group
-from NearsideBindings.activity.signals import activity_inform
+from NearsideBindings.activity.signals import *
 
 class Location(models.Model):
     name = models.CharField(max_length=30,unique=True)
     parent = models.ForeignKey('Location',null=True,blank=True)
+    full_path = models.CharField(max_length=100,blank=True,null=True)
     def __unicode__(self):
         return self.name
 
-    def full_path(self):
+    def save(self):
+        super(Location,self).save()
+        self.full_path = self.get_full_path()
+        super(Location,self).save()
+
+    def get_full_path(self):
         if self.parent:
-            return "%s-%s" % (self.parent.full_path(),self.name)
-        else: return self.name
+            return '%s - <a href="/activities/sort/location/%d">%s</a>' % (self.parent.get_full_path(),self.pk,self.name)
+        else:
+            return '<a href="/activities/sort/location/%d">%s</a>' % (self.pk,self.name)
 
 class ActivityType(models.Model):
     title = models.CharField(max_length=20)
     def __unicode__(self):
         return self.title
 
+class ActivityPhoto(models.Model):
+    source = models.CharField(max_length=100)
+    description = models.CharField(max_length=100)
 
 class Activity(models.Model):
     title = models.CharField(max_length=30)
@@ -34,9 +44,11 @@ class Activity(models.Model):
     # participators = models.ManyToManyField(User, related_name='participators')
     # hosts = models.ManyToManyField(User, related_name='hosts')
     host_groups = models.ManyToManyField(Group, through='HostShip')
+    host_string = models.CharField(max_length=100,blank=True,null=True)
+    photos = models.ManyToManyField(ActivityPhoto)
+
     def __unicode__(self):
         return self.title
-
 
     def __getattr__( self, name ):
         if name == 'host_string':
@@ -95,4 +107,5 @@ class MemberHostShip(models.Model):
     class Meta:
         unique_together = ('user','activity')
 
+post_save.connect(update_host_string,sender=HostShip)
 post_save.connect(activity_inform,sender=HostShip)

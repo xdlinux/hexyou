@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from NearsideBindings.activity.models import Activity
-from NearsideBindings.group.models import MemberShip
+from NearsideBindings.group.models import MemberShip, Group
 from NearsideBindings.member.forms import EditProfileForm
 from django import forms
 from messages.forms import ComposeForm
@@ -21,14 +21,14 @@ def single(request,username):
     """docstring for person"""
     view_user = User.objects.get(username=username)
     is_me = request.user.username==username
-    groups = [ membership.group for membership in MemberShip.objects.filter(user=view_user,is_approved=True) ]
-    group_counter = len(groups)
-    attended_activities = Activity.objects.filter(members=view_user)
-    attended_activities_slice = attended_activities[:4].annotate(Count('members'))
-    attended_activities_count = attended_activities.count()
-    host_activities = Activity.objects.filter(members=view_user)
-    host_activities_slice = host_activities[:4].annotate(Count('members'))
-    host_activities_count = host_activities.count()
+    groups = Group.objects.filter(members=view_user,membership__is_approved=True)[:8].values()
+    group_counter = Group.objects.filter(members=view_user,membership__is_approved=True).count()
+    participated_activities = Activity.objects.filter(members=view_user,memberhostship__is_host=False)
+    participated_activities_slice = participated_activities[:4].annotate(Count('members'))
+    participated_activities_count = participated_activities.count()
+    hosted_activities = Activity.objects.filter(members=view_user,memberhostship__is_host=True)
+    hosted_activities_slice = hosted_activities[:4].annotate(Count('members'))
+    hosted_activities_count = hosted_activities.count()
     form = ComposeForm()
     return render_to_response('members/single.html',locals(), context_instance=RequestContext(request))
 

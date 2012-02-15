@@ -68,17 +68,17 @@
 </form>
 <h3>发起的活动</h3>
 <ul class="list">
-    {% for activity in host_activities_slice %}
+    {% for activity in hosted_activities_slice %}
     <li class="activity">
         <div class="meta avatar">
-            <img src="{{ activity.avatar }}" class="avatar" alt="" />
+            <a href="/activities/{{ activity.pk }}"><img src="{{ activity.avatar }}" class="avatar" alt="" /></a>
             <p>{{ activity.members__count }} 人参加</p>
         </div>
         <div class="content">
-            <h4>{{ activity.title }}<br />
+            <h4><a href="/activities/{{ activity.pk }}">{{ activity.title }}</a><br />
             <small>{{ activity.host_string|safe }}</small></h4>
-            <p>于 {{ activity.begin_time|date:"Y-m-d h:m"}} 在 {{ activity.location }}</p>
-            <p>{{ activity.activity_type }}</p>
+            <p>于 {{ activity.begin_time|date:"Y-m-d h:i"}}
+            <p>在 {{ activity.location.full_path|safe }}</p>
         </div>
     </li>
     {% empty %}
@@ -87,17 +87,17 @@
 </ul>
 <h3>参加的活动</h3>
 <ul class="list">
-    {% for activity in attended_activities_slice %}
+    {% for activity in participated_activities_slice %}
     <li class="activity">
         <div class="meta avatar">
-            <img src="{{ activity.avatar }}" class="avatar" alt="" />
+            <a href="/activities/{{ activity.pk }}"><img src="{{ activity.avatar }}" class="avatar" alt="" /></a>
             <p>{{ activity.members__count }} 人参加</p>
         </div>
         <div class="content">
-            <h4>{{ activity.title }}<br />
+            <h4><a href="/activities/{{ activity.pk }}">{{ activity.title }}</a><br />
             <small>{{ activity.host_string|safe }}</small></h4>
-            <p>于 {{ activity.begin_time|date:"Y-m-d h:m"}} 在 {{ activity.location }}</p>
-            <p>{{ activity.activity_type }}</p>
+            <p>于 {{ activity.begin_time|date:"Y-m-d h:i"}}
+            <p>在 {{ activity.location.full_path|safe }}</p>
         </div>
     </li>
     {% empty %}
@@ -110,11 +110,11 @@
 <div id="side-counter">
     <div class="side-counter-block">
         <span class="description">发起活动</span>
-        <a href="#" class="count">{{ host_activities_count }}</a>
+        <a href="#" class="count">{{ hosted_activities_count }}</a>
     </div>
     <div class="side-counter-block">
         <span class="description">参加活动</span>
-        <a href="#" class="count">{{ attended_activities_count }}</a>
+        <a href="#" class="count">{{ participated_activities_count }}</a>
     </div>
     <div class="side-counter-block">
         <span class="description">咻！</span>
