@@ -54,6 +54,23 @@
         <div class="tab-pane fade in" id="tab-photos">
         </div>
         <div class="tab-pane fade in" id="tab-cancle">
+            <p class="align-center"><a href="#cancle-modal" class="btn btn-danger btn-large" data-toggle="modal">撤销 {{ activity.title }}</a></p>
+            <p class="align-center">给人幸福的不是身体上的好处，也不是财富，而是正直和谨慎</p>
+            <div id="cancle-modal" class="modal fade">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3>确认撤销</h3>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li>活动解散后不可恢复</li>
+                        <li>系统会用站内信告知参加者 {{ activity.title }} 已被撤销</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-danger" href="/activities/{{ activity.id }}/cancle">确认撤销</a>
+                </div>
+            </div>
         </div>
     </div>
 </form>

@@ -1,5 +1,6 @@
   /* photo uploader */
-
+$(document).ready(function(){
+    
   $('#upload-activity-photo-input').uploadify({
     'uploader'  : '/static/uploadify.swf',
     'script'    : '/upload/',
@@ -60,3 +61,4 @@
       }
     })
   })
+})
