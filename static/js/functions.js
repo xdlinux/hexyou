@@ -693,7 +693,7 @@ $(document).ready(function(){
   /* float fix */
   $('#main>ul.list>li.activity:odd').each(function(index,element){
     var height = $(element).height()
-    if($(element).prev())>height){
+    if($(element).prev().height()>height){
       $(element).height($(element).prev().height())
     }else{
       $(element).prev().height(height)
