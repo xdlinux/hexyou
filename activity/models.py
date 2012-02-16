@@ -40,12 +40,12 @@ class Activity(models.Model):
     end_time = models.DateTimeField()
     description = models.TextField(blank=True,null=True)
     location = models.ForeignKey(Location)
-    members = models.ManyToManyField(User,through='MemberHostShip',related_name='participated_activities')
+    members = models.ManyToManyField(User,through='MemberHostShip',related_name='participated_activities',blank=True)
     # participators = models.ManyToManyField(User, related_name='participators')
     # hosts = models.ManyToManyField(User, related_name='hosts')
-    host_groups = models.ManyToManyField(Group, through='HostShip')
+    host_groups = models.ManyToManyField(Group, through='HostShip',blank=True)
     host_string = models.CharField(max_length=100,blank=True,null=True)
-    photos = models.ManyToManyField(ActivityPhoto)
+    photos = models.ManyToManyField(ActivityPhoto,blank=True)
 
     def __unicode__(self):
         return self.title
