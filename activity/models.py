@@ -89,6 +89,12 @@ class ActivityPhoto(models.Model):
     activity = models.ForeignKey(Activity,related_name='photos')
     source = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
+    thumbnail = models.CharField(max_length=128, blank=True)
+    def save(self,*arg,**karg):
+        print self.source
+        if not self.thumbnail:
+            self.thumbnail=self.source[:-4]+'_small'+self.source[-4:]
+        models.Model.save(self)
 
 class HostShip(models.Model):
     """hostship between group and Activity"""

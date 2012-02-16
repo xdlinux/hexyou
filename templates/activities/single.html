@@ -46,9 +46,25 @@
 </p>
 <h3>活动相册</h3>
 <div class="isotope">
-    {% for photo  in activity.photos.all %}
-        <img src="{{ photo.source }}" alt="" />
+    {% for photo  in activity.photos.values %}
+    <a href="{{ photo.source }}" data-toggle="modal" data-l-image="{{ photo.source }}" data-image-description="{{ photo.description }}" data-target="#imagemodal">
+        <img src="{{ photo.thumbnail }}"  alt="" />
+    </a>
     {% endfor %}
+</div>
+<div class="modal" id="imagemodal" style="display:none">
+<div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>{{ activity }} 的活动图片</h3>
+</div>
+<div class="modal-body">
+<img src="" alt="" id="largeimage" />
+</div>
+<div class="modal-footer">
+    <p id="image-description">
+    </p>
+    <a href="#close" class="pull-right btn btn-warning" data-dismiss="modal">关闭</a>
+</div>
 </div>
 <form id="upload-activity-photo-form" action="" method="post" class="form-horizontal inner-post">
 <script type="text/javascript" src="/static/js/swfobject.js"></script>

@@ -701,6 +701,13 @@ $(document).ready(function(){
     }
   })
 
-//----------------------------------isotope--------------------------------------------
+//----------------------------------image--------------------------------------------
+
+$('a[data-target=#imagemodal]').click(
+    function(){
+        $('#largeimage').attr('src',$(this).attr('data-l-image'));
+        $('#image-description').text($(this).attr('data-image-description'));
+    }
+)
 
 })
