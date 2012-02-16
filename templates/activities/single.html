@@ -43,19 +43,8 @@
     {{ activity.description|linebreaksbr|default:"发起这个活动的人很懒，什么都没写" }}
 </p>
 <h3>活动相册</h3>
-<div id="activity-album" class="carousel slide">
-    <div class="carousel-inner">
-        {% for photo in photos %}            
-        <div class="item {% if forloop.first %}active{% endif %}">
-            <img src="{{ photo.source }}" width="620px" />
-            <div class="carousel-caption">
-                <p>{{ photo.description }}</p>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-    <a class="left carousel-control" data-slide="prev" href="#activity-album">‹</a>
-    <a class="right carousel-control" data-slide="next" href="#activity-album">›</a>
+<div class="isotope">
+    
 </div>
 <form id="upload-activity-photo-form" action="" method="post" class="form-horizontal inner-post">
 <script type="text/javascript" src="/static/js/swfobject.js"></script>

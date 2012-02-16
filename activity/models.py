@@ -31,6 +31,7 @@ class ActivityType(models.Model):
 class ActivityPhoto(models.Model):
     source = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
+    activity = models.ForeignKey('Activity', related_name='photos',null=True)
 
 class Activity(models.Model):
     title = models.CharField(max_length=30)
@@ -45,7 +46,6 @@ class Activity(models.Model):
     # hosts = models.ManyToManyField(User, related_name='hosts')
     host_groups = models.ManyToManyField(Group, through='HostShip',blank=True)
     host_string = models.CharField(max_length=100,blank=True,null=True)
-    photos = models.ManyToManyField(ActivityPhoto,blank=True)
 
     def __unicode__(self):
         return self.title
