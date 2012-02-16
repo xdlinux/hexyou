@@ -332,3 +332,10 @@ THE SOFTWARE.
        -o-transition-duration: 0s;
           transition-duration: 0s;
 }
+/* -------------------------------isotope----------------------------------- */
+.isotope{list-style:none;padding:5px;margin:0}
+.isotope li{background:#eee;padding:0;}
+.isotope img {width:auto;max-height:100px}
+.isotope div.description{height:0;overflow:show;}
+
+

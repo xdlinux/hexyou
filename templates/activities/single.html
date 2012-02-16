@@ -44,7 +44,9 @@
 </p>
 <h3>活动相册</h3>
 <div class="isotope">
-    
+    {% for photo  in activity.photos.all %}
+        <img src="{{ photo.source }}" alt="" />
+    {% endfor %}
 </div>
 <form id="upload-activity-photo-form" action="" method="post" class="form-horizontal inner-post">
 <script type="text/javascript" src="/static/js/swfobject.js"></script>

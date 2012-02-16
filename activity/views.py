@@ -119,7 +119,7 @@ def edit(request,activity_id):
     return render_to_response('activities/edit.html',locals(),context_instance=RequestContext(request))
 
 @login_required
-def cancle(request,activity_id):
+def cancel(request,activity_id):
     activity = get_object_or_404(Activity,id=int(activity_id))
     group_accepted = activity.host_groups.filter(hostship__accepted=True).count()
     is_host = MemberHostShip.objects.get(user=request.user,activity=activity).is_host
