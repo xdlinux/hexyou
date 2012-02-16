@@ -28,11 +28,6 @@ class ActivityType(models.Model):
     def __unicode__(self):
         return self.title
 
-class ActivityPhoto(models.Model):
-    source = models.CharField(max_length=100)
-    description = models.CharField(max_length=100)
-    activity = models.ForeignKey('Activity', related_name='photos',null=True)
-
 class Activity(models.Model):
     title = models.CharField(max_length=30)
     avatar = models.CharField(max_length=100,default='/static/images/no_avatar.png')
@@ -89,6 +84,11 @@ class Activity(models.Model):
             host_string = host_string[:-1]
             host_string += " "
         return host_string
+
+class ActivityPhoto(models.Model):
+    activity = models.ForeignKey(Activity,related_name='photos')
+    source = models.CharField(max_length=100)
+    description = models.CharField(max_length=100)
 
 class HostShip(models.Model):
     """hostship between group and Activity"""
