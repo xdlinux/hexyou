@@ -1,4 +1,4 @@
-import os, ImageFile, md5, time, urllib, hashlib
+import os, Image, ImageFile, md5, time, urllib, hashlib
 from datetime import datetime
 from django.core.serializers import json, serialize
 from django.core.paginator import Paginator
@@ -35,12 +35,13 @@ def upload_image(request_file,save_to='tmp'):
     for chunk in request_file:
         parser.feed(chunk)
     img = parser.close()
-    filename = md5.new(str(time.time())).hexdigest()
+    datefilename = md5.new(str(time.time())).hexdigest()
+    small_size = 150,150
     if img.format == 'JPEG':
         ext = '.jpg'
     else:
         ext = '.' + img.format.lower()
-    filename = filename + ext
+    filename = datefilename + ext
     path = os.path.join(MEDIA_ROOT,save_to)
     if not os.path.isdir(path):
         os.mkdir(path)
@@ -50,6 +51,9 @@ def upload_image(request_file,save_to='tmp'):
         path=os.path.join(path,date)
         if not os.path.isdir(path):
             os.mkdir(path)
+        small_img = img.copy()
+        small_img.thumbnail(small_size,Image.ANTIALIAS)
+        small_img.save(os.path.join(path,datefilename+'_small'+ext))
     else:
         date = ""
     img.save(os.path.join(path,filename))
