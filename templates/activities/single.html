@@ -7,7 +7,9 @@
 
 {% block headeraction %}
 {% if is_participator %}
-<a href="#upload-activity-photo-modal" class="btn btn-small btn-info" data-toggle="modal">上传照片</a>
+<a href="#upload-activity-photo-modal" id="show-upload-modal" class="btn btn-small btn-info" data-toggle="modal">上传照片</a>
+{% else %}
+<a href="#upload-activity-photo-modal" id="show-upload-modal" class="btn btn-small btn-info hide" data-toggle="modal">上传照片</a>
 {% endif %}
 {% if is_host %}
 <a href="/activities/{{ activity.pk }}/edit" class="btn btn-small btn-danger">编辑活动</a>
@@ -31,7 +33,7 @@
     </div>
 </div>
 <p class="extra align-right">
-    {% if is_participator %}
+    {% if is_participator or is_host %}
     <a href="#" class="btn btn-primary disabled">已参加 {{ activity.title }}</a>
     {% else %}
     <a id="participate-activity" href="#" class="btn btn-primary">参加 {{ activity.title }}</a>

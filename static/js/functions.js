@@ -408,6 +408,7 @@ $(document).ready(function(){
       success:function(){
         btn.text('已参加 '+origin.substr(3))
         updateAvatarList('participators','members')
+        $('#show-upload-modal').show()
       }
     })
   })
