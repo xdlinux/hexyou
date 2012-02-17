@@ -95,6 +95,7 @@ $(document).ready(function(){
       'multi'     : false,
       'fileExt'   : '*.jpg;*.gif;*.png',
       'fileDesc'    : 'Web Image Files(*.jpg,*.gif,*.png)',
+      'scriptData' : {'save_to':'tmp'},
       'onComplete'  : function(event, ID, fileObj, response, data) {
         response = $.parseJSON(response);
         response.path = response.path.replace(/\\\\/g,"\\");
