@@ -414,13 +414,14 @@ $(document).ready(function(){
   })
 
   $('#send-message-form').submit(function(){
+    var self=$(this)
     $.ajax({
       data:{
         request_type:'send_message',
         request_phrase:$.toJSON($('#send-message-form').serializeJSON())
       },
       success:function(){
-        $(this)[0].reset()
+        self[0].reset()
         $('#send-message-modal').modal('hide')
       },
       error:function(){
