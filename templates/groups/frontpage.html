@@ -40,7 +40,7 @@
             <td>
                 <h4><a href="{% url NearsideBindings.group.views.single group.slug %}">{{ group }}</a>
                     <small><a href="{% url NearsideBindings.group.views.members group.slug %}">({{ group.members_count }})</a></small>
-                    <small>始于 {{ top_group.create_date|date:"Y年m月d日" }}</small></h4>
+                    <small>始于 {{ group.create_date|date:"Y年m月d日" }}</small></h4>
                 <p>{{ group.description|words:50 }}</p>
             </td>
         </tr>

@@ -4,6 +4,8 @@
 
 {% block title %}{% if is_host %}我发起的活动{% else %}我参加的活动{% endif %}{% endblock title %}
 
+{% block subtitle %}{% if is_host %}你若要喜爱你自己的价值，你就得给世界创造价值{% else %}不要浪费你的生命在你一定会后悔的地方上{% endif %}{% endblock subtitle %}
+
 {% block main %}
 <ul class="list" style="border:0;padding:0;margin:0;">
     {% for activity in activities.object_list %}

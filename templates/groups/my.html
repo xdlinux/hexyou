@@ -1,0 +1,67 @@
+{% extends "groups/base.html" %}
+{% load bootstrap %}
+{% load topbar %}
+
+{% block title %}我的组织{% endblock title %}
+
+{% block subtitle %}你若要喜爱你自己的价值，你就得给世界创造价值{% endblock subtitle %}
+
+{% block main %}
+<table class="table">
+    <tbody>
+        {% for group in groups.object_list %}
+        <tr>
+            <td class="avatar">
+                <a href="{% url NearsideBindings.group.views.single group.slug %}"><img class="avatar" src="{{ group.avatar }}" /></a>
+            </td>
+            <td>
+                <h4><a href="{% url NearsideBindings.group.views.single group.slug %}">{{ group }}</a>
+                    <small><a href="{% url NearsideBindings.group.views.members group.slug %}">({{ group.members_count }})</a></small>
+                    <small>始于 {{ group.create_date|date:"Y年m月d日" }}</small></h4>
+                <p>{{ group.description|words:50 }}</p>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="pagination pagination-centered">
+    <ul>
+        {% if groups.has_previous %}
+        <li>
+            <a href="?page={{ groups.previous_page_number }}">«</a>
+        </li>
+        {% else %}
+        <li class="disabled">
+            <a href="#">«</a>
+        </li>
+        {% endif %}
+        {{ groups.page_range }}
+        {% for val in paginator.page_range_slice %}
+        <li {% ifequal page val %}class="active"{% endifequal %}>
+            <a href="?page={{ val }}">{{ val }}</a>
+        </li>
+        {% endfor %}
+        {% if paginator.page_range_slice|last < paginator.num_pages %}
+        <li class="disabled">
+            <a href="#">...</a>
+        </li>
+        <li>
+            <a href="?page={{ paginator.num_pages }}" {% ifequal page val %}class="active"{% endifequal %}>{{ paginator.num_pages }}</a>
+        </li>
+        {% endif %}
+        {% if groups.has_next %}
+        <li>
+            <a href="?page={{ groups.next_page_number }}" class="disabled">»</a>
+        </li>
+        {% else %}
+        <li class="disabled">
+            <a href="#">»</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock main %}
+
+{% block side %}
+{% topbar my_groups subnav.html %}
+{% endblock side %}

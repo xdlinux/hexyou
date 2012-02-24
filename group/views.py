@@ -157,8 +157,19 @@ def members(request,group_slug):
     return render_to_response('groups/members.html',locals(), context_instance=RequestContext(request))
 
 @login_required
-def my():
-    pass
+def my(request):
+    paginator = ExPaginator([ membership.group for membership in MemberShip.objects.filter(user=request.user) ],10)
+    try:
+        page = int(request.GET.get('page','1'))
+    except ValueError:
+        page = 1
+    try:
+        groups = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        groups = paginator.page(paginator.num_pages)
+    for group in groups.object_list:
+        group.members_count = MemberShip.objects.filter(group=group).count()
+    return render_to_response('groups/my.html',locals(), context_instance=RequestContext(request))
 
 @login_required
 def exit(request,group_slug):
