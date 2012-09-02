@@ -3,5 +3,4 @@ PIL==1.1.7
 South==0.7.6
 django-configurations==0.1
 django-debug-toolbar==0.9.4
-django-messages==0.4.4
 wsgiref==0.1.2
